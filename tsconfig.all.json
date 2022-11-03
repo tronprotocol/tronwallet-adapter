@@ -1,0 +1,8 @@
+{
+    "extends": "./tsconfig.root.json",
+    "references": [
+        {
+            "path": "./packages/adapters/abstract-adapter/tsconfig.all.json"
+        }
+    ]
+}

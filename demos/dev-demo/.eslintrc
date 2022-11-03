@@ -1,0 +1,7 @@
+{
+    // "extends": [],
+    "parser": "@typescript-eslint/parser",
+    "rules": {
+        "require-extensions/require-extensions": "off"
+    }
+}

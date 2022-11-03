@@ -1,0 +1,62 @@
+{
+    "name": "tronwallet-adapter",
+    "description": "wallet adapters for TRON blockchain",
+    "version": "1.0.0",
+    "main": "index.js",
+    "sideEffects": false,
+    "private": true,
+    "engines": {
+        "node": ">=16",
+        "pnpm": ">=7"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/tronprotocol/tronwallet-adapter"
+    },
+    "author": "tronprotocol",
+    "license": "MIT",
+    "scripts": {
+        "nuke": "shx rm -rf packages/*/*/node_modules demos/*/node_modules node_modules pnpm-lock.yaml || true",
+        "reinstall": "pnpm run nuke && pnpm install",
+        "clean": "pnpm --recursive run clean && shx rm -rf **/*.tsbuildinfo",
+        "ts": "pnpm run build:ts",
+        "build": "pnpm run build:ts && pnpm run build:other",
+        "build:ts": "tsc --build --verbose tsconfig.all.json",
+        "build:other": "pnpm --recursive --filter \"@tronweb3/*\" run build",
+        "package": "pnpm --recursive run package",
+        "release": "pnpm run clean && pnpm run build:ts && pnpm run package && pnpm run build:other",
+        "watch": "pnpm run watch:ts",
+        "watch:ts": "tsc --build --verbose --watch tsconfig.all.json",
+        "dev": "pnpm watch & pnpm run --filter {demos/dev-demo} dev",
+        "fmt": "prettier --write '{*,**/*}.{ts,tsx,js,jsx,json}'",
+        "lint": "prettier --check '{*,**/*}.{ts,tsx,js,jsx,json}' && eslint . --ignore-pattern \"/demos\"",
+        "lint:fix": "pnpm run fmt && eslint --fix .",
+        "test": "pnpm --recursive --filter \"@tronweb3/*\" run test"
+    },
+    "devDependencies": {
+        "@changesets/cli": "^2.26.0",
+        "@commitlint/cli": "^17.3.0",
+        "@commitlint/config-conventional": "^17.3.0",
+        "@testing-library/jest-dom": "^5.16.5",
+        "@testing-library/react": "^13.4.0",
+        "@types/jest": "^27.5.2",
+        "@types/node": "^18.11.9",
+        "@types/testing-library__jest-dom": "^5.14.5",
+        "@typescript-eslint/eslint-plugin": "^5.38.0",
+        "@typescript-eslint/parser": "^5.38.0",
+        "eslint": "^8.23.1",
+        "eslint-config-prettier": "^8.5.0",
+        "eslint-plugin-prettier": "^4.2.1",
+        "eslint-plugin-react": "^7.31.8",
+        "eslint-plugin-react-hooks": "^4.6.0",
+        "eslint-plugin-require-extensions": "^0.1.1",
+        "gh-pages": "^4.0.0",
+        "jest": "^29.3.1",
+        "pnpm": "^7.12.1",
+        "prettier": "2.7.1",
+        "shx": "^0.3.4",
+        "ts-jest": "^29.0.3",
+        "typedoc": "^0.23.15",
+        "typescript": "^4.8.3"
+    }
+}
