@@ -1,9 +1,19 @@
 /**
+ * check simply if current environment is browser or not
+ * @returns boolean
+ */
+export function isInBrowser() {
+    return typeof window !== 'undefined' && typeof document !== 'undefined' && typeof navigator !== 'undefined';
+}
+
+/**
  *
  * @param {Function} check funcion to check if adapter is installed. return true if
  * @returns
  */
 export function checkAdapterState(check: () => boolean): void {
+    if (!isInBrowser()) return;
+
     const disposers: (() => void)[] = [];
 
     function dispose() {
