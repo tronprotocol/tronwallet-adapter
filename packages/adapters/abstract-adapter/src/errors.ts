@@ -59,3 +59,18 @@ export class WalletSignMessageError extends WalletError {
 export class WalletSignTransactionError extends WalletError {
     name = 'WalletSignTransactionError';
 }
+
+/**
+ * Occurs when load wallet
+ */
+export class WalletWalletLoadError extends WalletError {
+    name = 'WalletWalletLoadError';
+}
+
+/**
+ * Occurs when walletconnect QR window is closed.
+ */
+export class WalletWindowClosedError extends WalletError {
+    name = 'WalletWindowClosedError';
+    message = 'The QR window is closed.';
+}
