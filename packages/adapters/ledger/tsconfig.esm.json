@@ -1,0 +1,16 @@
+{
+    "extends": "../../../tsconfig.esm.json",
+    "include": ["src"],
+    "compilerOptions": {
+        "outDir": "lib/esm",
+        "declarationDir": "lib/types",
+        "jsx": "react-jsx",
+        "jsxImportSource": "preact",
+        "skipLibCheck": true,
+        "baseUrl": "./",
+        "paths": {
+            "react": ["./node_modules/preact/compat/"],
+            "react-dom": ["./node_modules/preact/compat/"]
+        }
+    }
+}
