@@ -3,6 +3,18 @@
     "references": [
         {
             "path": "./packages/adapters/abstract-adapter/tsconfig.all.json"
+        },
+        {
+            "path": "./packages/adapters/adapters/tsconfig.all.json"
+        },
+        {
+            "path": "./packages/adapters/tronlink/tsconfig.all.json"
+        },
+        {
+            "path": "./packages/adapters/ledger/tsconfig.all.json"
+        },
+        {
+            "path": "./packages/adapters/walletconnect/tsconfig.all.json"
         }
     ]
 }
