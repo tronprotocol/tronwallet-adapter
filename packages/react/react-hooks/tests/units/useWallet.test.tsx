@@ -221,6 +221,29 @@ describe('useWallet', function () {
         });
     });
 
+    describe('when there is a wallet ready with autoConnect disable', function () {
+        beforeEach(async function () {
+            adapter1._state = AdapterState.Disconnect;
+            mountTest({ autoConnect: false } as WalletProviderProps);
+            await act(async () => {
+                ref.current?.getState().select(adapter1.name);
+                await Promise.resolve();
+            });
+            // auto select
+            expect(ref.current?.getState().wallet?.state).toEqual(AdapterState.Disconnect);
+        });
+        it('should be disconnected when change wallet as autoConnect disable', async function () {
+            await act(async () => {
+                adapter2._state = AdapterState.Disconnect;
+                adapter2.emit('stateChanged', AdapterState.Disconnect);
+                ref.current?.getState().select(adapter2.name);
+                await Promise.resolve();
+            });
+            expect(ref.current?.getState().wallet?.adapter.name).toEqual(adapter2.name);
+            expect(ref.current?.getState().wallet?.state).toEqual(AdapterState.Disconnect);
+        });
+    });
+
     describe('when there is a seleted a wallet in local storage', function () {
         beforeEach(function () {
             localStorage.setItem('tronAdapterName', JSON.stringify(adapter1.name));
@@ -244,6 +267,176 @@ describe('useWallet', function () {
         });
         it('wallet should be null', function () {
             expect(ref.current?.getState().wallet).toEqual(null);
+        });
+    });
+
+    describe('custom error should work fine', function () {
+        beforeEach(function () {
+            act(function () {
+                adapter1.connectMethod = () => Promise.resolve();
+                adapter1.disconnectMethod = () => Promise.resolve();
+            });
+        });
+        // skip these two test cases, because use Promise.reject() as adapter.connect won't work as expected
+        it.skip('connect error should work fine', async function () {
+            const onError = jest.fn();
+            jest.useFakeTimers();
+            adapter1._state = AdapterState.Disconnect;
+            adapter1.connectMethod = () =>
+                new Promise((resolve, reject) => {
+                    setTimeout(() => reject(), 100);
+                });
+            mountTest({ onError } as unknown as WalletProviderProps);
+
+            await act(async () => {
+                await ref.current?.getState().select(adapter1.name);
+                await Promise.resolve();
+            });
+
+            await act(async function () {
+                await ref.current?.getState().connect();
+                await Promise.resolve();
+            });
+            jest.advanceTimersByTime(200);
+            expect(onError).toHaveBeenCalledTimes(1);
+        });
+        it.skip('disconnect error should work fine', async function () {
+            const onError = jest.fn();
+            const error = new WalletDisconnectionError();
+            act(() => {
+                adapter1._state = AdapterState.Disconnect;
+                adapter1.connectMethod = () => Promise.resolve();
+                adapter1.disconnectMethod = () => Promise.reject();
+            });
+
+            mountTest({ onError } as unknown as WalletProviderProps);
+            await act(async function () {
+                await ref.current?.getState().select(adapter1.name);
+                await Promise.resolve();
+            });
+            expect(ref.current?.getState().wallet?.adapter.name).toEqual(adapter1.name);
+            await act(async () => {
+                try {
+                    await ref.current?.getState().connect();
+                    await Promise.resolve();
+                } catch (e) {
+                    console.log('error', e);
+                }
+            });
+            expect(true).toBe(true);
+            await act(async function () {
+                try {
+                    await ref.current?.getState().disconnect();
+                    await Promise.resolve();
+                } catch (e) {
+                    expect(e).toBeInstanceOf(WalletDisconnectionError);
+                }
+            });
+            // expect(onError).toHaveBeenCalledTimes(1);
+            expect(onError).toHaveBeenCalledWith(error);
+        });
+    });
+
+    describe('connect()', function () {
+        describe('given a wallet that is not ready', () => {
+            beforeEach(async () => {
+                (window.open as any).mockClear();
+                adapter1._state = AdapterState.NotFound;
+                mountTest({
+                    onError: (err) => {
+                        console.error(err);
+                        return undefined;
+                    },
+                    autoConnect: false,
+                });
+                act(() => {
+                    ref.current?.getState().select(adapter1.name);
+                });
+                expect(ref.current?.getState().wallet?.state).toEqual(AdapterState.NotFound);
+
+                await act(async () => {
+                    try {
+                        await ref.current?.getState().connect();
+                        throw new Error();
+                    } catch (e) {
+                        expect(e).toBeInstanceOf(WalletNotFoundError);
+                    }
+                });
+            });
+            it('clear the state', () => {
+                const state = ref.current?.getState();
+                expect(state?.wallet).toEqual(null);
+                expect(state?.connected).toEqual(false);
+            });
+            it("opens the wallet's URL in a new window", () => {
+                expect(window.open).toHaveBeenCalledTimes(1);
+            });
+            it('throws a `WalletNotFoundError`', async () => {
+                await act(async () => {
+                    adapter1._state = AdapterState.NotFound;
+                    ref.current?.getState().select(adapter1.name);
+                    await Promise.resolve();
+                });
+                try {
+                    await ref.current?.getState().connect();
+                    throw new Error();
+                } catch (e) {
+                    expect(e).toBeInstanceOf(WalletNotFoundError);
+                }
+            });
+        });
+        describe('given a wallet that is ready', function () {
+            beforeEach(async function () {
+                adapter1._state = AdapterState.Disconnect;
+                mountTest({
+                    onError: (err) => {
+                        console.error(err);
+                        return undefined;
+                    },
+                    // autoConnect: true,
+                });
+                await act(async function () {
+                    await ref.current?.getState().select(adapter1.name);
+                    await Promise.resolve();
+                });
+            });
+            it('connect() should work fine', async function () {
+                await act(async function () {
+                    await ref.current?.getState().connect();
+                });
+                expect(true).toBe(true);
+            });
+            it('connect() should throw NoSelectedError when select a non-exist wallet', async function () {
+                await act(async function () {
+                    await ref.current?.getState().select('none' as AdapterName<'none'>);
+                    await Promise.resolve();
+                });
+                await act(async function () {
+                    try {
+                        await ref.current?.getState().connect();
+                        throw new Error();
+                    } catch (e) {
+                        expect(e).toBeInstanceOf(WalletNotSelectedError);
+                    }
+                });
+            });
+        });
+    });
+
+    describe('disconnect()', function () {
+        beforeEach(function () {
+            adapter1._state = AdapterState.Disconnect;
+            mountTest({});
+        });
+        it('disconnect() should not be called as there is no selected wallet', async function () {
+            await act(async function () {
+                try {
+                    await ref.current?.getState().disconnect();
+                } catch (e) {
+                    //
+                }
+            });
+            expect(adapter1.disconnect).toHaveBeenCalledTimes(0);
         });
     });
 });
