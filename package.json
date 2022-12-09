@@ -32,6 +32,7 @@
         "lint": "prettier --check '{*,**/*}.{ts,tsx,js,jsx,json}' && eslint . --ignore-pattern \"/demos\"",
         "lint:fix": "pnpm run fmt && eslint --fix .",
         "test": "pnpm --recursive --filter \"@tronweb3/*\" run test",
+        "example": "pnpm run --filter {demos/react-ui/vite-app} dev",
         "prepare": "husky install",
         "update-version": "pnpm changeset"
     },
