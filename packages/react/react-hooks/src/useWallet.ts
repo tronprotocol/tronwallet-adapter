@@ -23,8 +23,8 @@ export interface WalletContextState {
 }
 function printError() {
     console.error(`
-    You are using WalletContext without provide the WalletContext.Provider.
-    Please wrap your sub-components with a WalletProvider and provide required values.
+You are using WalletContext without provide the WalletContext.Provider.
+Please wrap your sub-components with a WalletProvider and provide required values.
 `);
 }
 const DEFAULT_CONTEXT = {

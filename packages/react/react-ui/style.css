@@ -24,6 +24,9 @@
 .adapter-react-button:focus-visible {
     outline: 2px solid white;
 }
+.adapter-react-button:not([disabled]):hover {
+    background-color: #373c47;
+}
 .adapter-react-button[disabled] {
     background: #404144;
     color: #999;
@@ -141,6 +144,10 @@
 .adapter-modal-header .close-button::after {
     transform: rotate(-45deg);
 }
+.adapter-modal-header .close-button:hover::before,
+.adapter-modal-header .close-button:hover::after {
+    background-color: antiquewhite;
+}
 
 /** WalletItem */
 .adapter-wallet-item .adapter-react-button {
@@ -200,4 +207,8 @@
     font-size: 14px;
     font-weight: 600;
     display: flex;
+}
+
+.adapter-dropdown-list li:not([disabled]):hover {
+    background-color: #373c47;
 }

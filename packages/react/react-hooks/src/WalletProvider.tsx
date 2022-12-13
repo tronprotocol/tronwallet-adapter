@@ -138,6 +138,9 @@ export const WalletProvider: FC<WalletProviderProps> = function ({
         },
         [onError]
     );
+    const handleAccountChange = useCallback(function (address: string) {
+        setState((state) => ({ ...state, address }));
+    }, []);
 
     useEffect(
         function () {
@@ -145,15 +148,23 @@ export const WalletProvider: FC<WalletProviderProps> = function ({
                 adapter.on('connect', handleConnect);
                 adapter.on('disconnect', handleDisconnect);
                 adapter.on('error', handleError);
+                adapter.on('accountsChanged', handleAccountChange);
                 return () => {
                     adapter.off('connect', handleConnect);
                     adapter.off('disconnect', handleDisconnect);
                     adapter.off('error', handleError);
+                    adapter.off('accountsChanged', handleAccountChange);
                 };
             }
         },
-        [adapter, handleConnect, handleDisconnect, handleError]
+        [adapter, handleConnect, handleDisconnect, handleError, handleAccountChange]
     );
+    // disconnect the previous when wallet changes
+    useEffect(() => {
+        return () => {
+            adapter?.disconnect();
+        };
+    }, [adapter]);
 
     // auto connect
     useEffect(
