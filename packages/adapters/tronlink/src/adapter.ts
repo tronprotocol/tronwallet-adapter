@@ -1,4 +1,10 @@
-import { Adapter, AdapterState, isInBrowser, checkAdapterState } from '@tronweb3/tronwallet-abstract-adapter';
+import {
+    Adapter,
+    AdapterState,
+    isInBrowser,
+    checkAdapterState,
+    isInMobileBrowser,
+} from '@tronweb3/tronwallet-abstract-adapter';
 import {
     WalletNotFoundError,
     WalletDisconnectedError,
@@ -28,6 +34,29 @@ export function isFireFox() {
  */
 export function isInTronLinkApp() {
     return isInBrowser() && typeof (window as any).iTron !== 'undefined';
+}
+
+export function openTronLink(
+    { dappIcon, dappName }: { dappIcon: string; dappName: string } = { dappIcon: '', dappName: '' }
+) {
+    if (isInMobileBrowser() && !isInTronLinkApp()) {
+        const { origin, pathname, search, hash } = window.location;
+        const url = origin + pathname + search + (hash.includes('?') ? hash : `${hash}?_=1`);
+        const params = {
+            action: 'open',
+            actionId: Date.now() + '',
+            callbackUrl: 'http://someurl.com', // no need callback
+            dappIcon,
+            dappName,
+            url,
+            protocol: 'TronLink',
+            version: '1.0',
+            chainId: '0x2b6653dc',
+        };
+        window.location.href = `tronlinkoutside://pull.activity?param=${encodeURIComponent(JSON.stringify(params))}`;
+        return true;
+    }
+    return false;
 }
 
 declare global {
@@ -126,6 +155,7 @@ export class TronLinkAdapter extends Adapter {
 
     async connect(): Promise<void> {
         try {
+            this.checkIfOpenTronLink();
             if (this.connected || this.connecting) return;
             if (this.state === AdapterState.NotFound) {
                 isInBrowser() && window.open(this.url, '_blank');
@@ -180,6 +210,7 @@ export class TronLinkAdapter extends Adapter {
 
     async signTransaction(transaction: Transaction): Promise<SignedTransaction> {
         try {
+            this.checkIfOpenTronLink();
             if (this.state !== AdapterState.Connected) throw new WalletDisconnectedError();
             const wallet = this._wallet;
             if (!wallet) throw new WalletDisconnectedError();
@@ -201,6 +232,7 @@ export class TronLinkAdapter extends Adapter {
 
     async signMessage(message: string): Promise<string> {
         try {
+            this.checkIfOpenTronLink();
             if (this.state !== AdapterState.Connected) throw new WalletDisconnectedError();
             const wallet = this._wallet;
             if (!wallet) throw new WalletDisconnectedError();
@@ -232,16 +264,18 @@ export class TronLinkAdapter extends Adapter {
             return;
         }
         if (message.action === 'accountsChanged') {
-            this._address = (message.data as AccountsChangedEventData).address;
-            this.emit('accountsChanged', this._address);
-            if (this._wallet?.ready) {
-                this._state = AdapterState.Connected;
-                this.emit('connect', this._address as string);
-            } else {
-                this._state = AdapterState.Disconnect;
-                this.emit('disconnect');
-            }
-            this.emit('stateChanged', this._state);
+            setTimeout(() => {
+                this._address = (message.data as AccountsChangedEventData).address;
+                this.emit('accountsChanged', this._address);
+                if (this._wallet?.ready) {
+                    this._state = AdapterState.Connected;
+                    this.emit('connect', this._address as string);
+                } else {
+                    this._state = AdapterState.Disconnect;
+                    this.emit('disconnect');
+                }
+                this.emit('stateChanged', this._state);
+            }, 200);
         } else if (message.action === 'setNode') {
             this.emit('chainChanged', message.data as NetworkChangedEventData);
         } else if (message.action === 'connect') {
@@ -253,4 +287,11 @@ export class TronLinkAdapter extends Adapter {
             this.emit('stateChanged', this._state);
         }
     };
+
+    private checkIfOpenTronLink() {
+        const { dappName = '', dappIcon = '' } = this.config;
+        if (openTronLink({ dappIcon, dappName })) {
+            throw new WalletNotFoundError();
+        }
+    }
 }

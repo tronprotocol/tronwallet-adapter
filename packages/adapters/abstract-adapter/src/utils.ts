@@ -43,3 +43,10 @@ export function checkAdapterState(check: () => boolean): void {
     // stop all task after 5min
     setTimeout(dispose, 5 * 60 * 1000);
 }
+
+/**
+ * Simplily detect mobile device
+ */
+export function isInMobileBrowser() {
+    return navigator.userAgent.match(/Android|webOS|iPhone|iPad|iPod|BlackBerry|Windows Phone/i);
+}
