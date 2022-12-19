@@ -1,6 +1,6 @@
 # `@tronweb3/tronwallet-adapter-ledger`
 
-This package provides an adapter to connect Ledger Wallet.
+This package provides an adapter for the Ledger Wallet.
 
 ## Usage
 
@@ -11,7 +11,7 @@ const App = () => {
     const adapters = useMemo(
         () => [
             new LedgerAdapter({
-                // Initial account number to get once connection is created
+                // Initial total accounts to get once connection is created
                 accountNumber: 5,
             }),
         ],
@@ -19,3 +19,5 @@ const App = () => {
     );
 };
 ```
+
+For more information about tronwallet adapters, please refer to [`@tronweb3/tronwallet-adapters`](https://github.com/tronprotocol/tronwallet-adapter/tree/main/packages/adapters/adapters)
