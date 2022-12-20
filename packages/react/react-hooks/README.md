@@ -1,6 +1,6 @@
 # @tronweb3/tronwallet-adapter-react-hooks
 
-`@tronweb3/tronwallet-adapter-react-hooks` provides a `useWallet()` hook make it easy to "Connect Wallet" and listen to the state change.
+`@tronweb3/tronwallet-adapter-react-hooks` provides a `useWallet()` hook which will make it easy to "Connect Wallet" and listen to the state change for developers.
 
 ## Installation
 
@@ -12,7 +12,7 @@ npm install @tronweb3/tronwallet-adapter-react-hooks @tronweb3/tronwallet-abstra
 
 ## Usage
 
-`@tronweb3/tronwallet-adapter-react-hooks` uses [`Context` of React](https://reactjs.org/docs/context.html) to maintain a shared data. So developers must wrap `App` content within the `WalletProvider`.
+`@tronweb3/tronwallet-adapter-react-hooks` uses [`Context` of React](https://reactjs.org/docs/context.html) to maintain a shared data. So developers need to wrap `App` content within the `WalletProvider`.
 
 You can provide a `onError` callback to handle various errors such as `WalletConnectionError`, `WalletNotFoundError`.
 
@@ -22,7 +22,7 @@ import { WalletDisconnectedError, WalletError, WalletNotFoundError } from '@tron
 import toast, { Toaster } from 'react-hot-toast';
 
 function App() {
-    // here use `react-hot-toast` npm package to notify user what happened
+    // use `react-hot-toast` npm package to notify user what happened here
     function onError(e: WalletError) {
         if (e instanceof WalletNotFoundError) {
             toast.error(e.message);
@@ -57,7 +57,7 @@ function Profile() {
 
 ## `WalletProvider`
 
-`WalletProvider` and `useWallet` work together like `Context.Provider` and `useContext()`. There is a `WalletProviderContext` underlying which maintains some state and can obtained with `useWallet`. So developer must wrap application components with `WalletProvider`.
+`WalletProvider` and `useWallet` work together like `Context.Provider` and `useContext()`. There is a `WalletProviderContext` underlying which maintains some state and can be obtained with `useWallet`. So developers need to wrap application components with `WalletProvider`.
 
 ```jsx
 function App() {
@@ -98,7 +98,7 @@ Used to specify what wallet adapters are supported. All wallet adapters can be i
 -   Type: `(error: WalletError): void`
 -   Default: `function(error) { console.error(error); }`
 
-Used to handle errors occured when use wallet. Developer can use the callback to tell user what happened according to the `error` type. All error types can be found [here](https://github.com/tronprotocol/tronwallet-adapter/blob/main/packages/adapters/abstract-adapter/src/errors.ts).
+Used to handle errors occured when use wallet. Developers can use the callback to tell users what happened according to the `error` type. All error types can be found [here](https://github.com/tronprotocol/tronwallet-adapter/blob/main/packages/adapters/abstract-adapter/src/errors.ts).
 
 -   Example
     ```jsx
@@ -117,7 +117,7 @@ Used to handle errors occured when use wallet. Developer can use the callback to
 -   Type: `boolean`
 -   Default: `true`
 
-If connect the specified wallet automatically when page load and select a wallet.
+Whether connect to the specified wallet automatically when loading the page and selecting a wallet.
 
 #### localStorageKey
 
@@ -125,7 +125,7 @@ If connect the specified wallet automatically when page load and select a wallet
 -   Type: `string`
 -   Default: `tronAdapterName`
 
-Specified the key used to cache wallet name in `localStorage`. When user select a wallet, application will cache the wallet name to localStorage.
+Specified the key used to cache wallet name in `localStorage`. When user select a wallet, applications will cache the wallet name to localStorage.
 
 ## `useWallet()`
 
@@ -204,7 +204,7 @@ enum AdapterState {
 ### signTransaction
 
 -   Type: `(transaction: Transaction) => Promise<SignedTransaction>`
-    Sign a unsigned transaction. This method is the same as tronWeb API.
+    Sign a unsigned transaction. This method is the same as TronWeb API.
 
 ### signMessage
 
