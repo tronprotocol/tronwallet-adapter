@@ -97,6 +97,7 @@ function Comp() {
 -   `WalletActionButton`: A Button with multiple actions include `select/connect/disconnect`
 
 Here is the demo image:
+
 ![example](./demo.png)
 
 ## Documentation
@@ -139,10 +140,10 @@ You can use the `@tronweb3/tronwallet-adapters` package, or add the individual w
 
 | package                                     | description                                                      | npm                                          |
 | ------------------------------------------- | ---------------------------------------------------------------- | -------------------------------------------- |
-| adapters                                    | Includes all the wallets (with tree shaking)                     | `@tronweb3/tronwallet-adapters`              |
-| [tronlink](https://www.tronlink.org/)       | Adapter for tronlink extention and tronlink app(IOS and Android) | `@tronweb3/tronwallet-adapter-tronlink`      |
-| [ledger](https://www.ledger.com/)           | Adapter for ledger                                               | `@tronweb3/tronwallet-adapter-ledger`        |
-| [walletconnect](https://walletconnect.com/) | Adapter for walletconnect                                        | `@tronweb3/tronwallet-adapter-walletconnect` |
+| adapters                                    | Includes all the wallets (with tree shaking)                     | [`@tronweb3/tronwallet-adapters`](https://www.npmjs.com/package/@tronweb3/tronwallet-adapters)              |
+| [tronlink](https://www.tronlink.org/)       | Adapter for tronlink extention and tronlink app(IOS and Android) | [`@tronweb3/tronwallet-adapter-tronlink`](https://www.npmjs.com/package/@tronweb3/tronwallet-adapter-tronlink)   |
+| [ledger](https://www.ledger.com/)           | Adapter for ledger                                               | [`@tronweb3/tronwallet-adapter-ledger`](https://www.npmjs.com/package/@tronweb3/tronwallet-adapter-ledger)        |
+| [walletconnect](https://walletconnect.com/) | Adapter for walletconnect                                        | [`@tronweb3/tronwallet-adapter-walletconnect`](https://www.npmjs.com/package/@tronweb3/tronwallet-adapter-walletconnect) |
 
 ### React Components
 
@@ -150,8 +151,8 @@ These packages provide components for react hooks context and custom react UI.
 
 | package     | description                         | npm                                        |
 | ----------- | ----------------------------------- | ------------------------------------------ |
-| react-hooks | provides a `useWallet()` react hook | `@tronweb3/tronwallet-adapter-react-hooks` |
-| react-ui    | UI frameworks for react app         | `@tronweb3/tronwallet-adapter-react-ui`    |
+| react-hooks | provides a `useWallet()` react hook | [`@tronweb3/tronwallet-adapter-react-hooks`](https://www.npmjs.com/package/@tronweb3/tronwallet-adapter-react-hooks) |
+| react-ui    | UI frameworks for react app         | [`@tronweb3/tronwallet-adapter-react-ui`](https://www.npmjs.com/package/@tronweb3/tronwallet-adapter-react-ui)    |
 
 ## Packages Examples
 
