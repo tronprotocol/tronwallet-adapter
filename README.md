@@ -277,6 +277,9 @@ If you want to have different appearance by developing components, you can use `
 Welcome to contribute your idea!
 
 1. Fork the repo and clone to your device.
+    ```bash
+    git clone https://github.com/tronprotocol/tronwallet-adapter.git
+    ```
 2. Install Nodejs@16.x and pnpm@7.x
 3. Install dependencies
     ```bash
