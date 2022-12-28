@@ -1,0 +1,66 @@
+{
+    "name": "@tronweb3/tronwallet-adapter-react-ui",
+    "version": "1.0.0",
+    "author": "tronprotocol",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/tronprotocol/tronwallet-adapter"
+    },
+    "license": "MIT",
+    "type": "module",
+    "sideEffects": false,
+    "engines": {
+        "node": ">=16",
+        "pnpm": ">=7"
+    },
+    "main": "./lib/cjs/index.js",
+    "module": "./lib/esm/index.js",
+    "types": "./lib/types/index.d.ts",
+    "exports": {
+        ".": {
+            "import": "./lib/esm/index.js",
+            "require": "./lib/cjs/index.js",
+            "types": "./lib/types/index.d.ts"
+        },
+        "./style.css": "./style.css"
+    },
+    "files": [
+        "lib",
+        "src",
+        "LICENSE",
+        "style.css"
+    ],
+    "publishConfig": {
+        "access": "public"
+    },
+    "scripts": {
+        "clean": "shx mkdir -p lib && shx rm -rf lib",
+        "package": "shx echo '{ \"type\": \"commonjs\" }' > lib/cjs/package.json",
+        "test": "jest"
+    },
+    "peerDependencies": {
+        "react": "*",
+        "react-dom": "*"
+    },
+    "dependencies": {
+        "@tronweb3/tronwallet-abstract-adapter": "^1.0.0",
+        "@tronweb3/tronwallet-adapter-react-hooks": "^1.0.0",
+        "@tronweb3/tronwallet-adapters": "^1.0.0"
+    },
+    "devDependencies": {
+        "@testing-library/jest-dom": "^5.16.5",
+        "@testing-library/react": "^13.4.0",
+        "@testing-library/user-event": "^13.5.0",
+        "@tronweb3/tronwallet-adapter-tronlink": "^1.0.0",
+        "@types/jest": "^27.5.2",
+        "@types/react": "^18.0.26",
+        "@types/react-dom": "^18.0.0",
+        "@types/testing-library__jest-dom": "^5.14.5",
+        "jest": "^29.3.1",
+        "jest-environment-jsdom": "^29.3.1",
+        "jest-localstorage-mock": "^2.4.22",
+        "react": "^18.0.0",
+        "react-dom": "^18.0.0",
+        "shx": "^0.3.4"
+    }
+}

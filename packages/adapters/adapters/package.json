@@ -1,0 +1,47 @@
+{
+    "name": "@tronweb3/tronwallet-adapters",
+    "version": "1.0.0",
+    "author": "tronprotocol",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/tronprotocol/tronwallet-adapter"
+    },
+    "license": "MIT",
+    "type": "module",
+    "sideEffects": false,
+    "engines": {
+        "node": ">=16",
+        "pnpm": ">=7"
+    },
+    "main": "./lib/cjs/index.js",
+    "module": "./lib/esm/index.js",
+    "types": "./lib/types/index.d.ts",
+    "exports": {
+        "require": "./lib/cjs/index.js",
+        "import": "./lib/esm/index.js",
+        "types": "./lib/types/index.d.ts"
+    },
+    "files": [
+        "lib",
+        "src",
+        "LICENSE"
+    ],
+    "publishConfig": {
+        "access": "public"
+    },
+    "scripts": {
+        "clean": "shx mkdir -p lib && shx rm -rf lib",
+        "package": "shx echo '{ \"type\": \"commonjs\" }' > lib/cjs/package.json"
+    },
+    "peerDependencies": {
+        "@tronweb3/tronwallet-abstract-adapter": "^1.0.0"
+    },
+    "dependencies": {
+        "@tronweb3/tronwallet-adapter-ledger": "^1.0.0",
+        "@tronweb3/tronwallet-adapter-tronlink": "^1.0.0",
+        "@tronweb3/tronwallet-adapter-walletconnect": "^1.0.0"
+    },
+    "devDependencies": {
+        "shx": "^0.3.4"
+    }
+}

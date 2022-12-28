@@ -1,0 +1,19 @@
+{
+    "compilerOptions": {
+        "target": "ESNext",
+        "module": "ESNext",
+        "moduleResolution": "Node",
+        "esModuleInterop": true,
+        "declaration": true,
+        "declarationDir": "lib/types",
+        "jsx": "react-jsx",
+        "jsxImportSource": "preact",
+        "skipLibCheck": true,
+        "baseUrl": "./",
+        "rootDir": ".",
+        "paths": {
+            "react": ["./node_modules/preact/compat/"],
+            "react-dom": ["./node_modules/preact/compat/"]
+        }
+    }
+}
