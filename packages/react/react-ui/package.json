@@ -1,6 +1,6 @@
 {
     "name": "@tronweb3/tronwallet-adapter-react-ui",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "author": "tronprotocol",
     "repository": {
         "type": "git",
@@ -44,8 +44,7 @@
     },
     "dependencies": {
         "@tronweb3/tronwallet-abstract-adapter": "^1.0.0",
-        "@tronweb3/tronwallet-adapter-react-hooks": "^1.0.0",
-        "@tronweb3/tronwallet-adapters": "^1.0.0"
+        "@tronweb3/tronwallet-adapter-react-hooks": "^1.0.0"
     },
     "devDependencies": {
         "@testing-library/jest-dom": "^5.16.5",

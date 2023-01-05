@@ -138,21 +138,21 @@ tronwallet-adapter
 These packages provide adapters for each wallet.
 You can use the `@tronweb3/tronwallet-adapters` package, or add the individual wallet packages you want.
 
-| package                                     | description                                                      | npm                                          |
-| ------------------------------------------- | ---------------------------------------------------------------- | -------------------------------------------- |
-| adapters                                    | Includes all the wallets (with tree shaking)                     | [`@tronweb3/tronwallet-adapters`](https://www.npmjs.com/package/@tronweb3/tronwallet-adapters)              |
-| [tronlink](https://www.tronlink.org/)       | Adapter for tronlink extention and tronlink app(IOS and Android) | [`@tronweb3/tronwallet-adapter-tronlink`](https://www.npmjs.com/package/@tronweb3/tronwallet-adapter-tronlink)   |
-| [ledger](https://www.ledger.com/)           | Adapter for ledger                                               | [`@tronweb3/tronwallet-adapter-ledger`](https://www.npmjs.com/package/@tronweb3/tronwallet-adapter-ledger)        |
+| package                                     | description                                                      | npm                                                                                                                      |
+| ------------------------------------------- | ---------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ |
+| adapters                                    | Includes all the wallets (with tree shaking)                     | [`@tronweb3/tronwallet-adapters`](https://www.npmjs.com/package/@tronweb3/tronwallet-adapters)                           |
+| [tronlink](https://www.tronlink.org/)       | Adapter for tronlink extention and tronlink app(IOS and Android) | [`@tronweb3/tronwallet-adapter-tronlink`](https://www.npmjs.com/package/@tronweb3/tronwallet-adapter-tronlink)           |
+| [ledger](https://www.ledger.com/)           | Adapter for ledger                                               | [`@tronweb3/tronwallet-adapter-ledger`](https://www.npmjs.com/package/@tronweb3/tronwallet-adapter-ledger)               |
 | [walletconnect](https://walletconnect.com/) | Adapter for walletconnect                                        | [`@tronweb3/tronwallet-adapter-walletconnect`](https://www.npmjs.com/package/@tronweb3/tronwallet-adapter-walletconnect) |
 
 ### React Components
 
 These packages provide components for react hooks context and custom react UI.
 
-| package     | description                         | npm                                        |
-| ----------- | ----------------------------------- | ------------------------------------------ |
+| package     | description                         | npm                                                                                                                  |
+| ----------- | ----------------------------------- | -------------------------------------------------------------------------------------------------------------------- |
 | react-hooks | provides a `useWallet()` react hook | [`@tronweb3/tronwallet-adapter-react-hooks`](https://www.npmjs.com/package/@tronweb3/tronwallet-adapter-react-hooks) |
-| react-ui    | UI frameworks for react app         | [`@tronweb3/tronwallet-adapter-react-ui`](https://www.npmjs.com/package/@tronweb3/tronwallet-adapter-react-ui)    |
+| react-ui    | UI frameworks for react app         | [`@tronweb3/tronwallet-adapter-react-ui`](https://www.npmjs.com/package/@tronweb3/tronwallet-adapter-react-ui)       |
 
 ## Packages Examples
 
@@ -287,6 +287,20 @@ Welcome to contribute your idea!
     ```
 4. You can run `pnpm watch` to rebuild the code when changes.
 5. Commit the changes you've made and open a PR to this repository.
+
+### Release
+
+1. first update package version:
+
+```shell
+pnpm update-version
+```
+
+2. release the packages
+
+```
+pnpm release
+```
 
 ## License
 
