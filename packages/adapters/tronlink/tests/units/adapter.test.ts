@@ -2,6 +2,7 @@ import {
     WalletConnectionError,
     WalletDisconnectedError,
     WalletNotFoundError,
+    WalletSwitchChainError,
     AdapterState,
 } from '@tronweb3/tronwallet-abstract-adapter';
 import { TronLinkAdapter } from '../../src/index.js';
@@ -13,6 +14,8 @@ beforeEach(function () {
     global.document = window.document;
     global.navigator = window.navigator;
     jest.useFakeTimers();
+    window.tronLink = undefined;
+    window.tron = undefined;
 });
 afterAll(function () {
     setTimeout(process.exit, 500);
@@ -33,6 +36,7 @@ describe('TronLinkAdapter', function () {
             expect(adapter).toHaveProperty('disconnect');
             expect(adapter).toHaveProperty('signMessage');
             expect(adapter).toHaveProperty('signTransaction');
+            expect(adapter).toHaveProperty('switchChain');
 
             expect(adapter).toHaveProperty('on');
             expect(adapter).toHaveProperty('off');
@@ -67,6 +71,53 @@ describe('TronLinkAdapter', function () {
             expect(adapter.state).toEqual(AdapterState.Connected);
             expect(adapter.connected).toEqual(true);
             expect(adapter.address).toEqual('xxx');
+        });
+    });
+    describe('Tron protocol for TIP1193', function () {
+        test('should work fine when tron is disconnected', async function () {
+            (window as any).tron = {
+                tronWeb: false,
+                request() {
+                    return new Promise((resolve) => {
+                        this.tronWeb = {
+                            defaultAddress: {
+                                base58: 'xxx',
+                            },
+                        };
+                        resolve(['xxx']);
+                    });
+                },
+                on() {
+                    //
+                },
+            };
+            const adapter = new TronLinkAdapter();
+            jest.advanceTimersByTime(200);
+            expect(adapter.state).toEqual(AdapterState.Disconnect);
+
+            await adapter.connect();
+            expect(adapter.state).toEqual(AdapterState.Connected);
+            expect(adapter.address).toEqual('xxx');
+        });
+        test('should work fine when tron is connected', async function () {
+            const onMethod = jest.fn();
+            const removeListenerMethod = jest.fn();
+            (window as any).tron = {
+                tronWeb: {
+                    defaultAddress: {
+                        base58: 'xxx',
+                    },
+                },
+                on: onMethod,
+                removeListener: removeListenerMethod,
+            };
+            const adapter = new TronLinkAdapter();
+            expect(adapter.state).toEqual(AdapterState.Connected);
+            expect(adapter.address).toEqual('xxx');
+            expect(onMethod).toHaveBeenCalledTimes(4);
+
+            await adapter.disconnect();
+            expect(removeListenerMethod).toHaveBeenCalledTimes(4);
         });
     });
     describe('#connect()', function () {
@@ -253,6 +304,32 @@ describe('TronLinkAdapter', function () {
             await adapter.connect();
             const signedTransaction = await adapter.signTransaction({} as any);
             expect(signedTransaction).toEqual('123');
+        });
+    });
+
+    describe('#switchChain', function () {
+        test('should throw error and open link when TronLink is not found', async function () {
+            const adapter = new TronLinkAdapter();
+            jest.advanceTimersByTime(300);
+            await expect(adapter.switchChain('0x39483')).rejects.toThrow('The wallet is not found.');
+            expect(window.open).toBeCalled();
+        });
+        test('should throw error when TronLink do not support Tron protocol', async function () {
+            (window as any).tronLink = {
+                ready: false,
+            };
+            const adapter = new TronLinkAdapter();
+            jest.advanceTimersByTime(300);
+            await expect(adapter.switchChain('0x39483')).rejects.toThrowError(WalletSwitchChainError);
+        });
+        test('should work fine when TronLink support Tron protocol', async function () {
+            (window as any).tron = {
+                request: jest.fn(),
+            };
+            const adapter = new TronLinkAdapter();
+            jest.advanceTimersByTime(300);
+            await adapter.switchChain('0x39483');
+            expect(window.tron?.request).toBeCalledTimes(1);
         });
     });
 });
