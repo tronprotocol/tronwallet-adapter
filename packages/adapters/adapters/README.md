@@ -142,6 +142,7 @@ The `Adapter` class defines the common interface for all adapters of specified w
 -   `disconnect(): Promise<void>`: disconnect to the wallet.
 -   `signMessage(message, privateKey?): Promise<string>`: sign a string, return the signature result. An optional `privateKey` can be provided.
 -   `signTransaction(transaction, privateKey?)`: sign a transaction, return the signature result of the transaction. An optional `privateKey` can be provided.
+-   `switchChain(chainId: string): Promise<void>;`: request wallet to switch chain by `chainId`.
 
 #### Events
 
@@ -163,12 +164,7 @@ Events are as follows:
 -   `chainChanged(chainInfo: ChainInfo)`: Emit when users change the current selected chain in wallet. The parameter is the new network config：
     ```typescript
     interface ChainInfo {
-        node: {
-            chain: string;
-            fullNode: string;
-            solidityNode: string;
-            eventServer: string;
-        };
+        chainId: string;
     }
     ```
 -   `error(ConnectionError)`: Emit when there are some errors when call the adapter's method. The [ConnectionError Types] is defined as follows.

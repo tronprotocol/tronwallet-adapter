@@ -28,6 +28,7 @@ export interface AdapterProps<Name extends string = string> {
     disconnect(): Promise<void>;
     signMessage(message: string, privateKey?: string): Promise<string>;
     signTransaction(transaction: Transaction, privateKey?: string): Promise<SignedTransaction>;
+    switchChain(chainId: string): Promise<void>;
 }
 
 /**
@@ -73,4 +74,8 @@ export abstract class Adapter<Name extends string = string>
     }
     abstract signMessage(message: string, privateKey?: string): Promise<string>;
     abstract signTransaction(transaction: Transaction, privateKey?: string): Promise<SignedTransaction>;
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    switchChain(_chainId: string): Promise<void> {
+        return Promise.reject("The current wallet doesn't support switch chain.");
+    }
 }

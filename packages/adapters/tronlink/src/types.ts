@@ -45,3 +45,32 @@ export interface NetworkChangedEventData {
     node: NetworkNodeConfig;
     connectNode: NetworkNodeConfig;
 }
+
+interface TronRequestArguments {
+    readonly method: string;
+    readonly params?: unknown[] | object;
+}
+interface ProviderRpcError extends Error {
+    code: number;
+    message: string;
+    data?: unknown;
+}
+type TronEvent = 'connect' | 'disconnect' | 'chainChanged' | 'accountsChanged';
+
+export type TronConnectCallback = (data: { chainId: string }) => void;
+export type TronChainChangedCallback = TronConnectCallback;
+export type TronDisconnectCallback = (error: ProviderRpcError) => void;
+export type TronAccountsChangedCallback = (data: [string?]) => void;
+export interface Tron {
+    request(args: { method: 'eth_requestAccounts' }): Promise<[string]>;
+    request(args: TronRequestArguments): Promise<unknown>;
+
+    on(event: 'connect', cb: TronConnectCallback): void;
+    on(event: 'disconnect', cb: TronDisconnectCallback): void;
+    on(event: 'chainChanged', cb: TronChainChangedCallback): void;
+    on(event: 'accountsChanged', cb: TronAccountsChangedCallback): void;
+
+    removeListener(event: TronEvent, cb: unknown): void;
+    tronWeb: TronWeb;
+    isTronLink: boolean;
+}
