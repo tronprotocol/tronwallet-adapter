@@ -1,4 +1,5 @@
 export type NetworkNodeConfig = {
+    chainId: string;
     chain: string;
     fullNode: string;
     solidityNode: string;

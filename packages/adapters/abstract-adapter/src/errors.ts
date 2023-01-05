@@ -74,3 +74,9 @@ export class WalletWindowClosedError extends WalletError {
     name = 'WalletWindowClosedError';
     message = 'The QR window is closed.';
 }
+/**
+ * Occurs when request wallet to switch chain.
+ */
+export class WalletSwitchChainError extends WalletError {
+    name = 'WalletSwitchChainError';
+}
