@@ -35,7 +35,7 @@
         "test": "pnpm --recursive --filter \"@tronweb3/*\" run test",
         "example": "pnpm run --filter {demos/react-ui/vite-app} dev",
         "prepare": "husky install",
-        "update-version": "pnpm changeset"
+        "update-version": "pnpm changeset add && pnpm changeset version"
     },
     "devDependencies": {
         "@changesets/cli": "^2.26.0",
