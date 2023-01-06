@@ -60,7 +60,7 @@ export function App() {
         return [tronLink1, walletConnect1, ledger];
     }, []);
     return (
-        <WalletProvider onError={onError} autoConnect={false} adapters={adapters}>
+        <WalletProvider onError={onError} autoConnect={true} adapters={adapters}>
             <WalletModalProvider>
                 <UIComponent></UIComponent>
                 <Profile></Profile>

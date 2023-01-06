@@ -115,6 +115,7 @@ export class TronLinkAdapter extends Adapter {
                     this._state = AdapterState.Connected;
                     this._address = this._wallet.tronWeb.defaultAddress?.base58 || '';
                     this._listenTronEvent();
+                    this.emit('connect', this._address);
                 } else {
                     this._state = AdapterState.Disconnect;
                 }
@@ -361,18 +362,10 @@ export class TronLinkAdapter extends Adapter {
     // following code is for TIP-1193
     private _listenTronEvent() {
         const wallet = this._wallet as Tron;
-        wallet.on('connect', this._onConnect);
         wallet.on('chainChanged', this._onChainChanged);
         wallet.on('accountsChanged', this._onAccountsChanged);
         wallet.on('disconnect', this._onDisconnect);
     }
-    private _onConnect = () => {
-        const wallet = this._wallet as Tron;
-        this._address = wallet.tronWeb.defaultAddress?.base58 || '';
-        this._state = AdapterState.Connected;
-        this.emit('connect', this._address);
-        this.emit('stateChanged', this._state);
-    };
     private _onChainChanged: TronChainChangedCallback = (data) => {
         this.emit('chainChanged', data);
     };
@@ -389,7 +382,6 @@ export class TronLinkAdapter extends Adapter {
         const wallet = this._wallet as Tron;
         this._state = AdapterState.Disconnect;
         this._address = null;
-        wallet.removeListener('connect', this._onConnect);
         wallet.removeListener('chainChanged', this._onChainChanged);
         wallet.removeListener('accountsChanged', this._onAccountsChanged);
         wallet.removeListener('disconnect', this._onDisconnect);
