@@ -114,10 +114,10 @@ describe('TronLinkAdapter', function () {
             const adapter = new TronLinkAdapter();
             expect(adapter.state).toEqual(AdapterState.Connected);
             expect(adapter.address).toEqual('xxx');
-            expect(onMethod).toHaveBeenCalledTimes(4);
+            expect(onMethod).toHaveBeenCalledTimes(3);
 
             await adapter.disconnect();
-            expect(removeListenerMethod).toHaveBeenCalledTimes(4);
+            expect(removeListenerMethod).toHaveBeenCalledTimes(3);
         });
     });
     describe('#connect()', function () {
