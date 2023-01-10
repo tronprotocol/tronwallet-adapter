@@ -9,9 +9,12 @@
         "preview": "vite preview"
     },
     "dependencies": {
+        "@mui/material": "^5.10.10",
+        "@tronweb3/tronwallet-abstract-adapter": "workspace:^1.0.0",
         "@tronweb3/tronwallet-adapter-ledger": "workspace:^1.0.0",
         "@tronweb3/tronwallet-adapter-react-hooks": "workspace:^1.0.0",
         "@tronweb3/tronwallet-adapter-react-ui": "workspace:^1.0.0",
+        "@tronweb3/tronwallet-adapters": "workspace:^1.0.0",
         "react": "^18.2.0",
         "react-dom": "^18.2.0",
         "vconsole": "^3.15.0"

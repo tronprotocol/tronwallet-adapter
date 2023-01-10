@@ -71,6 +71,6 @@ export interface Tron {
     on(event: 'accountsChanged', cb: TronAccountsChangedCallback): void;
 
     removeListener(event: TronEvent, cb: unknown): void;
-    tronWeb: TronWeb;
+    tronWeb: TronWeb | false;
     isTronLink: boolean;
 }
