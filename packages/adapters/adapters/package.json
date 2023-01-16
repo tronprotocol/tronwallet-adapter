@@ -1,6 +1,11 @@
 {
     "name": "@tronweb3/tronwallet-adapters",
     "version": "1.1.0",
+    "keywords": [
+        "TRON",
+        "TronWeb",
+        "adapters"
+    ],
     "author": "tronprotocol",
     "repository": {
         "type": "git",

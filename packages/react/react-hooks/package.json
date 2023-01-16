@@ -1,6 +1,11 @@
 {
     "name": "@tronweb3/tronwallet-adapter-react-hooks",
     "version": "1.0.0",
+    "keywords": [
+        "TRON",
+        "TronWeb",
+        "adapter"
+    ],
     "author": "tronprotocol",
     "repository": {
         "type": "git",

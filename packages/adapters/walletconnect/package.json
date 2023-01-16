@@ -1,6 +1,11 @@
 {
     "name": "@tronweb3/tronwallet-adapter-walletconnect",
     "version": "1.0.0",
+    "keywords": [
+        "TRON",
+        "TronWeb",
+        "walletconnect"
+    ],
     "author": "tronprotocol",
     "repository": {
         "type": "git",
