@@ -34,7 +34,7 @@
         "package": "shx echo '{ \"type\": \"commonjs\" }' > lib/cjs/package.json"
     },
     "dependencies": {
-        "@tronweb3/tronwallet-abstract-adapter": "^1.0.0",
+        "@tronweb3/tronwallet-abstract-adapter": "^1.1.0",
         "@tronweb3/walletconnect-tron": "^1.0.0",
         "@walletconnect/sign-client": "^2.1.4",
         "@walletconnect/types": "^2.1.4"
