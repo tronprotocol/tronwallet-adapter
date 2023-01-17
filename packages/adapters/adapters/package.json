@@ -1,6 +1,11 @@
 {
     "name": "@tronweb3/tronwallet-adapters",
-    "version": "1.0.0",
+    "version": "1.1.0",
+    "keywords": [
+        "TRON",
+        "TronWeb",
+        "adapters"
+    ],
     "author": "tronprotocol",
     "repository": {
         "type": "git",
@@ -34,11 +39,11 @@
         "package": "shx echo '{ \"type\": \"commonjs\" }' > lib/cjs/package.json"
     },
     "peerDependencies": {
-        "@tronweb3/tronwallet-abstract-adapter": "^1.0.0"
+        "@tronweb3/tronwallet-abstract-adapter": "^1.1.0"
     },
     "dependencies": {
         "@tronweb3/tronwallet-adapter-ledger": "^1.0.0",
-        "@tronweb3/tronwallet-adapter-tronlink": "^1.0.0",
+        "@tronweb3/tronwallet-adapter-tronlink": "^1.1.0",
         "@tronweb3/tronwallet-adapter-walletconnect": "^1.0.0"
     },
     "devDependencies": {

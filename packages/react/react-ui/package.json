@@ -1,6 +1,11 @@
 {
     "name": "@tronweb3/tronwallet-adapter-react-ui",
-    "version": "1.0.1",
+    "version": "1.1.0",
+    "keywords": [
+        "TRON",
+        "TronWeb",
+        "adapter"
+    ],
     "author": "tronprotocol",
     "repository": {
         "type": "git",
@@ -43,14 +48,14 @@
         "react-dom": "*"
     },
     "dependencies": {
-        "@tronweb3/tronwallet-abstract-adapter": "^1.0.0",
+        "@tronweb3/tronwallet-abstract-adapter": "^1.1.0",
         "@tronweb3/tronwallet-adapter-react-hooks": "^1.0.0"
     },
     "devDependencies": {
         "@testing-library/jest-dom": "^5.16.5",
         "@testing-library/react": "^13.4.0",
         "@testing-library/user-event": "^13.5.0",
-        "@tronweb3/tronwallet-adapter-tronlink": "^1.0.0",
+        "@tronweb3/tronwallet-adapter-tronlink": "^1.1.0",
         "@types/jest": "^27.5.2",
         "@types/react": "^18.0.26",
         "@types/react-dom": "^18.0.0",

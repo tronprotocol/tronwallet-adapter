@@ -1,6 +1,11 @@
 {
     "name": "@tronweb3/tronwallet-adapter-react-hooks",
     "version": "1.0.0",
+    "keywords": [
+        "TRON",
+        "TronWeb",
+        "adapter"
+    ],
     "author": "tronprotocol",
     "repository": {
         "type": "git",
@@ -39,8 +44,8 @@
         "react-dom": "*"
     },
     "dependencies": {
-        "@tronweb3/tronwallet-abstract-adapter": "workspace:^1.0.0",
-        "@tronweb3/tronwallet-adapter-tronlink": "workspace:^1.0.0"
+        "@tronweb3/tronwallet-abstract-adapter": "workspace:^1.1.0",
+        "@tronweb3/tronwallet-adapter-tronlink": "workspace:^1.1.0"
     },
     "devDependencies": {
         "@types/react": "^18.0.26",
