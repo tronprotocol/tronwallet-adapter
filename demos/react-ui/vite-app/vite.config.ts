@@ -7,7 +7,7 @@ export default defineConfig({
     plugins: [
         react(),
         legacy({
-            targets: ['defaults', 'not IE 11'],
+            targets: ['defaults'],
         }),
     ],
     define: {
@@ -24,4 +24,10 @@ export default defineConfig({
         host: '0.0.0.0',
         port: 3000,
     },
+    // https://tronprotocol.github.io/tronwallet-adapter/example
+    base: '/tronwallet-adapter/example/',
+    build: {
+        emptyOutDir: true,
+        outDir: '../../../docs/example'
+    }
 });
