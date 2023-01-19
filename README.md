@@ -104,7 +104,7 @@ Here is the demo image:
 
 -   [For Tron Apps](./App.md)
 
-For more details, please refer to the API Documentation.
+For more details, please refer to the [API Documentation](https://developers.tron.network/docs/tronwallet-adapter).
 
 ## TronWallet Adapter Packages
 
