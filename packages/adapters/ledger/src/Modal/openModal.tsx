@@ -1,4 +1,5 @@
 import React, { render } from 'preact/compat';
+import { ConfirmContent } from './ConfirmContent.js';
 import { ConnectingContent } from './ConnectingContent.js';
 import { getLangText } from './lang.js';
 import { Modal } from './Modal.js';
@@ -27,6 +28,19 @@ export function openConnectingModal() {
     render(
         <Modal title={langText.loadingTitle} onClose={onClose}>
             <ConnectingContent></ConnectingContent>
+        </Modal>,
+        div
+    );
+
+    return onClose;
+}
+
+export function openConfirmModal(address: string) {
+    const { onClose, div } = prepareDomNode();
+    const langText = getLangText();
+    render(
+        <Modal width={550} title={langText.loadingTitle} onClose={onClose}>
+            <ConfirmContent address={address}></ConfirmContent>
         </Modal>,
         div
     );

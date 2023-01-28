@@ -38,7 +38,7 @@ export class LedgerAdapter extends Adapter {
         this._connecting = false;
         this._address = null;
         this._wallet = new LedgerWallet({
-            accountNumber: this._config.accountNumber,
+            accountNumber: this._config.accountNumber || 2,
         });
         if (isSupportedLedger()) {
             this._state = AdapterState.Disconnect;
@@ -79,7 +79,6 @@ export class LedgerAdapter extends Adapter {
             this._state = AdapterState.Connected;
             this.emit('connect', this.address || '');
             this.emit('stateChanged', this._state);
-            this._wallet.on('accountChanged', this._changeAccount);
         } catch (error: any) {
             this.emit('error', error);
             throw error;
@@ -93,11 +92,11 @@ export class LedgerAdapter extends Adapter {
             return;
         }
         try {
+            this._wallet.disconnect();
             this._state = AdapterState.Disconnect;
             this._address = null;
             this.emit('disconnect');
             this.emit('stateChanged', this._state);
-            this._wallet.off('accountChanged', this._changeAccount);
         } catch (e: any) {
             throw new WalletDisconnectedError(e.message);
         }
@@ -136,8 +135,4 @@ export class LedgerAdapter extends Adapter {
             throw error;
         }
     }
-    private _changeAccount = (address: string) => {
-        this._address = address;
-        this.emit('accountsChanged', address);
-    };
 }
