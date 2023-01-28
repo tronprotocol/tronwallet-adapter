@@ -46,12 +46,11 @@ export class LedgerWallet extends EventEmitter<WalletEvent> {
             setTimeout(() => {
                 this.getAccount(0, this.accountNumber);
             }, 300);
+            closeModal();
             // eslint-disable-next-line no-useless-catch
         } catch (e: any) {
             throw e;
         } finally {
-            // @ts-ignore
-            closeModal();
             await this.cleanUp();
         }
     }

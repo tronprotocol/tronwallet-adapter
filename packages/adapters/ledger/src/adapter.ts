@@ -68,9 +68,12 @@ export class LedgerAdapter extends Adapter {
             try {
                 await this._wallet.connect();
             } catch (e: any) {
-                throw new WalletConnectionError(
-                    `ConnectionError: ${e.message}. \nPlease prepare your ledger and enter Tron app.`
-                );
+                if (e.message?.includes('Incorrect length (0x6700)')) {
+                    // This error code usually means that users don't have the right application opened on device
+                    // see here  https://www.reddit.com/r/ledgerwallet/comments/mxcxo3/can_someone_help_with_the_problem_ledger_device/
+                    throw new WalletConnectionError('Please prepare your ledger and enter Tron app.');
+                }
+                throw new WalletConnectionError(`${e.message}.`);
             }
             this._address = this._wallet.address;
             this._state = AdapterState.Connected;

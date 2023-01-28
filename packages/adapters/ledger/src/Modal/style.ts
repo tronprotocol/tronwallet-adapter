@@ -51,9 +51,11 @@ export const modalStyleSheetContent = `
   cursor: pointer;
   transition: color 0.3s;
 }
-.ledger-modal-close:focus, .ledger-modal-close:hover {
+.ledger-modal-close:focus,.ledger-modal-close:active,.ledger-modal-close:hover {
   color: rgba(0, 0, 0, 0.75);
   text-decoration: none;
+  border: none;
+  outline: none;
 }
 .ledger-modal-close-x {
   display: block;
