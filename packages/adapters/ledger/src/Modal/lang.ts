@@ -65,19 +65,19 @@ export function getLangText() {
     const searchParams = new URLSearchParams(globalThis.location.search);
     const searchParamsLang = searchParams.get('lang') as keyof typeof Lang;
     const storageSettingLang = globalThis.localStorage.getItem('lang') as keyof typeof Lang;
-    const appLang = searchParamsLang || storageSettingLang;
-    const browserLang = globalThis.navigator.language;
+    const appLang = (searchParamsLang || storageSettingLang || '').toLowerCase();
+    const browserLang = (globalThis.navigator.language || '').toLowerCase();
     if (appLang) {
-        if (['zh-TW', 'zh-HK', 'zh-TC'].includes(appLang)) {
+        if (['zh-tw', 'zh-hk', 'zh-tc'].includes(appLang)) {
             lang = Lang['zh-TC'];
         } else if (appLang.includes('zh')) {
             lang = Lang['zh-CN'];
         } else {
             lang = Lang.en;
         }
-    } else if (['zh-TW', 'zh-HK'].includes(browserLang)) {
+    } else if (['zh-tw', 'zh-hk', 'zh-tc'].includes(browserLang)) {
         lang = Lang['zh-TC'];
-    } else if (['zh', 'zh-CN'].includes(browserLang)) {
+    } else if (['zh', 'zh-cn'].includes(browserLang)) {
         lang = Lang['zh-CN'];
     } else if (browserLang.includes('en')) {
         lang = Lang['en'];
