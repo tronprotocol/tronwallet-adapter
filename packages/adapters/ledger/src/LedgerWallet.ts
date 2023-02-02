@@ -33,10 +33,24 @@ export class LedgerWallet {
 
     async connect() {
         let closeModal: (() => void) | null = null;
+        this.accounts = [];
+        this._address = '';
+        this.selectedIndex = 0;
         try {
             closeModal = openConnectingModal();
             await this.makeApp();
-            await this.getAccount(0, this.accountNumber);
+
+            const path = this.getPathForIndex(0);
+            const { address } = await this.app!.getAddress(path);
+            this.accounts[0] = {
+                address,
+                path,
+                index: 0,
+            };
+            await this.cleanUp();
+            if (this.accountNumber > 1) {
+                await this.getAccount(1, this.accountNumber);
+            }
             closeModal();
 
             const index = await openSelectAccountModal({
@@ -44,7 +58,6 @@ export class LedgerWallet {
                 selectedIndex: 0,
                 getAccount: this.getAccount,
             });
-            await this.cleanUp();
 
             await this.verifyAddress(index);
             this.selectedIndex = index;

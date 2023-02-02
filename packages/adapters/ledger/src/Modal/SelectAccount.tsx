@@ -32,7 +32,7 @@ export function SelectAccount(props: SelectAccountProps) {
     const langText = useMemo(() => getLangText(), []);
 
     useEffect(() => {
-        setAccounts([...props.accounts]);
+        setAccounts([...props.accounts.filter((a) => a.isValid !== false)]);
     }, [props.accounts]);
 
     useEffect(() => {
