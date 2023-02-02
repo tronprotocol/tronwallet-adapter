@@ -32,7 +32,7 @@ export function SelectAccount(props: SelectAccountProps) {
     const langText = useMemo(() => getLangText(), []);
 
     useEffect(() => {
-        setAccounts(props.accounts);
+        setAccounts([...props.accounts]);
     }, [props.accounts]);
 
     useEffect(() => {
@@ -57,7 +57,7 @@ export function SelectAccount(props: SelectAccountProps) {
         const to = last.index + 6;
         try {
             const result = await props.getAccount(from, to);
-            setAccounts((accounts) => [...accounts, ...result.filter((a) => a.isValid)]);
+            setAccounts((accounts) => [...accounts, ...result.filter((a) => a.isValid !== false)]);
         } finally {
             setLoading(false);
         }

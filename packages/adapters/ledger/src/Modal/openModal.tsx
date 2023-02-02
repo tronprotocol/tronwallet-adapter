@@ -65,7 +65,7 @@ export function openSelectAccountModal(options: {
             onClose();
         }
         render(
-            <Modal title={langText.loadingTitle} onClose={onClose}>
+            <Modal title={langText.loadingTitle} onClose={onCancel} closable={true}>
                 <SelectAccount
                     accounts={options.accounts}
                     selectedIndex={options.selectedIndex}

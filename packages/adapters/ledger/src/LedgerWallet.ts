@@ -32,7 +32,7 @@ export class LedgerWallet {
     }
 
     async connect() {
-        let closeModal: () => void;
+        let closeModal: (() => void) | null = null;
         try {
             closeModal = openConnectingModal();
             await this.makeApp();
@@ -41,7 +41,7 @@ export class LedgerWallet {
 
             const index = await openSelectAccountModal({
                 accounts: this.accounts,
-                selectedIndex: this.selectedIndex,
+                selectedIndex: 0,
                 getAccount: this.getAccount,
             });
             await this.cleanUp();
@@ -51,6 +51,9 @@ export class LedgerWallet {
             this._address = this.accounts[index].address;
             // eslint-disable-next-line no-useless-catch
         } catch (e: any) {
+            setTimeout(() => {
+                closeModal?.();
+            }, 2000);
             throw e;
         } finally {
             await this.cleanUp();
@@ -127,18 +130,21 @@ export class LedgerWallet {
     };
 
     private async verifyAddress(index: number) {
-        let closeModal;
+        let closeModal: (() => void) | null = null;
         try {
             const selectedAddress = this.accounts[index].address;
             closeModal = openConfirmModal(selectedAddress);
             const path = this.getPathForIndex(index);
             await this.makeApp();
             await this.app!.getAddress(path, true);
+            closeModal();
             // eslint-disable-next-line no-useless-catch
         } catch (e) {
+            setTimeout(() => {
+                closeModal?.();
+            }, 2000);
             throw e;
         } finally {
-            closeModal?.();
             await this.cleanUp();
         }
     }
@@ -152,7 +158,7 @@ export class LedgerWallet {
                 address,
                 index,
             };
-        } catch (e: any) {
+        } catch (e: unknown) {
             return {
                 path,
                 address: '',
@@ -181,8 +187,8 @@ export class LedgerWallet {
     }
 
     private async cleanUp() {
-        this.app = null as any;
+        this.app = null as unknown as Trx;
         await this.transport?.close();
-        this.transport = null as any;
+        this.transport = null as unknown as Transport;
     }
 }

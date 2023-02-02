@@ -1,11 +1,12 @@
-import React, { useState } from 'react';
-import {
-    WalletActionButton,
-    WalletConnectButton,
-    WalletDisconnectButton,
-    WalletSelectButton,
-} from '@tronweb3/tronwallet-adapter-react-ui';
-import { TronLinkAdapterDemo } from './TronLinkAdapterDemo.js';
+import React from 'react';
+// import {
+//     WalletActionButton,
+//     WalletConnectButton,
+//     WalletDisconnectButton,
+//     WalletSelectButton,
+// } from '@tronweb3/tronwallet-adapter-react-ui';
+// import { TronLinkAdapterDemo } from './TronLinkAdapterDemo.js';
+import { LedgerAdapterDemo } from './LedgerAdapterDemo.js';
 
 function App() {
     return (
@@ -20,7 +21,7 @@ function App() {
             <WalletDisconnectButton></WalletDisconnectButton>
             <h2>WalletActionButton</h2>
             <WalletActionButton></WalletActionButton> */}
-            <TronLinkAdapterDemo></TronLinkAdapterDemo>
+            <LedgerAdapterDemo></LedgerAdapterDemo>
         </div>
     );
 }

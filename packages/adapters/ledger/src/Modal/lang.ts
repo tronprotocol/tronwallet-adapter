@@ -39,11 +39,49 @@ export const Lang = {
         balance: '可用余额',
         loadMore: '加载更多账户',
     },
-};
+    'zh-TC': {
+        loadingTitle: 'Ledger 登錄',
+        loadingTip0: '請連接 Ledger 設備，並在設備上進入 “TRON” 應用',
+        loadingTip4: 'Ledger 設備準備中...',
 
+        checkTitle: '請確認以下地址與 Ledger 設備顯示地址一致',
+        checkTip0: '如果一致：請按設備上的 Approve 按鈕進行確認',
+        checkTip1: '如果不一致：請在 Ledger 設備中選擇 Reject 按鈕並刷新本頁面',
+        confirmTip: '請在 Ledger 上確認',
+
+        selectTitle: '選擇賬戶',
+        selectTip: '請選擇要使用的錢包賬戶',
+
+        cancel: '取消',
+        confirm: '確認',
+
+        address: '地址',
+        balance: '可用餘額',
+        loadMore: '加載更多賬戶',
+    },
+};
 export function getLangText() {
-    if (globalThis.navigator.language.includes('zh')) {
-        return Lang['zh-CN'];
+    let lang = Lang.en;
+    const searchParams = new URLSearchParams(globalThis.location.search);
+    const searchParamsLang = searchParams.get('lang') as keyof typeof Lang;
+    const storageSettingLang = globalThis.localStorage.getItem('lang') as keyof typeof Lang;
+    const appLang = searchParamsLang || storageSettingLang;
+    const browserLang = globalThis.navigator.language;
+    if (appLang) {
+        if (['zh-TW', 'zh-HK', 'zh-TC'].includes(appLang)) {
+            lang = Lang['zh-TC'];
+        } else if (appLang.includes('zh')) {
+            lang = Lang['zh-CN'];
+        } else {
+            lang = Lang.en;
+        }
+    } else if (['zh-TW', 'zh-HK'].includes(browserLang)) {
+        lang = Lang['zh-TC'];
+    } else if (['zh', 'zh-CN'].includes(browserLang)) {
+        lang = Lang['zh-CN'];
+    } else if (browserLang.includes('en')) {
+        lang = Lang['en'];
     }
-    return Lang.en;
+
+    return lang || Lang.en;
 }
