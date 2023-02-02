@@ -64,9 +64,9 @@ export class LedgerWallet {
             this._address = this.accounts[index].address;
             // eslint-disable-next-line no-useless-catch
         } catch (e: any) {
-            setTimeout(() => {
-                closeModal?.();
-            }, 2000);
+            // setTimeout(() => {
+            //     closeModal?.();
+            // }, 2000);
             throw e;
         } finally {
             await this.cleanUp();
@@ -153,9 +153,9 @@ export class LedgerWallet {
             closeModal();
             // eslint-disable-next-line no-useless-catch
         } catch (e) {
-            setTimeout(() => {
-                closeModal?.();
-            }, 2000);
+            // setTimeout(() => {
+            //     closeModal?.();
+            // }, 2000);
             throw e;
         } finally {
             await this.cleanUp();

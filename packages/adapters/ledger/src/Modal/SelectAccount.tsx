@@ -92,6 +92,7 @@ export function SelectAccount(props: SelectAccountProps) {
                     <button
                         ref={loadBtnRef}
                         style={{ marginTop: 10 }}
+                        disabled={loading}
                         className="ledger-select-button"
                         onClick={onLoadMore}
                     >
