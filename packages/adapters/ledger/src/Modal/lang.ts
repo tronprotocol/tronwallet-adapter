@@ -22,7 +22,7 @@ export const Lang = {
     'zh-CN': {
         loadingTitle: 'Ledger 登录',
         loadingTip0: '请连接 Ledger 设备，并在设备上进入 “TRON” 应用',
-        loadingTip4: 'Ledger 设备准备中...',
+        loadingTip4: 'Ledger 设备准备中......',
 
         checkTitle: '请确认以下地址与 Ledger 设备显示地址一致',
         checkTip0: '如果一致：请按设备上的 Approve 按钮进行确认',
@@ -42,7 +42,7 @@ export const Lang = {
     'zh-TC': {
         loadingTitle: 'Ledger 登錄',
         loadingTip0: '請連接 Ledger 設備，並在設備上進入 “TRON” 應用',
-        loadingTip4: 'Ledger 設備準備中...',
+        loadingTip4: 'Ledger 設備準備中......',
 
         checkTitle: '請確認以下地址與 Ledger 設備顯示地址一致',
         checkTip0: '如果一致：請按設備上的 Approve 按鈕進行確認',
@@ -61,27 +61,29 @@ export const Lang = {
     },
 };
 export function getLangText() {
-    let lang = Lang.en;
     const searchParams = new URLSearchParams(globalThis.location.search);
     const searchParamsLang = searchParams.get('lang') as keyof typeof Lang;
     const storageSettingLang = globalThis.localStorage.getItem('lang') as keyof typeof Lang;
     const appLang = (searchParamsLang || storageSettingLang || '').toLowerCase();
-    const browserLang = (globalThis.navigator.language || '').toLowerCase();
+    const browserSettingLang = (globalThis.navigator.language || '').toLowerCase();
+    let browserLang;
+    if (['zh-tw', 'zh-hk', 'zh-tc'].includes(browserSettingLang)) {
+        browserLang = Lang['zh-TC'];
+    } else if (['zh', 'zh-cn'].includes(browserSettingLang)) {
+        browserLang = Lang['zh-CN'];
+    } else if (browserSettingLang.includes('en')) {
+        browserLang = Lang['en'];
+    }
+
+    let lang = browserLang;
     if (appLang) {
         if (['zh-tw', 'zh-hk', 'zh-tc'].includes(appLang)) {
             lang = Lang['zh-TC'];
-        } else if (appLang.includes('zh')) {
+        } else if (['zh', 'zh-cn'].includes(appLang)) {
             lang = Lang['zh-CN'];
-        } else {
+        } else if (appLang.includes('en')) {
             lang = Lang.en;
         }
-    } else if (['zh-tw', 'zh-hk', 'zh-tc'].includes(browserLang)) {
-        lang = Lang['zh-TC'];
-    } else if (['zh', 'zh-cn'].includes(browserLang)) {
-        lang = Lang['zh-CN'];
-    } else if (browserLang.includes('en')) {
-        lang = Lang['en'];
     }
-
     return lang || Lang.en;
 }

@@ -9,7 +9,9 @@ export function ConfirmContent(props: { address: string }) {
             <LedgerIcon></LedgerIcon>
             <div className="ledger-connecting-pop">
                 <ul className="ledger-connecting-pop-content">
-                    <li className="title">{langText.checkTitle}</li>
+                    <li className="title" style={{ wordBreak: 'break-word' }}>
+                        {langText.checkTitle}
+                    </li>
                     <li>
                         <strong style={{ color: '#B0170D', textAlign: 'left', fontWeight: '600' }}>
                             {props.address}

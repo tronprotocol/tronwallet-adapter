@@ -26,7 +26,7 @@ export function openConnectingModal() {
     const { onClose, div } = prepareDomNode();
     const langText = getLangText();
     render(
-        <Modal title={langText.loadingTitle} onClose={onClose}>
+        <Modal title={langText.loadingTitle} onClose={onClose} closable>
             <ConnectingContent></ConnectingContent>
         </Modal>,
         div
@@ -39,7 +39,7 @@ export function openConfirmModal(address: string) {
     const { onClose, div } = prepareDomNode();
     const langText = getLangText();
     render(
-        <Modal width={550} title={langText.loadingTitle} onClose={onClose}>
+        <Modal width={550} title={langText.loadingTitle} onClose={onClose} closable>
             <ConfirmContent address={address}></ConfirmContent>
         </Modal>,
         div
