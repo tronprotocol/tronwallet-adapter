@@ -45,7 +45,7 @@ function UIComponent() {
         <div>
             <h2>UI Component</h2>
             <TableContainer style={{ overflow: 'visible' }} component="div">
-                <Table sx={{ minWidth: 650 }} aria-label="simple table">
+                <Table sx={{  }} aria-label="simple table">
                     <TableHead>
                         <TableRow>
                             <TableCell>Component</TableCell>

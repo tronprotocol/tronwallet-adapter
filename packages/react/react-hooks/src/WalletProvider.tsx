@@ -124,13 +124,6 @@ export const WalletProvider: FC<WalletProviderProps> = function ({
         [adapter, setName]
     );
 
-    const handleDisconnect = useCallback(
-        function () {
-            setName(null);
-        },
-        [setName]
-    );
-
     const handleError = useCallback(
         function (error: WalletError) {
             onError(error);
@@ -146,18 +139,16 @@ export const WalletProvider: FC<WalletProviderProps> = function ({
         function () {
             if (adapter) {
                 adapter.on('connect', handleConnect);
-                adapter.on('disconnect', handleDisconnect);
                 adapter.on('error', handleError);
                 adapter.on('accountsChanged', handleAccountChange);
                 return () => {
                     adapter.off('connect', handleConnect);
-                    adapter.off('disconnect', handleDisconnect);
                     adapter.off('error', handleError);
                     adapter.off('accountsChanged', handleAccountChange);
                 };
             }
         },
-        [adapter, handleConnect, handleDisconnect, handleError, handleAccountChange]
+        [adapter, handleConnect, handleError, handleAccountChange]
     );
     // disconnect the previous when wallet changes
     useEffect(() => {
@@ -169,13 +160,7 @@ export const WalletProvider: FC<WalletProviderProps> = function ({
     // auto connect
     useEffect(
         function () {
-            if (
-                isConnecting.current ||
-                connected ||
-                !autoConnect ||
-                !adapter ||
-                adapter.state !== AdapterState.Disconnect
-            ) {
+            if (isConnecting.current || !autoConnect || !adapter || adapter.state !== AdapterState.Disconnect) {
                 return;
             }
             (async function connect() {
@@ -184,14 +169,14 @@ export const WalletProvider: FC<WalletProviderProps> = function ({
                 try {
                     await adapter.connect();
                 } catch (error) {
-                    setName(null);
+                    // setName(null);
                 } finally {
                     setConnecting(false);
                     isConnecting.current = false;
                 }
             })();
         },
-        [isConnecting, autoConnect, adapter, connected, setName]
+        [isConnecting, autoConnect, adapter, setName]
     );
 
     const connect = useCallback(
@@ -224,6 +209,7 @@ export const WalletProvider: FC<WalletProviderProps> = function ({
             setDisconnecting(true);
             try {
                 await adapter.disconnect();
+                setName(null);
             } catch (error: any) {
                 setName(null);
                 throw error;

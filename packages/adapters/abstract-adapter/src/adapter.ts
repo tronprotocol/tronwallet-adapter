@@ -5,6 +5,7 @@ import type { SignedTransaction, Transaction } from './types.js';
 export { EventEmitter };
 
 export interface AdapterEvents {
+    ready(): void;
     connect(address: string): void;
     disconnect(): void;
     error(error: WalletError): void;
@@ -35,6 +36,10 @@ export interface AdapterProps<Name extends string = string> {
  * Adapter state
  */
 export enum AdapterState {
+    /**
+     * If adapter is checking the wallet, the state is Loading.
+     */
+    Loading = 'Loading',
     /**
      * If wallet is not installed, the state is NotFound.
      */

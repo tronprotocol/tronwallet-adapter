@@ -69,29 +69,42 @@ export const WalletActionButton: FC<ButtonProps> = ({ children, ...props }) => {
     }, [ref, hideDropdown]);
 
     if (!wallet) return <WalletSelectButton {...props}>{children}</WalletSelectButton>;
-    if (!address) return <WalletConnectButton {...props}>{children}</WalletConnectButton>;
 
     return (
         <div data-testid="wallet-action-button" className="adapter-dropdown">
-            <Button
-                onClick={openDropdown}
-                style={{ pointerEvents: dropdownVisible ? 'none' : 'auto', ...props.style }}
-                icon={wallet ? wallet.adapter.icon : ''}
-                {...props}
+            {!address ? (
+                <div onMouseEnter={openDropdown} onMouseLeave={hideDropdown}>
+                    <WalletConnectButton {...props}>{children}</WalletConnectButton>
+                </div>
+            ) : (
+                <Button
+                    onClick={openDropdown}
+                    style={{ pointerEvents: dropdownVisible ? 'none' : 'auto', ...props.style }}
+                    icon={wallet ? wallet.adapter.icon : ''}
+                    {...props}
+                >
+                    {content}
+                </Button>
+            )}
+            <Collapse
+                className="adapter-dropdown-collapse"
+                isOpen={dropdownVisible}
+                {...(!address ? { onMouseEnter: openDropdown, onMouseLeave: hideDropdown } : {})}
             >
-                {content}
-            </Button>
-            <Collapse className="adapter-dropdown-collapse" isOpen={dropdownVisible}>
                 <ul ref={ref} className="adapter-dropdown-list" role="menu">
-                    <li onClick={copyAddress} className="adapter-dropdown-list-item" role="menuitem">
-                        {copied ? 'Copied' : 'Copy address'}
-                    </li>
+                    {address && (
+                        <li onClick={copyAddress} className="adapter-dropdown-list-item" role="menuitem">
+                            {copied ? 'Copied' : 'Copy address'}
+                        </li>
+                    )}
                     <li onClick={changeWallet} className="adapter-dropdown-list-item" role="menuitem">
                         Change wallet
                     </li>
-                    <li onClick={handleDisconnect} className="adapter-dropdown-list-item" role="menuitem">
-                        Disconnect
-                    </li>
+                    {address && (
+                        <li onClick={handleDisconnect} className="adapter-dropdown-list-item" role="menuitem">
+                            Disconnect
+                        </li>
+                    )}
                 </ul>
             </Collapse>
         </div>

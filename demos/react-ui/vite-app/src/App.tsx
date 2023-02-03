@@ -60,7 +60,7 @@ export function App() {
         return [tronLink1, walletConnect1, ledger];
     }, []);
     return (
-        <WalletProvider onError={onError} autoConnect={true} adapters={adapters}>
+        <WalletProvider onError={onError} autoConnect={false} adapters={adapters}>
             <WalletModalProvider>
                 <UIComponent></UIComponent>
                 <Profile></Profile>
@@ -75,7 +75,7 @@ function UIComponent() {
         <div>
             <h2>UI Component</h2>
             <TableContainer style={{ overflow: 'visible' }} component="div">
-                <Table sx={{ minWidth: 650 }} aria-label="simple table">
+                <Table sx={{}} aria-label="simple table">
                     <TableHead>
                         <TableRow>
                             <TableCell>Component</TableCell>
@@ -143,7 +143,7 @@ function SignDemo() {
             <p style={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', wordBreak: 'break-all' }}>
                 You can sign a message by click the button.
             </p>
-            <Button style={{ marginRight: '20px' }} onClick={onSignMessage}>
+            <Button style={{ marginRight: '20px', marginBottom: '10px' }} onClick={onSignMessage}>
                 SignMessage
             </Button>
             <TextField
@@ -151,7 +151,7 @@ function SignDemo() {
                 onChange={(e) => setMessage(e.target.value)}
                 placeholder="input message to signed"
             ></TextField>
-            <p>Your sigedMessage is: {signedMessage}</p>
+            { !!signedMessage && <p><span>Your sigedMessage is:</span> <span>{signedMessage}</span>  </p> }
             <h2>Sign a Transaction</h2>
             <p style={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', wordBreak: 'break-all' }}>
                 You can transfer 0.1 Trx to &nbsp;{receiver}&nbsp;by click the button.

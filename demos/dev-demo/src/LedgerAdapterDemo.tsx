@@ -62,6 +62,7 @@ export function LedgerAdapterDemo() {
 
     return (
         <Box sx={{ width: '100%', maxWidth: 500 }}>
+            <h1>Ledger Demo</h1>
             <Typography variant="h6" gutterBottom>
                 Your account address:
             </Typography>

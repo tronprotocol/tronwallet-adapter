@@ -61,6 +61,7 @@ export function TronLinkAdapterDemo() {
 
     return (
         <Box sx={{ width: '100%', maxWidth: 500 }}>
+            <h1>TronLink Demo</h1>
             <Typography variant="h6" gutterBottom>
                 Your account address:
             </Typography>

@@ -6,6 +6,8 @@ export type CollapseProps = PropsWithChildren<{
     id?: string;
     className?: string;
     transition?: string;
+    onMouseEnter?: () => void;
+    onMouseLeave?: () => void;
 }>;
 
 export const Collapse: FC<CollapseProps> = function ({
@@ -13,6 +15,8 @@ export const Collapse: FC<CollapseProps> = function ({
     className,
     transition = 'height 250ms ease-out',
     isOpen,
+    onMouseEnter,
+    onMouseLeave,
 }) {
     const initialState = { height: '0px', transition };
     const wrapRef = useRef<HTMLDivElement>(null);
@@ -61,6 +65,8 @@ export const Collapse: FC<CollapseProps> = function ({
                 overflow: 'hidden',
                 ...style,
             }}
+            onMouseEnter={onMouseEnter}
+            onMouseLeave={onMouseLeave}
         >
             {children}
         </div>
