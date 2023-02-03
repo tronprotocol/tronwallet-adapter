@@ -62,12 +62,6 @@ export class LedgerWallet {
             await this.verifyAddress(index);
             this.selectedIndex = index;
             this._address = this.accounts[index].address;
-            // eslint-disable-next-line no-useless-catch
-        } catch (e: any) {
-            // setTimeout(() => {
-            //     closeModal?.();
-            // }, 2000);
-            throw e;
         } finally {
             await this.cleanUp();
         }
@@ -86,9 +80,6 @@ export class LedgerWallet {
             const hex = Buffer.from(message).toString('hex');
             const res = await this.app!.signPersonalMessage(path, hex);
             return res;
-            // eslint-disable-next-line no-useless-catch
-        } catch (e: unknown) {
-            throw e;
         } finally {
             await this.cleanUp();
         }
@@ -106,9 +97,6 @@ export class LedgerWallet {
                 transaction.signature = [signedResponse];
             }
             return transaction as SignedTransaction;
-            // eslint-disable-next-line no-useless-catch
-        } catch (e: unknown) {
-            throw e;
         } finally {
             await this.cleanUp();
         }
@@ -151,12 +139,6 @@ export class LedgerWallet {
             await this.makeApp();
             await this.app!.getAddress(path, true);
             closeModal();
-            // eslint-disable-next-line no-useless-catch
-        } catch (e) {
-            // setTimeout(() => {
-            //     closeModal?.();
-            // }, 2000);
-            throw e;
         } finally {
             await this.cleanUp();
         }
@@ -177,7 +159,6 @@ export class LedgerWallet {
                 address: '',
                 index,
                 isValid: false,
-                balance: 0,
             };
         }
     }
