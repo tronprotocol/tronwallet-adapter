@@ -68,7 +68,12 @@ export const WalletActionButton: FC<ButtonProps> = ({ children, ...props }) => {
         };
     }, [ref, hideDropdown]);
 
-    if (!wallet) return <WalletSelectButton {...props}>{children}</WalletSelectButton>;
+    if (!wallet)
+        return (
+            <WalletSelectButton onClick={hideDropdown} {...props}>
+                {children}
+            </WalletSelectButton>
+        );
 
     return (
         <div data-testid="wallet-action-button" className="adapter-dropdown">
