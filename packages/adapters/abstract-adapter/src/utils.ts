@@ -27,7 +27,7 @@ export function checkAdapterState(check: () => boolean): void {
         }
     }
 
-    const interval = setInterval(checkAndDispose, 3000);
+    const interval = setInterval(checkAndDispose, 500);
     disposers.push(() => clearInterval(interval));
 
     if (document.readyState === 'loading') {
@@ -40,8 +40,8 @@ export function checkAdapterState(check: () => boolean): void {
         disposers.push(() => window.removeEventListener('load', checkAndDispose));
     }
     checkAndDispose();
-    // stop all task after 5min
-    setTimeout(dispose, 5 * 60 * 1000);
+    // stop all task after 1min
+    setTimeout(dispose, 60 * 1000);
 }
 
 /**

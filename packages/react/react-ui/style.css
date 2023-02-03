@@ -170,9 +170,8 @@
 }
 .adapter-dropdown-collapse {
     position: absolute;
-    top: 0;
     margin: auto;
-    top: calc(100% + 5px);
+    top: 100%;
     right: 0;
     left: 0;
     display: inline-flex;
@@ -183,9 +182,12 @@
     list-style-type: none;
     border-radius: 10px;
     font-family: DM Sans, Roboto, Helvetica Neue, Helvetica, Arial, sans-serif;
-    box-shadow: 0 2px 3px #0009;
     flex-direction: column;
+    position: relative;
+    top: 5px;
     padding: 5px;
+    overflow: hidden;
+    height: min-content;
     background: #2c2d30;
 }
 .adapter-dropdown-list li {

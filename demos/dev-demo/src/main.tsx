@@ -8,11 +8,9 @@ import VConsole from 'vconsole';
 const vConsole = new VConsole();
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
-    <React.StrictMode>
-        <WalletProvider autoConnect={true}>
-            <WalletModalProvider>
-                <App></App>
-            </WalletModalProvider>
-        </WalletProvider>
-    </React.StrictMode>
+    <WalletProvider autoConnect={true}>
+        <WalletModalProvider>
+            <App></App>
+        </WalletModalProvider>
+    </WalletProvider>
 );

@@ -39,9 +39,8 @@ body {
     min-height: 100vh;
 }
 
-h1 {
-    font-size: 3.2em;
-    line-height: 1.1;
+h2 {
+    margin: 30px 0 10px;
 }
 
 button {
@@ -66,6 +65,8 @@ button:focus-visible {
 p {
     display: flex;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    word-break: break-all;
+    margin: 10px 0 ;
 }
 p span:first-of-type {
     width: 160px;
@@ -80,4 +81,11 @@ a:hover {
 }
 button {
     background-color: #f9f9f9;
+}
+
+@media screen and (max-width: 800px) {
+    p {
+        display: flex;
+        flex-direction: column;
+    }
 }
