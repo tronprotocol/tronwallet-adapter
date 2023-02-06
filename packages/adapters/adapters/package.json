@@ -1,6 +1,7 @@
 {
     "name": "@tronweb3/tronwallet-adapters",
     "version": "1.1.1",
+    "description": "Wallet adapters to help developers interact with Tron wallets using consistent API.",
     "keywords": [
         "TRON",
         "TronWeb",
