@@ -2,7 +2,6 @@ import {
     Adapter,
     AdapterState,
     isInBrowser,
-    checkAdapterState,
     isInMobileBrowser,
     WalletSignMessageError,
 } from '@tronweb3/tronwallet-abstract-adapter';

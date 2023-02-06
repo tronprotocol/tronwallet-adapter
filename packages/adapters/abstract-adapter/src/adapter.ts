@@ -5,7 +5,6 @@ import type { SignedTransaction, Transaction } from './types.js';
 export { EventEmitter };
 
 export interface AdapterEvents {
-    ready(): void;
     connect(address: string): void;
     disconnect(): void;
     error(error: WalletError): void;

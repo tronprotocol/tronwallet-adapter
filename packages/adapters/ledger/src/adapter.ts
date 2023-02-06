@@ -15,7 +15,7 @@ import { LedgerWallet } from './LedgerWallet.js';
 const isSupportedLedger = () => !!(globalThis.navigator && (globalThis.navigator as any).hid);
 
 export interface LedgerAdapterConfig {
-    accountNumber: number;
+    accountNumber?: number;
 }
 
 export const LedgerAdapterName = 'Ledger' as AdapterName<'Ledger'>;

@@ -129,6 +129,7 @@ The `Adapter` class defines the common interface for all adapters of specified w
 -   `url`: The website of the adapter's wallet.
 -   `icon`: The icon of the adapter's wallet.
 -   `state`: The adapter's state, which includes three value:
+    -   `Loading`: When adapter is checking if the wallet is available or not.
     -   `NotFound`: The wallet is not detected in current browser.
     -   `Disconnected`: The wallet is detected in current browser but the adapter has not connected to wallet yet.
     -   `Connected`: The adapter is connected to wallet.
@@ -246,7 +247,7 @@ All errors are as follows:
 -   `Constructor(config: LedgerAdapterConfig)`
     ```typescript
     interface LedgerAdapterConfig {
-        // Initial total accounts to get once connection is created
+        // Initial total accounts to get once connection is created, default is 2
         accountNumber: number;
     }
     ```
