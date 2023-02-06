@@ -51,9 +51,11 @@ export const modalStyleSheetContent = `
   cursor: pointer;
   transition: color 0.3s;
 }
-.ledger-modal-close:focus, .ledger-modal-close:hover {
+.ledger-modal-close:focus,.ledger-modal-close:active,.ledger-modal-close:hover {
   color: rgba(0, 0, 0, 0.75);
   text-decoration: none;
+  border: none;
+  outline: none;
 }
 .ledger-modal-close-x {
   display: block;
@@ -120,7 +122,7 @@ export const modalStyleSheetContent = `
   margin-bottom: 20px;
   font-weight: bold;
 }
-.ant-spin {
+.ledger-ant-spin {
   box-sizing: border-box;
   padding: 0;
   font-size: 14px;
@@ -137,7 +139,7 @@ export const modalStyleSheetContent = `
   text-align: center;
   display: block;
 }
-.ant-spin-dot {
+.ledger-ant-spin-dot {
   position: relative;
   display: inline-block;
   font-size: 20px;
@@ -148,7 +150,7 @@ export const modalStyleSheetContent = `
   font-size: 32px;
 }
 
-.ant-spin-dot-item {
+.ledger-ant-spin-dot-item {
   position: absolute;
   display: block;
   width: 9px;
@@ -160,26 +162,26 @@ export const modalStyleSheetContent = `
   opacity: 0.3;
   animation: antSpinMove 1s infinite linear alternate;
 }
-.ant-spin-dot-item:nth-child(1) {
+.ledger-ant-spin-dot-item:nth-child(1) {
   top: 0;
   left: 0;
 }
-.ant-spin-dot-item:nth-child(2) {
+.ledger-ant-spin-dot-item:nth-child(2) {
   top: 0;
   right: 0;
   animation-delay: 0.4s;
 }
-.ant-spin-dot-item:nth-child(3) {
+.ledger-ant-spin-dot-item:nth-child(3) {
   right: 0;
   bottom: 0;
   animation-delay: 0.8s;
 }
-.ant-spin-dot-item:nth-child(4) {
+.ledger-ant-spin-dot-item:nth-child(4) {
   bottom: 0;
   left: 0;
   animation-delay: 1.2s;
 }
-.ant-spin-lg .ant-spin-dot i {
+.ledger-ant-spin-lg .ledger-ant-spin-dot i {
   width: 14px;
   height: 14px;
 }

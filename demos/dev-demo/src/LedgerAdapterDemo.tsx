@@ -1,18 +1,19 @@
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import type { ReactNode } from 'react';
-import { useEffect, useMemo, useState } from 'react';
-// import './App.css';
-import { TronLinkAdapter } from '@tronweb3/tronwallet-adapters';
+import { LedgerAdapter } from '@tronweb3/tronwallet-adapters';
 import { AdapterState } from '@tronweb3/tronwallet-abstract-adapter';
-import { Box, Button, Typography, Tooltip, Select, MenuItem, Alert } from '@mui/material';
+import { Box, Button, Typography, Alert, TextField } from '@mui/material';
+import { tronWeb } from './tronweb';
 
-export function TronLinkAdapterDemo() {
+export function LedgerAdapterDemo() {
     const [connectState, setConnectState] = useState(AdapterState.NotFound);
     const [account, setAccount] = useState('');
-    const [chainId, setChainId] = useState<string>('');
-    const [selectedChainId, setSelectedChainId] = useState('0xcd8690dc')
+    const [signMessage, setSignMessage] = useState('Hello, Adapter');
+    const [signedMessage, setSignedMessage] = useState('')
     const receiver = 'TMDKznuDWaZwfZHcM61FVFstyYNmK6Njk1';
+    
     const [open, setOpen] = useState(false);
-    const adapter = useMemo(() => new TronLinkAdapter(), []);
+    const adapter = useMemo(() => new LedgerAdapter({ accountNumber: 2 }), []);
 
     useEffect(() => {
         console.log('--- new adapter ----');
@@ -32,11 +33,6 @@ export function TronLinkAdapterDemo() {
             setAccount(data as string);
         });
 
-        adapter.on('chainChanged', (data) => {
-            console.log('---chain changed', data);
-            setChainId((data  as any).chainId);
-        });
-
         adapter.on('disconnect', () => {
             console.log('---disconnect');
         });
@@ -46,12 +42,7 @@ export function TronLinkAdapterDemo() {
         };
     }, [adapter]);
 
-    function onSwitchChain() {
-        adapter.switchChain(selectedChainId)
-    }
-
     async function onSignTransaction() {
-        const tronWeb = (window.tron as any).tronWeb as any;
         const transaction = await tronWeb.transactionBuilder.sendTrx(receiver, tronWeb.toSun(0.1), adapter.address);
         const signedTransaction = await adapter.signTransaction(transaction);
         // const signedTransaction = await tronWeb.trx.sign(transaction);
@@ -59,21 +50,31 @@ export function TronLinkAdapterDemo() {
         setOpen(true);
     }
 
+    const onSignMessage = useCallback(async function () {
+        const res = await adapter.signMessage(signMessage);
+        setSignedMessage(res);
+    }, [adapter, signMessage, setSignedMessage]);
+
+    const onVerifyMessage = useCallback(async function() {
+        const address = await tronWeb.trx.verifyMessageV2(signMessage, signedMessage);
+        alert(address === adapter.address ? '验证成功' : '验证失败')
+    }, [signMessage, signedMessage, adapter])
+
     return (
         <Box sx={{ width: '100%', maxWidth: 500 }}>
-            <h1>TronLink Demo</h1>
+            <h1>Ledger Demo</h1>
             <Typography variant="h6" gutterBottom>
                 Your account address:
             </Typography>
             <Detail>{account}</Detail>
 
-            <Typography variant="h6" gutterBottom>
-                Current network you choose: {chainId}
-            </Typography>
 
             <Typography variant="h6" gutterBottom>
                 Current connection status:&nbsp;&nbsp;
                 <span style={{ color: adapter?.connected ? '#08f108' : 'orange' }}>{connectState}</span>
+            </Typography>
+            <Typography variant="h6" gutterBottom>
+                <TextField value={signMessage} onChange={e => setSignMessage(e.target.value)}></TextField>
             </Typography>
             <Detail>
                 <Button variant="contained" disabled={adapter?.connected} onClick={() => adapter?.connect()}>
@@ -84,6 +85,10 @@ export function TronLinkAdapterDemo() {
                 </Button>&nbsp;&nbsp;&nbsp;&nbsp;
                 <Button variant="contained" disabled={!adapter?.connected} onClick={onSignTransaction}>Transfer</Button>
             </Detail>
+            <Detail>
+                <Button variant="contained" onClick={onSignMessage}>Sign Message</Button>&nbsp;&nbsp;&nbsp;&nbsp;
+                <Button variant="contained" disabled={!signedMessage} onClick={onVerifyMessage}>Verify Signed Message</Button>
+            </Detail>
             {open && (
                 <Alert onClose={() => setOpen(false)} severity="success" sx={{ width: '100%', marginTop: 1 }}>
                     Success! You can confirm your transfer on{' '}
@@ -92,24 +97,6 @@ export function TronLinkAdapterDemo() {
                     </a>
                 </Alert>
             )}
-            <Typography variant="h6" gutterBottom>
-                You can switch chain by click the button.
-            </Typography>
-            <Select
-                labelId="demo-simple-select-label"
-                id="demo-simple-select"
-                value={selectedChainId}
-                label="Chain"
-                onChange={(e) => setSelectedChainId(e.target.value)}
-            >
-                <MenuItem value={'0x2b6653dc'}>Mainnet</MenuItem>
-                <MenuItem value={'0x94a9059e'}>Shasta</MenuItem>
-                <MenuItem value={'0xcd8690dc'}>Nile</MenuItem>
-            </Select>
-            
-            <Button style={{ marginRight: '20px' }} onClick={onSwitchChain}>
-                Switch Chain to {selectedChainId}
-            </Button>
         </Box>
     );
 }

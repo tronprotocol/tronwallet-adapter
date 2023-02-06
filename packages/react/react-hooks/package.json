@@ -1,6 +1,6 @@
 {
     "name": "@tronweb3/tronwallet-adapter-react-hooks",
-    "version": "1.0.0",
+    "version": "1.1.0",
     "keywords": [
         "TRON",
         "TronWeb",
@@ -44,8 +44,8 @@
         "react-dom": "*"
     },
     "dependencies": {
-        "@tronweb3/tronwallet-abstract-adapter": "workspace:^1.1.0",
-        "@tronweb3/tronwallet-adapter-tronlink": "workspace:^1.1.0"
+        "@tronweb3/tronwallet-abstract-adapter": "workspace:^1.1.1",
+        "@tronweb3/tronwallet-adapter-tronlink": "workspace:^1.1.1"
     },
     "devDependencies": {
         "@types/react": "^18.0.26",

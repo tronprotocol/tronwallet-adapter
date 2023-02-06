@@ -16,3 +16,4 @@ dist
 out
 *.tsbuildinfo
 *.log
+coverage

@@ -36,6 +36,10 @@ export interface AdapterProps<Name extends string = string> {
  */
 export enum AdapterState {
     /**
+     * If adapter is checking the wallet, the state is Loading.
+     */
+    Loading = 'Loading',
+    /**
      * If wallet is not installed, the state is NotFound.
      */
     NotFound = 'NotFound',
