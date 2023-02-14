@@ -88,7 +88,7 @@ describe('constructor config.accountNumber should work fine', () => {
     test('invalid account should throw error', async () => {
         expect(function () {
             new LedgerWallet({ accountNumber: 4.4 });
-        }).toThrowError('[Ledger]: accountNumber should be an integer!');
+        }).toThrowError('[Ledger]: accountNumber must be an integer!');
     });
     test('test0', async () => {
         addPropertyToTrx('_getAddress', _getAddress);

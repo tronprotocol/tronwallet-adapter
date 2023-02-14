@@ -1,28 +1,28 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-empty-function */
 export class LedgerWallet {
-    static _constructor(...args) {}
-    static _connect(...args) {}
-    static _disconnect(...args) {}
-    static _signPersonalMessage(...args) {}
-    static _getAccounts(...args) {}
-    static _getAddress(...args) {}
-    constructor(...args) {
+    static _constructor(...args: any[]) {}
+    static _connect(...args: any[]) {}
+    static _disconnect(...args: any[]) {}
+    static _signPersonalMessage(...args: any[]) {}
+    static _getAccounts(...args: any[]) {}
+    static _getAddress(...args: any[]) {}
+    constructor(...args: any[]) {
         LedgerWallet._constructor(...args);
     }
-    connect(...args) {
+    connect(...args: any[]) {
         LedgerWallet._connect(...args);
     }
-    disconnect(...args) {
+    disconnect(...args: any[]) {
         LedgerWallet._disconnect(...args);
     }
-    signPersonalMessage(...args) {
+    signPersonalMessage(...args: any[]) {
         LedgerWallet._signPersonalMessage(...args);
     }
-    getAccounts(...args) {
+    getAccounts(...args: any[]) {
         LedgerWallet._getAccounts(...args);
     }
-    getAddress(...args) {
+    getAddress(...args: any[]) {
         LedgerWallet._getAddress(...args);
     }
 }

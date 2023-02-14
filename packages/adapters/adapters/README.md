@@ -251,59 +251,83 @@ All errors are as follows:
 
 -   `Constructor(config: LedgerAdapterConfig)`
 
+    ```typescript
+    interface LedgerAdapterConfig {
+        /**
+         * Initial total accounts to get once connection is created, default is 1
+         */
+        accountNumber?: number;
+
+        /**
+         * Hook function to call before connecting to ledger and geting accounts.
+         * By default, a modal will popup to reminder user to prepare the ledger and enter Tron app.
+         * You can specify a function to disable this modal.
+         */
+        beforeConnect?: () => Promise<unknown> | unknown;
+
+        /**
+         * Hook function to call after connecting to ledger and geting initial accounts.
+         * The function should return the selected account including the index of account.
+         * Following operations such as `signMessage` will use the selected account.
+         */
+        selectAccount?: (params: { accounts: Account[]; ledgerUtils: LedgerUtils }) => Promise<Account>;
+
+        /**
+         * Function to get derivate BIP44 path by index.
+         * Default is `44'/195'/${index}'/0/0`
+         */
+        getDerivationPath?: (index: number) => string;
+    }
+    interface Account {
+        /**
+         * The index to get BIP44 path.
+         */
+        index: number;
+        /**
+         * The BIP44 path to derivate address.
+         */
+        path: string;
+        /**
+         * The derivated address.
+         */
+        address: string;
+    }
+    interface LedgerUtils {
+        /**
+         * Get accounts from ledger by index. `from` is included and `to` is excluded.
+         * User can use the function to load more accounts.
+         */
+        getAccounts: (from: number, to: number) => Promise<Account[]>;
+        /**
+         * Request to get an address with specified index using getDerivationPath(index) to get BIP44 path.
+         * If `display` is true, will request user to approve on ledger.
+         * The promise will resove if user approve and reject if user cancel the operation.
+         */
+        getAddress: (index: number, display: boolean) => Promise<{ publicKey: string; address: string }>;
+    }
+    ```
+
+-   Property: `ledgerUtils`
+    `ledgerUtils` on LedgerAdapter is used to get useful functions to interact with Ledger directly. `ledgerUtils` is defined as last section.
+
+    -   `getAccounts(from: number, to: number)` is a wrapped function to get multiple accounts by index range from ledger.
+        For example:
+
         ```typescript
-        interface LedgerAdapterConfig {
-            /**
-             * Initial total accounts to get once connection is created, default is 1
-             */
-            accountNumber?: number;
-
-            /**
-             * Hook function to call before connecting to ledger and geting accounts.
-             * By default, a modal will popup to reminder user to prepare the ledger and enter Tron app.
-             * You can specify a function to disable this modal.
-             */
-            beforeConnect?: BeforeConnect;
-
-            /**
-             * Hook function to call after connecting to ledger and geting initial accounts.
-             * The function should return the selected account including the index of account.
-             * Following operations such as `signMessage` will use the selected account.
-             */
-            selectAccount?: SelectAccount;
-
-            /**
-             * Function to get derivate BIP44 path by index.
-             * Default is `44'/195'/${index}'/0/0`
-             */
-            getDerivationPath?: (index: number) => string;
-        }
-
-        interface Account {
-            /**
-             * The index to get BIP44 path.
-             */
-            index: number;
-            /**
-             * The BIP44 path to derivate address.
-             */
-            path: string;
-            /**
-             * The derivated address.
-             */
-            address: string;
-        }
-        interface LedgerUtils {
-            /**
-             * Get accounts from ledger by index. `from` is included and `to` is excluded.
-             * User can use the function to load more accounts.
-             */
-            getAccounts: (from: number, to: number) => Promise<Account[]>;
-            /**
-             * Request to get an address with specified index using getDerivationPath(index) to get BIP44 path.
-             * If `display` is true, will request user to approve on ledger.
-             * The promise will resove if user approve and reject if user cancel the operation.
-             */
-            getAddress: (index: number, display: boolean) => Promise<{ publicKey: string; address: string }>;
-        }
+        const adapter = new LedgerAdapter();
+        // get 5 accounts from ledger
+        const accounts = await adapter.ledgerUtils.getAcccounts(0, 5);
+        // [{ address: string, index: 0, path: "44'/195'/0'/0/0" }, ...]
         ```
+
+    -   `getAddress: (index: number, display: boolean)` is a raw function to request an address from ledger.
+        If `display` is true, will request user to approve on ledger.
+        For example, following code will request user approve on Ledger to confirm to connect their ledger.
+
+        ```typescript
+        const adapter = new LedgerAdapter();
+        const result = await adapter.ledgerUtils.getAddress(0, true);
+        // { address: 'some address', publicKey: 'publicKey for address' }
+        ```
+
+-   `multiSign()` is not supported yet.

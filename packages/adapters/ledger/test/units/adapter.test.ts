@@ -1,6 +1,4 @@
 import { LedgerWallet } from '../../src/LedgerWallet.js';
-import { fireEvent, screen, waitFor } from '@testing-library/dom';
-import type { Account } from 'src/LedgerWallet.js';
 import { LedgerAdapter } from '../../src/adapter.js';
 jest.mock('../../src/LedgerWallet.js');
 function addPropertyToLedgerWallet(prop, value) {
@@ -14,9 +12,6 @@ const LedgerWalletKeyValues = Object.getOwnPropertyNames(LedgerWallet)
         return acc;
     }, {});
 
-async function selectAccount(params: { accounts: Account[] }) {
-    return Promise.resolve(params.accounts[0]);
-}
 beforeAll(() => {
     jest.useFakeTimers();
 });
