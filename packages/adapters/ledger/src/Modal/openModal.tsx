@@ -1,9 +1,9 @@
 import React, { render } from 'preact/compat';
+import type { Account, GetAccounts } from '../LedgerWallet.js';
 import { ConfirmContent } from './ConfirmContent.js';
 import { ConnectingContent } from './ConnectingContent.js';
 import { getLangText } from './lang.js';
 import { Modal } from './Modal.js';
-import type { Account, GetAccount } from './SelectAccount.js';
 import { SelectAccount } from './SelectAccount.js';
 import { modalStyleSheetContent } from './style.js';
 
@@ -35,7 +35,7 @@ export function openConnectingModal() {
     return onClose;
 }
 
-export function openConfirmModal(address: string) {
+export function openVerifyAddressModal(address: string) {
     const { onClose, div } = prepareDomNode();
     const langText = getLangText();
     render(
@@ -50,14 +50,14 @@ export function openConfirmModal(address: string) {
 
 export function openSelectAccountModal(options: {
     accounts: Account[];
-    selectedIndex: number;
-    getAccount: GetAccount;
-}): Promise<number> {
+    selectedIndex?: number;
+    getAccounts: GetAccounts;
+}): Promise<Account> {
     const { onClose, div } = prepareDomNode();
     const langText = getLangText();
     return new Promise((resolve, reject) => {
-        function onConfirm(index: number) {
-            resolve(index);
+        function onConfirm(account: Account) {
+            resolve(account);
             onClose();
         }
         function onCancel() {
@@ -68,10 +68,10 @@ export function openSelectAccountModal(options: {
             <Modal title={langText.loadingTitle} onClose={onCancel}>
                 <SelectAccount
                     accounts={options.accounts}
-                    selectedIndex={options.selectedIndex}
+                    selectedIndex={options.selectedIndex || 0}
                     onConfirm={onConfirm}
                     onCancel={onCancel}
-                    getAccount={options.getAccount}
+                    getAccounts={options.getAccounts}
                 ></SelectAccount>
             </Modal>,
             div

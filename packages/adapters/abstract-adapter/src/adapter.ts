@@ -24,7 +24,7 @@ export interface AdapterProps<Name extends string = string> {
     connecting: boolean;
     connected: boolean;
 
-    connect(): Promise<void>;
+    connect(options?: Record<string, unknown>): Promise<void>;
     disconnect(): Promise<void>;
     signMessage(message: string, privateKey?: string): Promise<string>;
     signTransaction(transaction: Transaction, privateKey?: string): Promise<SignedTransaction>;
@@ -68,7 +68,7 @@ export abstract class Adapter<Name extends string = string>
         return this.state === AdapterState.Connected;
     }
 
-    abstract connect(): Promise<void>;
+    abstract connect(options?: Record<string, unknown>): Promise<void>;
     /**
      * Some wallets such as TronLink don't support disconnect() method.
      */
@@ -78,6 +78,9 @@ export abstract class Adapter<Name extends string = string>
     }
     abstract signMessage(message: string, privateKey?: string): Promise<string>;
     abstract signTransaction(transaction: Transaction, privateKey?: string): Promise<SignedTransaction>;
+    multiSign(...args: any[]): Promise<any> {
+        return Promise.reject("The current wallet doesn't support multiSign.");
+    }
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     switchChain(_chainId: string): Promise<void> {
         return Promise.reject("The current wallet doesn't support switch chain.");

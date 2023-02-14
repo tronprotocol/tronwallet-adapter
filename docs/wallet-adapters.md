@@ -129,7 +129,7 @@ The `Adapter` class defines the common interface for all adapters of specified w
 -   `url`: The website of the adapter's wallet.
 -   `icon`: The icon of the adapter's wallet.
 -   `state`: The adapter's state, which includes three value:
-    -  `Loading`: When adapter is checking if the wallet is available or not.
+    -   `Loading`: When adapter is checking if the wallet is available or not.
     -   `NotFound`: The wallet is not detected in current browser.
     -   `Disconnected`: The wallet is detected in current browser but the adapter has not connected to wallet yet.
     -   `Connected`: The adapter is connected to wallet.
@@ -143,6 +143,10 @@ The `Adapter` class defines the common interface for all adapters of specified w
 -   `disconnect(): Promise<void>`: disconnect to the wallet.
 -   `signMessage(message, privateKey?): Promise<string>`: sign a string, return the signature result. An optional `privateKey` can be provided.
 -   `signTransaction(transaction, privateKey?)`: sign a transaction, return the signature result of the transaction. An optional `privateKey` can be provided.
+-   `multiSign(transaction, privateKey: string | null, permissionId?)`: sign a multi-sign transaction.
+    -   If `privateKey` is not `null`, will use the privateKey to sign rather than TronLink.
+    -   If `permissionId` is not provided, will use `0`(OwnerPerssion) as default.
+    -   Please refer to [here](https://developers.tron.network/docs/multi-signature) for more about Multi-Sign,
 -   `switchChain(chainId: string): Promise<void>;`: request wallet to switch chain by `chainId`.
 
 #### Events
@@ -241,13 +245,68 @@ All errors are as follows:
     }
     ```
     More detail about WalletConnect client options please refer to the [WalletConnect document](https://docs.walletconnect.com/2.0/javascript/sign/dapp-usage).
+-   `multiSign()` is not supported yet.
 
 ### LedgerAdapter
 
 -   `Constructor(config: LedgerAdapterConfig)`
-    ```typescript
-    interface LedgerAdapterConfig {
-        // Initial total accounts to get once connection is created, default is 2
-        accountNumber: number;
-    }
-    ```
+
+        ```typescript
+        interface LedgerAdapterConfig {
+            /**
+             * Initial total accounts to get once connection is created, default is 1
+             */
+            accountNumber?: number;
+            /**
+             * Hook function to call before connecting to ledger and geting accounts.
+             * By default, a modal will popup to reminder user to prepare the ledger and enter Tron app.
+             * You can specify a function to disable this modal.
+             */
+            beforeConnect?: () => Promise<unknown> | unknown;
+            /**
+             * Hook function to call after connecting to ledger and geting initial accounts successfully and before call selectAccount() function.
+             */
+            beforeSelectAccount?: (params: { accounts: Account[], ledgerUtils: LedgerUtils }) => Promise<unknown> | unknown;
+            /**
+             * The function should return the selected account including the index of account.
+             * Following operations such as `signMessage` will use the selected account.
+             */
+            selectAccount?: (params: { accounts: Account[], ledgerUtils: LedgerUtils }) => Promise<Account>;
+            /**
+             * Function to get derivate BIP44 path by index.
+             * Default is `44'/195'/${index}'/0/0`
+             */
+            getDerivationPath?: (index: number) => string;
+        }
+
+        interface Account {
+            /**
+             * The index to get BIP44 path.
+             */
+            index: number;
+            /**
+             * The BIP44 path to derivate address.
+             */
+            path: string;
+            /**
+             * The derivated address.
+             */
+            address: string;
+            /**
+             * If the address is valid, `false` when geting address from ledger throws error.
+             */
+            isValid?: boolean;
+        }
+        interface LedgerUtils {
+            /**
+             * Get accounts from ledger by index. `from` is included and `to` is excluded.
+            * User can use the function to load more accounts.
+            */
+            getAccounts: (from: number, to: number) => Promise<Account[]>;
+            /**
+             * Request to verify currently used address.
+            * The promise will resove if user approve on ledger and reject if user cancel the operation.
+            */
+            verifyAddress: (account: Account) => Promise<void>;
+        }
+        ```
