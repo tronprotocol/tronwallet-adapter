@@ -7,6 +7,7 @@ import {
     WalletSignMessageError,
     WalletSignTransactionError,
     WalletConnectionError,
+    WalletDisconnectionError,
 } from '@tronweb3/tronwallet-abstract-adapter';
 
 import type { Transaction, SignedTransaction, AdapterName } from '@tronweb3/tronwallet-abstract-adapter';
@@ -100,7 +101,8 @@ export class LedgerAdapter extends Adapter {
             this.emit('disconnect');
             this.emit('stateChanged', this._state);
         } catch (e: any) {
-            throw new WalletDisconnectedError(e.message);
+            this.emit('error', e);
+            throw new WalletDisconnectionError(e.message);
         }
     }
 

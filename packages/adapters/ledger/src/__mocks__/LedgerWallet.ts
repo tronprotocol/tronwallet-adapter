@@ -5,24 +5,28 @@ export class LedgerWallet {
     static _connect(...args: any[]) {}
     static _disconnect(...args: any[]) {}
     static _signPersonalMessage(...args: any[]) {}
+    static _signTransaction(...args: any[]) {}
     static _getAccounts(...args: any[]) {}
     static _getAddress(...args: any[]) {}
     constructor(...args: any[]) {
         LedgerWallet._constructor(...args);
     }
-    connect(...args: any[]) {
-        LedgerWallet._connect(...args);
+    async connect(...args: any[]) {
+        return await LedgerWallet._connect(...args);
     }
     disconnect(...args: any[]) {
-        LedgerWallet._disconnect(...args);
+        return LedgerWallet._disconnect(...args);
     }
-    signPersonalMessage(...args: any[]) {
-        LedgerWallet._signPersonalMessage(...args);
+    async signPersonalMessage(...args: any[]) {
+        return await LedgerWallet._signPersonalMessage(...args);
     }
-    getAccounts(...args: any[]) {
-        LedgerWallet._getAccounts(...args);
+    async signTransaction(...args: any[]) {
+        return await LedgerWallet._signTransaction(...args);
     }
-    getAddress(...args: any[]) {
-        LedgerWallet._getAddress(...args);
+    async getAccounts(...args: any[]) {
+        return await LedgerWallet._getAccounts(...args);
+    }
+    async getAddress(...args: any[]) {
+        return await LedgerWallet._getAddress(...args);
     }
 }
