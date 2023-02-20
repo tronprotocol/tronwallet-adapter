@@ -5,7 +5,7 @@ import { LoadingIcon } from './LoadingIcon.js';
 export function ConfirmContent(props: { address: string }) {
     const langText = useMemo(() => getLangText(), []);
     return (
-        <div style={{ textAlign: 'center' }}>
+        <div style={{ textAlign: 'center' }} data-testid="confirm-content">
             <LedgerIcon></LedgerIcon>
             <div className="ledger-connecting-pop">
                 <ul className="ledger-connecting-pop-content">
@@ -13,7 +13,10 @@ export function ConfirmContent(props: { address: string }) {
                         {langText.checkTitle}
                     </li>
                     <li>
-                        <strong style={{ color: '#B0170D', textAlign: 'left', fontWeight: '600' }}>
+                        <strong
+                            style={{ color: '#B0170D', textAlign: 'left', fontWeight: '600' }}
+                            data-testid="confirm-content-address"
+                        >
                             {props.address}
                         </strong>
                     </li>

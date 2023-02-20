@@ -5,24 +5,17 @@ import { useMemo } from 'preact/hooks';
 import { useRef } from 'preact/hooks';
 import { useEffect } from 'preact/hooks';
 import { useState } from 'preact/hooks';
+import type { Account, GetAccounts } from '../LedgerWallet.js';
 import { getLangText } from './lang.js';
 
-export type GetAccount = (from: number, to: number) => Promise<Account[]>;
 export type SelectAccountProps = RenderableProps<{
     accounts: Account[];
     selectedIndex: number;
     onCancel: () => void;
-    onConfirm: (index: number) => void;
-    getAccount: GetAccount;
+    onConfirm: (account: Account) => void;
+    getAccounts: GetAccounts;
 }>;
 
-export type Account = {
-    path: string;
-    address: string;
-    index: number;
-    isValid?: boolean;
-    balance?: number;
-};
 export function SelectAccount(props: SelectAccountProps) {
     const [index, setIndex] = useState(0);
     const [accounts, setAccounts] = useState<Account[]>([]);
@@ -32,7 +25,7 @@ export function SelectAccount(props: SelectAccountProps) {
     const langText = useMemo(() => getLangText(), []);
 
     useEffect(() => {
-        setAccounts([...props.accounts.filter((a) => a.isValid !== false)]);
+        setAccounts([...props.accounts]);
     }, [props.accounts]);
 
     useEffect(() => {
@@ -44,7 +37,8 @@ export function SelectAccount(props: SelectAccountProps) {
     }
 
     function onConfirm() {
-        props.onConfirm(index);
+        const selected = accounts.find((item) => item.index === index);
+        props.onConfirm(selected || accounts?.[0]);
     }
     function onCancel() {
         props.onCancel();
@@ -56,25 +50,26 @@ export function SelectAccount(props: SelectAccountProps) {
         const from = last.index + 1;
         const to = last.index + 6;
         try {
-            const result = await props.getAccount(from, to);
-            setAccounts((accounts) => [...accounts, ...result.filter((a) => a.isValid !== false)]);
+            const result = await props.getAccounts(from, to);
+            setAccounts((accounts) => [...accounts, ...result]);
         } finally {
             setLoading(false);
         }
     }
     useLayoutEffect(() => {
-        loadBtnRef.current?.scrollIntoView();
+        loadBtnRef.current?.scrollIntoView?.();
     }, [accounts]);
     return (
-        <div style={{ paddingLeft: 40 }} className="ledger-select">
+        <div style={{ paddingLeft: 40 }} className="ledger-select" data-testid="select-account-content">
             <span className="title">{langText.selectTip}</span>
             <div className="ledger-select-list-wrap">
-                <ul className="ledger-select-list">
+                <ul className="ledger-select-list" data-testid="select-account-list">
                     {accounts.map((account, idx) => {
                         return (
                             <li key={idx} className="ledger-select-item">
                                 <label htmlFor={`ledger-select-radio${idx}`}>
                                     <input
+                                        className={account.index === index ? 'checked' : ''}
                                         id={`ledger-select-radio${idx}`}
                                         type="radio"
                                         name="selectedAddress"
@@ -90,6 +85,7 @@ export function SelectAccount(props: SelectAccountProps) {
                 </ul>
                 <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
                     <button
+                        data-testid="btn-load-more"
                         ref={loadBtnRef}
                         style={{ marginTop: 10 }}
                         disabled={loading}
@@ -105,10 +101,20 @@ export function SelectAccount(props: SelectAccountProps) {
                 </div>
             </div>
             <footer style={{ display: 'flex', justifyContent: 'flex-end' }}>
-                <button style={{ marginRight: 10 }} className="ledger-select-button default-button" onClick={onCancel}>
+                <button
+                    data-testid="btn-cancel"
+                    style={{ marginRight: 10 }}
+                    className="ledger-select-button default-button"
+                    onClick={onCancel}
+                >
                     {langText.cancel}
                 </button>
-                <button disabled={loading} className="ledger-select-button" onClick={onConfirm}>
+                <button
+                    data-testid="btn-confirm"
+                    disabled={loading}
+                    className="ledger-select-button"
+                    onClick={onConfirm}
+                >
                     {langText.confirm}
                 </button>
             </footer>

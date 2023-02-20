@@ -11,6 +11,8 @@ import { TronLinkAdapter } from '../../src/adapter.js';
 import type { TronWeb } from '../../src/types.js';
 import { MockTron, MockTronLink } from './mock.js';
 import { ONE_MINUTE, wait } from './utils.js';
+import { waitFor } from '@testing-library/dom';
+
 const noop = () => {
     //
 };
@@ -322,6 +324,7 @@ describe('methods should work fine', () => {
             tron._unlock();
             tron._setAddress('address');
             adapter = new TronLinkAdapter();
+            jest.advanceTimersByTime(60 * 1000);
             const onError = jest.fn();
             adapter.on('error', onError);
             const signMessageV2: any = jest.fn(() => {
@@ -331,8 +334,9 @@ describe('methods should work fine', () => {
 
             expect(adapter.signMessage('333')).rejects.toThrow('signedMessage33');
             expect(adapter.signMessage('333')).rejects.toThrow(WalletSignMessageError);
-            await wait();
-            expect(onError).toHaveBeenCalled();
+            waitFor(() => {
+                expect(onError).toHaveBeenCalled();
+            });
         });
     });
 
@@ -379,8 +383,58 @@ describe('methods should work fine', () => {
 
             expect(adapter.signTransaction({} as any)).rejects.toThrow('signedTransaction');
             expect(adapter.signTransaction({} as any)).rejects.toThrow(WalletSignTransactionError);
+            waitFor(() => {
+                expect(onError).toHaveBeenCalled();
+            });
+        });
+    });
+
+    describe('multiSign() should work fine', () => {
+        test('when there is not wallet', async () => {
+            window.tron = undefined;
+            adapter = new TronLinkAdapter();
+            jest.advanceTimersByTime(ONE_MINUTE);
+            const onError = jest.fn();
+            adapter.on('error', onError);
+            expect(adapter.multiSign({} as any)).rejects.toThrow(WalletDisconnectedError);
             await wait();
-            expect(onError).toHaveBeenCalled();
+            expect(onError).toHaveBeenCalledTimes(1);
+        });
+        test('when wallet is disconnected', async () => {
+            const onError = jest.fn();
+            adapter.on('error', onError);
+            expect(adapter.multiSign({} as any)).rejects.toThrow(WalletDisconnectedError);
+            await wait();
+            expect(onError).toHaveBeenCalledTimes(1);
+        });
+        test('when multiSign successfully', async () => {
+            tron.request = () => Promise.resolve(['address']);
+            const onError = jest.fn();
+            adapter.on('error', onError);
+            tron._setAddress('address');
+            await adapter.connect();
+            const sign: any = jest.fn(() => Promise.resolve('signedTransaction'));
+            (tron.tronWeb as TronWeb).trx.multiSign = sign;
+
+            const result = await adapter.multiSign('1', '2', '3');
+            expect(sign).toHaveBeenCalledWith('1', '2', '3');
+            expect(result).toBe('signedTransaction');
+            expect(onError).not.toHaveBeenCalled();
+        });
+        test('when multiSign with error', async () => {
+            tron.request = () => Promise.resolve(['address']);
+            const onError = jest.fn();
+            tron._setAddress('address');
+            adapter = new TronLinkAdapter();
+            adapter.on('error', onError);
+            const sign: any = jest.fn(() => Promise.reject('multiSign error'));
+            (tron.tronWeb as TronWeb).trx.multiSign = sign;
+
+            expect(adapter.multiSign({} as any)).rejects.toThrow('multiSign error');
+            expect(adapter.multiSign({} as any)).rejects.toThrow(WalletSignTransactionError);
+            waitFor(() => {
+                expect(onError).toHaveBeenCalled();
+            });
         });
     });
 

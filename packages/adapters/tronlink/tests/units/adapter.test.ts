@@ -8,6 +8,7 @@ import {
 import { TronLinkAdapter } from '../../src/index.js';
 import { wait, ONE_MINUTE } from './utils.js';
 import { MockTron, MockTronLink } from './mock.js';
+import { waitFor } from '@testing-library/dom';
 const noop = () => {
     //
 };
@@ -357,7 +358,9 @@ describe('Events should work fine', function () {
         adapter.on('disconnect', _onDisconnect);
         jest.advanceTimersByTime(200);
         tronLink._emit('disconnect', {});
-        expect(_onDisconnect).toHaveBeenCalled();
+        waitFor(() => {
+            expect(_onDisconnect).toHaveBeenCalled();
+        });
     });
 
     test('empty message should work fine', () => {

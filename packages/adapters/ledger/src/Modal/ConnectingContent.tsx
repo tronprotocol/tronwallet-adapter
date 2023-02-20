@@ -5,7 +5,7 @@ import { LoadingIcon } from './LoadingIcon.js';
 export function ConnectingContent() {
     const langText = useMemo(() => getLangText(), []);
     return (
-        <div style={{ textAlign: 'center' }}>
+        <div style={{ textAlign: 'center' }} data-testid="connecting-content">
             <LedgerIcon></LedgerIcon>
             <div className="ledger-connecting-pop">
                 <ul className="ledger-connecting-pop-content">

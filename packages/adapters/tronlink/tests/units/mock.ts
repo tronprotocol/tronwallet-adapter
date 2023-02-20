@@ -16,6 +16,9 @@ export class MockTronWeb implements TronWeb {
         signMessageV2(_: unknown): Promise<unknown> {
             return Promise.resolve('');
         },
+        multiSign() {
+            return Promise.resolve();
+        },
     } as any;
     constructor(address: string) {
         this.defaultAddress.base58 = address;

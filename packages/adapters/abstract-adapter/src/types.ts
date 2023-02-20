@@ -36,6 +36,7 @@ export type Transaction = {
     };
     raw_data_hex: string;
     signature?: string[];
+    [key: string]: unknown;
 };
 
 export type SignedTransaction = Transaction & { signature: string[] };

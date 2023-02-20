@@ -1,6 +1,7 @@
 {
     "name": "@tronweb3/tronwallet-adapter-ledger",
-    "version": "1.1.1",
+    "version": "1.1.2",
+    "description": "Wallet adapter for the Ledger wallet.",
     "keywords": [
         "TRON",
         "TronWeb",
@@ -36,18 +37,20 @@
     },
     "scripts": {
         "clean": "shx mkdir -p lib && shx rm -rf lib",
-        "package": "shx echo '{ \"type\": \"commonjs\" }' > lib/cjs/package.json"
+        "package": "shx echo '{ \"type\": \"commonjs\" }' > lib/cjs/package.json",
+        "test": "jest"
     },
     "dependencies": {
         "@ledgerhq/hw-app-trx": "^6.27.8",
         "@ledgerhq/hw-transport": "6.27.1",
         "@ledgerhq/hw-transport-webhid": "6.27.1",
-        "@tronweb3/tronwallet-abstract-adapter": "^1.1.1",
+        "@tronweb3/tronwallet-abstract-adapter": "^1.1.2",
         "buffer": "^6.0.3",
         "eventemitter3": "^4.0.0",
         "preact": "^10.11.3"
     },
     "devDependencies": {
+        "@testing-library/dom": "^8.20.0",
         "shx": "^0.3.4"
     }
 }

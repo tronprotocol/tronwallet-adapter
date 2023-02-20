@@ -3,65 +3,167 @@ import Trx from '@ledgerhq/hw-app-trx';
 import type Transport from '@ledgerhq/hw-transport';
 import TransportWebHID from '@ledgerhq/hw-transport-webhid';
 import type { SignedTransaction, Transaction } from '@tronweb3/tronwallet-abstract-adapter';
-import { openConfirmModal, openConnectingModal, openSelectAccountModal } from './Modal/openModal.js';
-import type { Account } from './Modal/SelectAccount.js';
+import { openConnectingModal, openSelectAccountModal, openVerifyAddressModal } from './Modal/openModal.js';
 
 async function wait(timeout: number) {
     return new Promise((resolve) => {
         setTimeout(resolve, timeout);
     });
 }
+function isFunction(fn: unknown) {
+    return typeof fn === 'function';
+}
+
+export type SelectAccount = (params: { accounts: Account[]; ledgerUtils: LedgerUtils }) => Promise<Account>;
+
+export interface LedgerWalletConfig {
+    /**
+     * Initial total accounts to get once connection is created, default is 1
+     */
+    accountNumber?: number;
+    /**
+     * Hook function to call before connecting to ledger and geting accounts.
+     * By default, a modal will popup to reminder user to prepare the ledger and enter Tron app.
+     * You can specify a function to disable this modal.
+     */
+    beforeConnect?: () => Promise<unknown> | unknown;
+    /**
+     * Hook function to call after connecting to ledger and geting initial accounts.
+     * The function should return the selected account including the index of account.
+     * Following operations such as `signMessage` will use the selected account.
+     */
+    selectAccount?: SelectAccount;
+
+    /**
+     * Function to get derivate BIP44 path by index.
+     * Default is `44'/195'/${index}'/0/0`
+     */
+    getDerivationPath?: (index: number) => string;
+}
+/**
+ * getAccounts from Ledger
+ */
+export type GetAccounts = (from: number, to: number) => Promise<Account[]>;
+
+export type Account = {
+    /**
+     * The index to get BIP44 path.
+     */
+    index: number;
+    /**
+     * The BIP44 path to derivate address.
+     */
+    path: string;
+    /**
+     * The derivated address.
+     */
+    address: string;
+};
+export interface LedgerUtils {
+    /**
+     * Get accounts from ledger by index. `from` is included and `to` is excluded.
+     * User can use the function to load more accounts.
+     */
+    getAccounts: GetAccounts;
+    /**
+     * Request to get an address with specified index using getDerivationPath(index) to get BIP44 path.
+     * If `display` is true, will request user to approve on ledger.
+     * The promise will resove if user approve and reject if user cancel the operation.
+     */
+    getAddress: (index: number, display: boolean) => Promise<{ publicKey: string; address: string }>;
+}
+
+const defaultSelectAccount: SelectAccount = async function ({ accounts, ledgerUtils }) {
+    const account = await openSelectAccountModal({
+        accounts,
+        getAccounts: ledgerUtils.getAccounts,
+    });
+    const closeConfirm = openVerifyAddressModal(account.address);
+    try {
+        await ledgerUtils.getAddress(account.index, true);
+    } finally {
+        closeConfirm?.();
+    }
+
+    return account;
+};
 export class LedgerWallet {
     private accounts: Account[];
     private app: Trx | null = null;
     private transport: Transport | null = null;
-    private accountNumber: number;
     private fetchState: 'Initial' | 'Fetching' | 'Finished' = 'Initial';
     private selectedIndex = 0;
-    // private latestIndex = 0;
+    private config: LedgerWalletConfig;
 
     private _address = '';
-    constructor(options: { accountNumber: number }) {
-        const { accountNumber } = options;
-        this.accountNumber = accountNumber;
+    constructor(config: LedgerWalletConfig = {}) {
         this.accounts = [];
+        const { accountNumber = 1 } = config;
+        (['beforeConnect', 'selectAccount', 'getDerivationPath'] as (keyof LedgerWalletConfig)[]).forEach((func) => {
+            if (config[func] && !isFunction(config[func])) {
+                throw new Error(`[Ledger]: ${func} must be a function!`);
+            }
+        });
+
+        if (accountNumber && !Number.isInteger(+accountNumber)) {
+            throw new Error('[Ledger]: accountNumber must be an integer!');
+        }
+        this.config = {
+            ...config,
+            accountNumber,
+        };
     }
 
     get address() {
         return this._address;
     }
 
-    async connect() {
-        let closeModal: (() => void) | null = null;
+    async connect(options?: { account: Omit<Account, 'path'> }) {
+        if (options?.account && typeof options.account === 'object') {
+            const account = options.account;
+            this.selectedIndex = +account.index;
+            this._address = account.address;
+            if (account.index === undefined || account.address === undefined) {
+                console.warn(
+                    '[LedgerWallet] account parameter passed to connect() should have valid index and address property'
+                );
+            }
+            return;
+        }
+        const ledgerUtils = {
+            getAccounts: this.getAccounts,
+            getAddress: this.getAddress,
+        };
         this.accounts = [];
         this._address = '';
         this.selectedIndex = 0;
+        const { accountNumber = 1, beforeConnect, selectAccount = defaultSelectAccount } = this.config;
+
+        let closeConnectingModal: (() => void) | null = null;
         try {
-            closeModal = openConnectingModal();
+            if (beforeConnect) {
+                await beforeConnect();
+            } else {
+                closeConnectingModal = openConnectingModal();
+            }
             await this.makeApp();
 
-            const path = this.getPathForIndex(0);
-            const { address } = await this.app!.getAddress(path);
-            this.accounts[0] = {
-                address,
-                path,
-                index: 0,
-            };
-            await this.cleanUp();
-            if (this.accountNumber > 1) {
-                await this.getAccount(1, this.accountNumber);
-            }
-            closeModal();
+            const firstAccount = await this.getAccount(0);
+            this.accounts[0] = firstAccount;
 
-            const index = await openSelectAccountModal({
-                accounts: this.accounts,
-                selectedIndex: 0,
-                getAccount: this.getAccount,
+            await this.cleanUp();
+            if (accountNumber > 1) {
+                await this.getAccounts(1, accountNumber);
+            }
+            closeConnectingModal?.();
+            const accounts = this.accounts.slice(0, accountNumber);
+            const selectedAccount = await selectAccount!({
+                accounts,
+                ledgerUtils,
             });
 
-            await this.verifyAddress(index);
-            this.selectedIndex = index;
-            this._address = this.accounts[index].address;
+            this.selectedIndex = selectedAccount.index;
+            this._address = selectedAccount.address;
         } finally {
             await this.cleanUp();
         }
@@ -69,7 +171,6 @@ export class LedgerWallet {
     disconnect() {
         this.selectedIndex = 0;
         this._address = '';
-        this.accounts = [];
     }
     async signPersonalMessage(message: string) {
         await this.waitForIdle();
@@ -101,7 +202,7 @@ export class LedgerWallet {
             await this.cleanUp();
         }
     }
-    getAccount = async (from: number, to: number): Promise<Account[]> => {
+    getAccounts = async (from: number, to: number): Promise<Account[]> => {
         if (from < 0) {
             throw new Error('getAccount parameter error: from cannot be smaller than 0.');
         }
@@ -110,57 +211,46 @@ export class LedgerWallet {
         }
         if (this.fetchState === 'Fetching') {
             await wait(500);
-            return this.getAccount(from, to);
+            return this.getAccounts(from, to);
         }
         this.fetchState = 'Fetching';
 
         // ledger can not get address concurrently.
-        // about 13057ms to get 10 address
         await this.makeApp();
-        const obj: Record<string, Account> = {};
-        for (let i = from; i < to; i++) {
-            const account = await this.getAddress(i);
-            obj[account.index] = account;
+        try {
+            const obj: Record<string, Account> = {};
+            for (let i = from; i < to; i++) {
+                const account = await this.getAccount(i);
+                obj[account.index] = account;
+            }
+            Object.keys(obj).forEach((key) => {
+                this.accounts[+key] = obj[key];
+            });
+            return this.accounts.slice(from, to);
+        } finally {
+            this.fetchState = 'Initial';
+            await this.cleanUp();
         }
-        Object.keys(obj).forEach((key) => {
-            this.accounts[+key] = obj[key];
-        });
-        this.fetchState = 'Finished';
-        this.cleanUp();
-        return this.accounts.slice(from, to);
     };
 
-    private async verifyAddress(index: number) {
-        let closeModal: (() => void) | null = null;
+    public getAddress = async (index: number, display = false): Promise<{ publicKey: string; address: string }> => {
         try {
-            const selectedAddress = this.accounts[index].address;
-            closeModal = openConfirmModal(selectedAddress);
             const path = this.getPathForIndex(index);
             await this.makeApp();
-            await this.app!.getAddress(path, true);
-            closeModal();
+            return await this.app!.getAddress(path, display);
         } finally {
             await this.cleanUp();
         }
-    }
+    };
 
-    private async getAddress(index: number) {
+    private async getAccount(index: number) {
         const path = this.getPathForIndex(index);
-        try {
-            const { address } = await this.app!.getAddress(path);
-            return {
-                path,
-                address,
-                index,
-            };
-        } catch (e: unknown) {
-            return {
-                path,
-                address: '',
-                index,
-                isValid: false,
-            };
-        }
+        const { address } = await this.app!.getAddress(path);
+        return {
+            path,
+            address,
+            index,
+        };
     }
 
     private async waitForIdle() {
@@ -170,7 +260,7 @@ export class LedgerWallet {
         }
     }
     private getPathForIndex(index: number) {
-        return `44'/195'/${index}'/0/0`;
+        return this.config.getDerivationPath ? this.config.getDerivationPath(index) : `44'/195'/${index}'/0/0`;
     }
     private async makeApp() {
         if (this.transport && this.app) {

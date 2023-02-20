@@ -14,4 +14,5 @@ export default {
         '(.+)\\.js': '$1',
     },
     extensionsToTreatAsEsm: ['.ts'],
+    resolver: './resolver.cjs',
 };

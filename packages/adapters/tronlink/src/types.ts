@@ -11,6 +11,7 @@ export interface TronWeb {
     trx: {
         sign(transaction: Transaction, privateKey?: string): Promise<SignedTransaction>;
         sign(message: string, privateKey?: string): Promise<string>;
+        multiSign(...args: any[]): Promise<any>;
         signMessageV2(message: string, privateKey?: string): Promise<string>;
         // signMessageV2(...args: unknown[]): Promise<string>;
     };
