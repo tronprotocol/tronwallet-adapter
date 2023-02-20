@@ -72,7 +72,7 @@ importers:
       '@tronweb3/tronwallet-adapter-ledger': ^1.1.2
       '@tronweb3/tronwallet-adapter-react-hooks': ^1.0.0
       '@tronweb3/tronwallet-adapter-react-ui': ^1.1.0
-      '@tronweb3/tronwallet-adapters': ^1.1.1
+      '@tronweb3/tronwallet-adapters': ^1.1.2
       '@types/react': ^18.0.26
       '@types/react-dom': ^18.0.8
       '@vitejs/plugin-react': ^2.2.0
@@ -274,8 +274,8 @@ importers:
 
   packages/adapters/adapters:
     specifiers:
-      '@tronweb3/tronwallet-adapter-ledger': ^1.1.1
-      '@tronweb3/tronwallet-adapter-tronlink': ^1.1.1
+      '@tronweb3/tronwallet-adapter-ledger': ^1.1.2
+      '@tronweb3/tronwallet-adapter-tronlink': ^1.1.2
       '@tronweb3/tronwallet-adapter-walletconnect': ^1.0.0
       shx: ^0.3.4
     dependencies:
@@ -291,7 +291,7 @@ importers:
       '@ledgerhq/hw-transport': 6.27.1
       '@ledgerhq/hw-transport-webhid': 6.27.1
       '@testing-library/dom': ^8.20.0
-      '@tronweb3/tronwallet-abstract-adapter': ^1.1.1
+      '@tronweb3/tronwallet-abstract-adapter': ^1.1.2
       buffer: ^6.0.3
       eventemitter3: ^4.0.0
       preact: ^10.11.3
@@ -311,7 +311,7 @@ importers:
   packages/adapters/tronlink:
     specifiers:
       '@testing-library/dom': ^8.20.0
-      '@tronweb3/tronwallet-abstract-adapter': ^1.1.0
+      '@tronweb3/tronwallet-abstract-adapter': ^1.1.2
       jest-environment-jsdom: ^29.3.1
       shx: ^0.3.4
     dependencies:
