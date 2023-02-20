@@ -1,6 +1,7 @@
 {
     "name": "@tronweb3/tronwallet-adapter-walletconnect",
     "version": "1.0.0",
+    "description": "Wallet adapter for WalletConnect wallet.",
     "keywords": [
         "TRON",
         "TronWeb",
