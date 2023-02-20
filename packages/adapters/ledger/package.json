@@ -1,6 +1,7 @@
 {
     "name": "@tronweb3/tronwallet-adapter-ledger",
     "version": "1.1.2",
+    "description": "Wallet adapter for the Ledger wallet.",
     "keywords": [
         "TRON",
         "TronWeb",
