@@ -191,7 +191,16 @@ export class LedgerWallet {
             const index = this.selectedIndex;
             const path = this.getPathForIndex(index);
             await this.makeApp();
-            const signedResponse = await this.app!.signTransaction(path, transaction.raw_data_hex, []);
+            let signedResponse;
+            try {
+                signedResponse = await this.app!.signTransaction(path, transaction.raw_data_hex, []);
+            } catch (e: any) {
+                if (/Too many bytes to encode/.test(e.message)) {
+                    signedResponse = await this.app!.signTransactionHash(path, transaction.txID);
+                } else {
+                    throw e;
+                }
+            }
             if (Array.isArray(transaction.signature)) {
                 if (!transaction.signature.includes(signedResponse)) transaction.signature.push(signedResponse);
             } else {
