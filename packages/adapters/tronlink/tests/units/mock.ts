@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import type { TronLinkWallet } from '../../src/adapter.js';
 import type { Tron, TronWeb } from '../../src/types.js';
 

@@ -49,4 +49,16 @@ describe('when on mobile device browser', () => {
             expect(window.location.href).not.toContain('tronlinkoutside://');
         }
     });
+    test('config.openTronLinkOnMobile should work fine', async () => {
+        adapter = new TronLinkAdapter({
+            checkTimeout: 3000,
+            openTronLinkAppOnMobile: false,
+        });
+        try {
+            await adapter.connect();
+        } catch {
+            //
+        }
+        expect(window.location.href).not.toContain('tronlinkoutside://');
+    });
 });

@@ -8,16 +8,13 @@ import { ThemeProvider } from '@mui/material/styles';
 import theme from './theme';
 import VConsole from 'vconsole';
 import './index.css';
+import { AppWraper } from './AppWraper.js';
 const vConsole = new VConsole();
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
     <React.StrictMode>
         <ThemeProvider theme={theme}>
-            <WalletProvider autoConnect={true}>
-                <WalletModalProvider>
-                    <App></App>
-                </WalletModalProvider>
-            </WalletProvider>
+            <AppWraper></AppWraper>
         </ThemeProvider>
     </React.StrictMode>
 );

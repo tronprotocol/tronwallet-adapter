@@ -7,16 +7,23 @@ export default defineConfig({
     plugins: [
         react(),
         legacy({
-            targets: ['defaults', 'not IE 11'],
+            targets: ['>0.3%', 'defaults'],
         }),
     ],
     define: {
         global: 'window',
     },
+    resolve: {
+        alias: {
+            eventemitter3: 'eventemitter3/umd/eventemitter3.js',
+        },
+    },
     build: {
-        minify: false
+        // Set false to speed up build process, should change to `true` for production mode.
+        minify: false,
     },
     optimizeDeps: {
+        // Clear the array to optimize the dependencies
         exclude: [
             '@tronweb3/tronwallet-adapters',
             '@tronweb3/tronwallet-adapter-tronlink',

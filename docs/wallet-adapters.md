@@ -155,11 +155,18 @@ The `Adapter` class defines the common interface for all adapters of specified w
 
 Events are as follows:
 
--   `connect(address)`: Emit when adapter is connected to the wallet. The parameter is the address of current account.
--   `disconnect()`: Emit when adapter is disconnected to the wallet.
+-   `connect(address)`: This event indicates that DApp is connected to the wallet automatically or with user's action. Emit with current address as parameter when
+
+    -   page first load and the wallet is connected automatically;
+    -   user call `adapter.connect()` successfully.
+
+    If you want to monitor every state change, `stateChanged` may work fine.
+
+-   `disconnect()`: Emit when user call `adapter.disconnect()` successfully.
 -   `stateChanged(state: AdapteraState)`: Emit when adapter's state is changed. The parameter is the state of adapter:
     ```typescript
     enum AdapterState {
+        Loading = 'Loading',
         NotFound = 'NotFound',
         Disconnect = 'Disconnected',
         Connected = 'Connected',

@@ -2,7 +2,7 @@
 import Trx from '@ledgerhq/hw-app-trx';
 import type Transport from '@ledgerhq/hw-transport';
 import TransportWebHID from '@ledgerhq/hw-transport-webhid';
-import type { SignedTransaction, Transaction } from '@tronweb3/tronwallet-abstract-adapter';
+import type { BaseAdapterConfig, SignedTransaction, Transaction } from '@tronweb3/tronwallet-abstract-adapter';
 import { openConnectingModal, openSelectAccountModal, openVerifyAddressModal } from './Modal/openModal.js';
 
 async function wait(timeout: number) {
@@ -16,7 +16,7 @@ function isFunction(fn: unknown) {
 
 export type SelectAccount = (params: { accounts: Account[]; ledgerUtils: LedgerUtils }) => Promise<Account>;
 
-export interface LedgerWalletConfig {
+export interface LedgerWalletConfig extends BaseAdapterConfig {
     /**
      * Initial total accounts to get once connection is created, default is 1
      */

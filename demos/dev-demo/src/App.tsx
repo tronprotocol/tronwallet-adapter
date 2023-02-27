@@ -4,6 +4,7 @@ import { LedgerAdapterDemo } from './LedgerAdapterDemo.js';
 import { CustomConnectWithSelectAccount } from './LedgerDemo/CustomConnectWithSelectAccount.js';
 import { CustomConnectWithGetAccounts } from './LedgerDemo/CustomConnectWithGetAccounts.js';
 import { TronLinkAdapterDemo } from './TronLinkAdapterDemo.js';
+import { ReactHooksDemo } from './ReactHooksDemo.js';
 interface TabPanelProps {
     children?: React.ReactNode;
     index: number;
@@ -32,11 +33,12 @@ function App() {
         <div className="App">
             <Box sx={{ width: '100%' }}>
                 <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-                    <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
+                    <Tabs scrollButtons="auto" variant="scrollable" value={value} onChange={handleChange} aria-label="basic tabs example">
                         <Tab label="TronLinkAdapter Demo" />
                         <Tab label="LedgerAdapter Demo" />
                         <Tab label="LedgerAdapter CustomConnectWithSelectAccount" />
                         <Tab label="LedgerAdapter CustomConnectWithGetAccounts" />
+                        <Tab label="ReactHooks Demo" />
                     </Tabs>
                 </Box>
                 <TabPanel value={value} index={0}>
@@ -50,6 +52,9 @@ function App() {
                 </TabPanel>
                 <TabPanel value={value} index={3}>
                     <CustomConnectWithGetAccounts></CustomConnectWithGetAccounts>
+                </TabPanel>
+                <TabPanel value={value} index={4}>
+                    <ReactHooksDemo></ReactHooksDemo>
                 </TabPanel>
             </Box>
         </div>
