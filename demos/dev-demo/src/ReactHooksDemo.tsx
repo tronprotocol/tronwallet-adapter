@@ -95,7 +95,7 @@ export function ReactHooksDemo() {
                     })}
                 </Select>
                 <Button style={{ margin: '0 20px' }} onClick={onSelect} variant="contained">
-                    Switch Chain to {targetWallet}
+                    Switch to {targetWallet}
                 </Button>
             </Detail>
         </Box>
