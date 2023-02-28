@@ -456,12 +456,12 @@ export class TronLinkAdapter extends Adapter {
             this.setAddress(address);
             this.setState(AdapterState.Connected);
         }
+        this.emit('accountsChanged', this.address || '', preAddr);
         if (!preAddr && this.address) {
             this.emit('connect', this.address);
         } else if (preAddr && !this.address) {
             this.emit('disconnect');
         }
-        this.emit('accountsChanged', this.address || '', preAddr);
     };
 
     private _checkPromise: Promise<boolean> | null = null;
