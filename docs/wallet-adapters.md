@@ -281,7 +281,7 @@ try {
     }
     ```
     More detail about WalletConnect client options please refer to the [WalletConnect document](https://docs.walletconnect.com/2.0/javascript/sign/dapp-usage).
--   `multiSign()` is not supported yet.
+- `multiSign()` and `switchChain(chainId: string)` are not supported.
 
 ### LedgerAdapter
 
@@ -371,4 +371,4 @@ try {
         // { address: 'some address', publicKey: 'publicKey for address' }
         ```
 
--   `multiSign()` is not supported yet.
+- `multiSign()` and `switchChain(chainId: string)` are not supported.
