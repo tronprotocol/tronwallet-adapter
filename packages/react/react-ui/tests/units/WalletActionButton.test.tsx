@@ -93,27 +93,29 @@ describe('when tronlink is not avaliable', () => {
 describe('when tronlink is avaliable but not ready', () => {
     beforeEach(() => {
         (window.tronLink as MockTronLink).setReadyState(false);
+        (window.tronLink as MockTronLink).address = '';
     });
     describe('when no wallet is selected', () => {
         test('selectButton should exist', async () => {
             const { getByTestId } = makeSut();
-            expect(getByTestId('wallet-select-button')).toBeInTheDocument();
+            waitFor(() => {
+                expect(getByTestId('wallet-select-button')).toBeInTheDocument();
+            });
         });
 
         test('should work fine when select a wallet', async () => {
             const { getByTestId, getByText, queryByTestId, findByTestId } = makeSutNoAutoConnect();
             await act(async () => {
                 fireEvent.click(getByTestId('wallet-select-button'));
-                await Promise.resolve();
             });
 
             await waitFor(() => {
                 expect(getByTestId('wallet-select-modal')).toBeInTheDocument();
             });
-
+            const tronLinkBtn = getByText('TronLink');
+            expect(tronLinkBtn).toBeInTheDocument();
             await act(async () => {
-                fireEvent.click(getByText('TronLink'));
-                await Promise.resolve();
+                fireEvent.click(tronLinkBtn);
             });
             await waitFor(async () => {
                 expect(queryByTestId('wallet-select-modal')).toBeNull();

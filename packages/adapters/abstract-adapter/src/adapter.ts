@@ -8,8 +8,9 @@ export interface AdapterEvents {
     connect(address: string): void;
     disconnect(): void;
     error(error: WalletError): void;
+    readyStateChanged(state: WalletReadyState): void;
     stateChanged(state: AdapterState): void;
-    accountsChanged(address: string): void;
+    accountsChanged(address: string, preAddr: string): void;
     chainChanged(chainData: unknown): void;
 }
 
@@ -19,6 +20,7 @@ export interface AdapterProps<Name extends string = string> {
     name: AdapterName<Name>;
     url: string;
     icon: string;
+    readyState: WalletReadyState;
     state: AdapterState;
     address: string | null;
     connecting: boolean;
@@ -30,7 +32,23 @@ export interface AdapterProps<Name extends string = string> {
     signTransaction(transaction: Transaction, privateKey?: string): Promise<SignedTransaction>;
     switchChain(chainId: string): Promise<void>;
 }
-
+/**
+ * Wallet ready state.
+ */
+export enum WalletReadyState {
+    /**
+     * Adapter will start to check if wallet exists after adapter instance is created.
+     */
+    Loading = 'Loading',
+    /**
+     * When checking ends and wallet is not found, readyState will be NotFound.
+     */
+    NotFound = 'NotFound',
+    /**
+     * When checking ends and wallet is found, readyState will be Found.
+     */
+    Found = 'Found',
+}
 /**
  * Adapter state
  */
@@ -52,7 +70,13 @@ export enum AdapterState {
      */
     Connected = 'Connected',
 }
-
+export interface BaseAdapterConfig {
+    /**
+     * Set if open Wallet's website url when wallet is not installed.
+     * Default is true.
+     */
+    openUrlWhenWalletNotFound?: boolean;
+}
 export abstract class Adapter<Name extends string = string>
     extends EventEmitter<AdapterEvents>
     implements AdapterProps
@@ -60,6 +84,7 @@ export abstract class Adapter<Name extends string = string>
     abstract name: AdapterName<Name>;
     abstract url: string;
     abstract icon: string;
+    abstract readyState: WalletReadyState;
     abstract state: AdapterState;
     abstract address: string | null;
     abstract connecting: boolean;
@@ -78,6 +103,7 @@ export abstract class Adapter<Name extends string = string>
     }
     abstract signMessage(message: string, privateKey?: string): Promise<string>;
     abstract signTransaction(transaction: Transaction, privateKey?: string): Promise<SignedTransaction>;
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     multiSign(...args: any[]): Promise<any> {
         return Promise.reject("The current wallet doesn't support multiSign.");
     }

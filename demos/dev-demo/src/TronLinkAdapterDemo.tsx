@@ -11,35 +11,47 @@ const receiver = 'TMDKznuDWaZwfZHcM61FVFstyYNmK6Njk1';
 export function TronLinkAdapterDemo() {
     const [connectState, setConnectState] = useState(AdapterState.NotFound);
     const [account, setAccount] = useState('');
+    const [readyState, setReadyState] = useState('');
     const [chainId, setChainId] = useState<string>('');
     const [selectedChainId, setSelectedChainId] = useState('0xcd8690dc');
     const [open, setOpen] = useState(false);
-    const adapter = useMemo(() => new TronLinkAdapter(), []);
+    const [signMessage, setSignMessage] = useState('Hello, Adapter');
+    const [signedMessage, setSignedMessage] = useState('');
+    const adapter = useMemo(() => new TronLinkAdapter({
+        openTronLinkAppOnMobile: false,
+        openUrlWhenWalletNotFound: false,
+        checkTimeout: 3000
+    }), []);
 
     useEffect(() => {
         setConnectState(adapter.state);
         setAccount(adapter.address || '');
+        setReadyState(adapter.readyState)
 
+        adapter.on('readyStateChanged', () => {
+            console.log('readyState: ', adapter.readyState)
+            setReadyState(adapter.readyState)
+        })
         adapter.on('connect', () => {
-            console.log('---connect', adapter.address);
+            console.log('connect: ', adapter.address);
             setAccount(adapter.address || '');
         });
         adapter.on('stateChanged', (state) => {
-            console.log('---state change', state);
+            console.log('stateChanged: ', state);
             setConnectState(state);
         });
-        adapter.on('accountsChanged', (data) => {
-            console.log('---account changed', data);
+        adapter.on('accountsChanged', (data, preaddr) => {
+            console.log('accountsChanged: current', data,' pre: ', preaddr);
             setAccount(data as string);
         });
 
         adapter.on('chainChanged', (data) => {
-            console.log('---chain changed', data);
+            console.log('chainChanged: ', data);
             setChainId((data as any).chainId);
         });
 
         adapter.on('disconnect', () => {
-            console.log('---disconnect');
+            console.log('disconnect');
         });
 
         return () => {
@@ -60,6 +72,29 @@ export function TronLinkAdapterDemo() {
         setOpen(true);
     }
 
+    const onSignMessage = useCallback(
+        async function () {
+            const res = await adapter.signMessage(signMessage);
+            setSignedMessage(res);
+        },
+        [adapter, signMessage, setSignedMessage]
+    );
+
+    const onVerifyMessage = useCallback(
+        async function () {
+            const address = await tronWeb.trx.verifyMessageV2(signMessage, signedMessage);
+            alert(address === adapter.address ? 'success verify' : 'failed verify');
+        },
+        [signMessage, signedMessage, adapter]
+    );
+
+    async function handleConnect() {
+        try {
+            await adapter?.connect()
+        } catch(e: any) {
+            console.log(e.error?.message || e.message);
+        }
+    }
     return (
         <Box sx={{ width: '100%', maxWidth: 900 }}>
             <h1>TronLink Demo</h1>
@@ -73,11 +108,17 @@ export function TronLinkAdapterDemo() {
             </Typography>
 
             <Typography variant="h6" gutterBottom>
+                ReadyState: {readyState}
+            </Typography>
+            <Typography variant="h6" gutterBottom>
                 Current connection status:&nbsp;&nbsp;
                 <span style={{ color: adapter?.connected ? '#08f108' : 'orange' }}>{connectState}</span>
             </Typography>
+            <Typography variant="h6" gutterBottom>
+                <TextField label="Message to sign" size="small" value={signMessage} onChange={(e) => setSignMessage(e.target.value)}></TextField>
+            </Typography>
             <Detail>
-                <Button variant="contained" disabled={adapter?.connected} onClick={() => adapter?.connect()}>
+                <Button variant="contained" disabled={adapter?.connected} onClick={handleConnect}>
                     Connect
                 </Button>
                 &nbsp;&nbsp;&nbsp;&nbsp;
@@ -87,6 +128,15 @@ export function TronLinkAdapterDemo() {
                 &nbsp;&nbsp;&nbsp;&nbsp;
                 <Button variant="contained" disabled={!adapter?.connected} onClick={onSignTransaction}>
                     Transfer
+                </Button>
+            </Detail>
+            <Detail>
+                <Button variant="contained" onClick={onSignMessage}>
+                    Sign Message
+                </Button>
+                &nbsp;&nbsp;&nbsp;&nbsp;
+                <Button variant="contained" disabled={!signedMessage} onClick={onVerifyMessage}>
+                    Verify Signed Message
                 </Button>
             </Detail>
             {open && (
@@ -121,12 +171,8 @@ export function TronLinkAdapterDemo() {
     );
 }
 
-function Detail(props: { children: ReactNode }) {
-    return (
-        <Typography sx={{ ml: 4 }} variant="body1" gutterBottom>
-            {props.children}
-        </Typography>
-    );
+export function Detail(props: { children: ReactNode }) {
+    return <div style={{ margin: 15 }}>{props.children}</div>;
 }
 
 function MultiSignDemo(props: { address: string; adapter: Adapter }) {

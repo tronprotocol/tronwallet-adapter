@@ -21,22 +21,22 @@ You can use `@tronweb3/tronwallet-adapters` in your component. Use `useMemo` to 
 import { TronLinkAdapter } from '@tronweb3/tronwallet-adapters';
 
 function App() {
-    const [connectState, setConnectState] = useState(AdapterState.NotFound);
+    const [readyState, setReadyState] = useState(WalletReadyState.NotFound);
     const [account, setAccount] = useState('');
     const [netwok, setNetwork] = useState({});
     const [signedMessage, setSignedMessage] = useState('');
 
     const adapter = useMemo(() => new TronLinkAdapter(), []);
     useEffect(() => {
-        setConnectState(adapter.state);
+        setReadyState(adapter.state);
         setAccount(adapter.address!);
 
         adapter.on('connect', () => {
             setAccount(adapter.address!);
         });
 
-        adapter.on('stateChanged', (state) => {
-            setConnectState(state);
+        adapter.on('readyStateChanged', (state) => {
+            setReadyState(state);
         });
 
         adapter.on('accountsChanged', (data) => {
@@ -63,7 +63,7 @@ function App() {
 
     return (
         <div className="App">
-            <div>connectState: {connectState}</div>
+            <div>readyState: {readyState}</div>
             <div>current address: {account}</div>
             <div>current network: {JSON.stringify(netwok)}</div>
             <button disabled={adapter.connected} onClick={() => adapter.connect()}>
@@ -128,11 +128,10 @@ The `Adapter` class defines the common interface for all adapters of specified w
 -   `name`: The name of the adapter.
 -   `url`: The website of the adapter's wallet.
 -   `icon`: The icon of the adapter's wallet.
--   `state`: The adapter's state, which includes three value:
+-   `readyState`: The wallet's state, which includes three value:
     -   `Loading`: When adapter is checking if the wallet is available or not.
     -   `NotFound`: The wallet is not detected in current browser.
-    -   `Disconnected`: The wallet is detected in current browser but the adapter has not connected to wallet yet.
-    -   `Connected`: The adapter is connected to wallet.
+    -   `Found`: The wallet is detected in current browser.
 -   `address`: The address of current account when the adapter is connected.
 -   `connecting`: Whether the adapter is trying to connect to the wallet.
 -   `connected`: Whether the adapter is connected to the wallet.
@@ -157,15 +156,24 @@ Events are as follows:
 
 -   `connect(address)`: Emit when adapter is connected to the wallet. The parameter is the address of current account.
 -   `disconnect()`: Emit when adapter is disconnected to the wallet.
--   `stateChanged(state: AdapteraState)`: Emit when adapter's state is changed. The parameter is the state of adapter:
+-   `readyStateChanged(state: WalletReadyState)`: Emit when wallet's readyState is changed. The parameter is the state of wallet:
     ```typescript
-    enum AdapterState {
+    enum WalletReadyState {
+        /**
+         * Adapter will start to check if wallet exists after adapter instance is created.
+         */
+        Loading = 'Loading',
+        /**
+         * When checking ends and wallet is not found, readyState will be NotFound.
+         */
         NotFound = 'NotFound',
-        Disconnect = 'Disconnected',
-        Connected = 'Connected',
+        /**
+         * When checking ends and wallet is found, readyState will be Found.
+         */
+        Found = 'Found',
     }
     ```
--   `accountsChanged(address: string)`: Emit when users change the current selected account in wallet. The parameter is the address of new account.
+-   `accountsChanged(address: string, preAddress: string)`: Emit when users change the current selected account in wallet. The parameter is the address of new account.
 -   `chainChanged(chainInfo: ChainInfo)`: Emit when users change the current selected chain in wallet. The parameter is the new network config：
     ```typescript
     interface ChainInfo {
@@ -200,17 +208,45 @@ All errors are as follows:
 -   `WalletSignMessageError`: Occurs when call `signMessage()`.
 -   `WalletSignTransactionError`: Occurs when call `signTransaction()`.
 
+Following exmaple shows how to get original error info with `WalletError`:
+
+```js
+const adapter = new TronLinkAdapter();
+try {
+    await adapter.connect();
+} catch (e: any) {
+    const originalError = e.error;
+}
+```
+
 <h3 id="tronlinkadapter">TronLinkAdapter</h3>
 
 -   `Constructor(config: TronLinkAdapterConfig)`
     ```typescript
     interface TronLinkAdapterConfig {
         /**
+         * Set if open Wallet's website url when wallet is not installed.
+         * Default is true.
+         */
+        openUrlWhenWalletNotFound?: boolean;
+        /**
+         * Timeout in millisecond for checking if TronLink wallet exists.
+         * Default is 30 * 1000ms
+         */
+        checkTimeout?: number;
+        /**
+         * Set if open TronLink app using DeepLink on mobile device.
+         * Default is true.
+         */
+        openTronLinkAppOnMobile?: boolean;
+        /**
          * The icon of your dapp. Used when open TronLink app in mobile device browsers.
+         * Default is current website icon.
          */
         dappIcon?: string;
         /**
          * The name of your dapp. Used when open TronLink app in mobile device browsers.
+         * Default is `document.title`.
          */
         dappName?: string;
     }
@@ -253,6 +289,11 @@ All errors are as follows:
 
     ```typescript
     interface LedgerAdapterConfig {
+        /**
+         * Set if open Wallet's website url when wallet is not installed.
+         * Default is true.
+         */
+        openUrlWhenWalletNotFound?: boolean;
         /**
          * Initial total accounts to get once connection is created, default is 1
          */

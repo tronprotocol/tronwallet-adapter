@@ -1,7 +1,6 @@
 import type { ReqestAccountsResponse, TronLinkWallet, TronWeb } from '@tronweb3/tronwallet-adapter-tronlink';
 jest.useFakeTimers();
 export class MockTronLink implements TronLinkWallet {
-    tronWeb: TronWeb;
     ready: boolean;
 
     address: string;
@@ -9,7 +8,9 @@ export class MockTronLink implements TronLinkWallet {
     constructor() {
         this.address = 'address';
         this.ready = true;
-        this.tronWeb = {
+    }
+    get tronWeb() {
+        return {
             ready: true,
             defaultAddress: {
                 base58: this.address,

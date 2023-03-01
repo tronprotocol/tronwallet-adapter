@@ -3,6 +3,7 @@ import {
     WalletConnectionError,
     WalletDisconnectedError,
     WalletNotFoundError,
+    WalletReadyState,
     WalletSignMessageError,
     WalletSignTransactionError,
     WalletSwitchChainError,
@@ -30,10 +31,12 @@ describe('when tron is not found', () => {
         window.tron = undefined;
         adapter = new TronLinkAdapter();
     });
-    test('state should be NotFound', async () => {
+    test('readyState and state should be NotFound', async () => {
+        expect(adapter.readyState).toEqual(WalletReadyState.Loading);
         expect(adapter.state).toEqual(AdapterState.Loading);
         jest.advanceTimersByTime(ONE_MINUTE);
         await Promise.resolve();
+        expect(adapter.readyState).toEqual(WalletReadyState.NotFound);
         expect(adapter.state).toEqual(AdapterState.NotFound);
         expect(adapter.address).toEqual(null);
     });
@@ -77,9 +80,11 @@ describe('when tronlink is locked', () => {
             tron.on = originOn;
         });
         test('state should be Disconnect', async () => {
+            expect(adapter.readyState).toEqual(WalletReadyState.Loading);
             expect(adapter.state).toEqual(AdapterState.Loading);
             jest.advanceTimersByTime(1000);
             await Promise.resolve();
+            expect(adapter.readyState).toEqual(WalletReadyState.Found);
             expect(adapter.state).toEqual(AdapterState.Disconnect);
         });
     });
@@ -102,7 +107,7 @@ describe('when tronlink is locked', () => {
         });
     });
 
-    describe.skip('when there is a connected account', () => {
+    describe('when there is a connected account', () => {
         let adapter: TronLinkAdapter;
         beforeAll(() => {
             tron = new MockTron('address');
@@ -113,6 +118,8 @@ describe('when tronlink is locked', () => {
         // todo: TronLink should emit accountsChanged when unlock/lock
         test('state should be Connected after unlock tronLink', async () => {
             tron._unlock();
+            tron._setAddress('address');
+            tron._emit('accountsChanged', ['address']);
             jest.advanceTimersByTime(2000);
             await Promise.resolve();
             expect(adapter.state).toEqual(AdapterState.Connected);
@@ -135,9 +142,11 @@ describe('when tronlink is unlocked', () => {
         });
 
         test('initial state should be fine', async () => {
+            expect(adapter.readyState).toEqual(WalletReadyState.Loading);
             expect(adapter.state).toEqual(AdapterState.Loading);
             jest.advanceTimersByTime(ONE_MINUTE);
             await Promise.resolve();
+            expect(adapter.readyState).toEqual(WalletReadyState.Found);
             expect(adapter.state).toEqual(AdapterState.Disconnect);
             expect(adapter.address).toEqual(null);
         });
@@ -165,6 +174,7 @@ describe('when tronlink is unlocked', () => {
             adapter = new TronLinkAdapter();
         });
         test('initial state should be fine', async () => {
+            expect(adapter.readyState).toEqual(WalletReadyState.Found);
             expect(adapter.state).toEqual(AdapterState.Connected);
             expect(adapter.address).toEqual(address);
         });
@@ -190,24 +200,52 @@ describe('events should work fine', () => {
         tron._unlock();
         adapter = new TronLinkAdapter();
     });
+    test('readyStateChanged event should work fine when tron is avaliable', async () => {
+        window.tron = undefined;
+        setTimeout(() => {
+            window.tron = tron = new MockTron('address');
+        }, 500);
+        const onReadyStateChanged = jest.fn();
+        const adapter = new TronLinkAdapter();
+        adapter.on('readyStateChanged', onReadyStateChanged);
+        jest.advanceTimersByTime(1000);
+        expect(onReadyStateChanged).toHaveBeenCalledWith(WalletReadyState.Found);
+    });
+    test('readyStateChanged event should work fine when tron is not avaliable', async () => {
+        window.tron = undefined;
+        const onReadyStateChanged = jest.fn();
+        const adapter = new TronLinkAdapter();
+        adapter.on('readyStateChanged', onReadyStateChanged);
+        jest.advanceTimersByTime(ONE_MINUTE);
+        expect(onReadyStateChanged).toHaveBeenCalledWith(WalletReadyState.NotFound);
+    });
     test('accountsChanged event should work fine', async () => {
         const _onAccountsChanged = jest.fn();
+        const _onConnect = jest.fn();
+        const _onDisconnect = jest.fn();
+        adapter.on('connect', _onConnect);
+        adapter.on('disconnect', _onDisconnect);
         adapter.on('accountsChanged', _onAccountsChanged);
         tron._emit('accountsChanged', ['address2']);
         await wait();
+        expect(_onConnect).not.toHaveBeenCalled();
         expect(_onAccountsChanged).toHaveBeenCalledTimes(1);
-        expect(_onAccountsChanged).toHaveBeenCalledWith('address2');
+        expect(_onAccountsChanged).toHaveBeenCalledWith('address2', 'address');
         expect(adapter.address).toEqual('address2');
 
         tron._emit('accountsChanged', ['address3']);
         await wait();
         expect(_onAccountsChanged).toHaveBeenCalledTimes(2);
-        expect(_onAccountsChanged).toHaveBeenCalledWith('address2');
+        expect(_onAccountsChanged).toHaveBeenLastCalledWith('address3', 'address2');
+        expect(_onConnect).not.toHaveBeenCalled();
         expect(adapter.address).toEqual('address3');
 
         tron._emit('accountsChanged', []);
         await wait();
         expect(adapter.address).toEqual(null);
+        expect(_onAccountsChanged).toHaveBeenCalledTimes(3);
+        expect(_onAccountsChanged).toHaveBeenLastCalledWith('', 'address3');
+        expect(_onDisconnect).toHaveBeenCalled();
     });
     test('connect and stateChanged event should work fine', () => {
         window.tron = tron = new MockTron('');
@@ -533,5 +571,27 @@ describe('methods should work fine', () => {
             await Promise.resolve();
             expect(_onDisconnect).toHaveBeenCalled();
         });
+    });
+});
+describe('constructor config should work fine', () => {
+    let adapter: TronLinkAdapter;
+    beforeEach(() => {
+        window.tron = tron = new MockTron('address');
+        tron._unlock();
+    });
+    test('config.openUrlWhenWalletNotFound should work fine', async () => {
+        window.tron = undefined;
+        window.open = jest.fn();
+        adapter = new TronLinkAdapter({
+            checkTimeout: 3000,
+            openUrlWhenWalletNotFound: false,
+        });
+        jest.advanceTimersByTime(3000);
+        try {
+            await adapter.connect();
+        } catch {
+            //
+        }
+        expect(window.open).not.toHaveBeenCalled();
     });
 });

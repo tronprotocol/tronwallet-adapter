@@ -1,7 +1,5 @@
-import React, { useMemo, useState } from 'react';
-import type { WalletError } from '@tronweb3/tronwallet-abstract-adapter';
-import { WalletDisconnectedError, WalletNotFoundError } from '@tronweb3/tronwallet-abstract-adapter';
-import { useWallet, WalletProvider } from '@tronweb3/tronwallet-adapter-react-hooks';
+import React, { useState } from 'react';
+import { useWallet } from '@tronweb3/tronwallet-adapter-react-hooks';
 import {
     WalletActionButton,
     WalletConnectButton,

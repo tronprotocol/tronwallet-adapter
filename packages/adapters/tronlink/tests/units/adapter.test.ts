@@ -102,7 +102,8 @@ describe('TronLinkAdapter', function () {
             jest.advanceTimersByTime(500);
             expect(adapter.state).toEqual(AdapterState.Connected);
             expect(adapter.address).toEqual('xxx');
-            expect(onMethod).toHaveBeenCalledTimes(4);
+            // accountsChanged, chainChanged
+            expect(onMethod).toHaveBeenCalledTimes(2);
 
             await adapter.disconnect();
             expect(removeListenerMethod).toHaveBeenCalled();

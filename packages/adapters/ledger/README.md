@@ -13,6 +13,10 @@ const App = () => {
             new LedgerAdapter({
                 // Initial total accounts to get once connection is created
                 accountNumber: 5,
+                // Custom derivate path for address
+                getDerivationPath(index) {
+                    return `44'/195'/0'/0/${index}`;
+                },
             }),
         ],
         []
