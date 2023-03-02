@@ -180,18 +180,18 @@ Events are as follows:
         chainId: string;
     }
     ```
--   `error(ConnectionError)`: Emit when there are some errors when call the adapter's method. The [ConnectionError Types] is defined as follows.
+-   `error(WalletError)`: Emit when there are some errors when call the adapter's method. The [WalletError Types] is defined as follows.
 
-### ConnectionError
+### WalletError
 
-`ConnectionError` is a superclass which defines the error when using adapter.
+`WalletError` is a superclass which defines the error when using adapter.
 All error types are extended from this class.
 Developers can check the error type according to the error instance.
 
 ```typescript
 try {
     // do something here
-} catch (error: ConnectionError) {
+} catch (error: WalletError) {
     if (error instanceof WalletNotFoundError) {
         console.log('Wallet is not found');
     }
