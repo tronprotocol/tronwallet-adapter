@@ -1,17 +1,19 @@
-export type NetworkNodeConfig = {
-    chainId: string;
-    chain: string;
-    fullNode: string;
-    solidityNode: string;
-    eventServer: string;
-};
-
-export enum ChainNetwork {
+export enum NetworkType {
     Mainnet = 'Mainnet',
     Shasta = 'Shasta',
     Nile = 'Nile',
 }
 
+export type Network = {
+    networkType: NetworkType;
+    chainId: string;
+    fullNode: string;
+    solidityNode: string;
+    eventServer: string;
+};
+
+export type { Network as NetworkNodeConfig };
+export { NetworkType as ChainNetwork };
 // types should be defined in @tronweb3/web3.js, such as tronweb
 // as no ts in tronweb
 // just defined here

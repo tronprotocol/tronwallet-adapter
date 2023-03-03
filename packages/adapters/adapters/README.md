@@ -251,6 +251,24 @@ try {
         dappName?: string;
     }
     ```
+-   `network()` method is support to get current network information. The return value is of type `Network` as follows:
+
+    ```typescript
+    export enum NetworkType {
+        Mainnet = 'Mainnet',
+        Shasta = 'Shasta',
+        Nile = 'Nile',
+    }
+
+    export type Network = {
+        networkType: NetworkType;
+        chainId: string;
+        fullNode: string;
+        solidityNode: string;
+        eventServer: string;
+    };
+    ```
+
 -   **Don't support `disconnect` by DApp**. As TronLinkAdapter doesn't support disconnect by DApp website, call `adapter.disconnect()` won't disconnect from TronLink extension really.
 -   **Auto open TronLink app in mobile browser**. If developers call `connect()` method in mobile browser, it will open DApp in TronLink app to get tronlink wallet.
 

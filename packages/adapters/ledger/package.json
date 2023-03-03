@@ -1,6 +1,6 @@
 {
     "name": "@tronweb3/tronwallet-adapter-ledger",
-    "version": "1.1.4",
+    "version": "1.1.5",
     "description": "Wallet adapter for the Ledger wallet.",
     "keywords": [
         "TRON",
@@ -44,7 +44,7 @@
         "@ledgerhq/hw-app-trx": "^6.27.8",
         "@ledgerhq/hw-transport": "6.27.1",
         "@ledgerhq/hw-transport-webhid": "6.27.1",
-        "@tronweb3/tronwallet-abstract-adapter": "^1.1.2",
+        "@tronweb3/tronwallet-abstract-adapter": "^1.1.4",
         "buffer": "^6.0.3",
         "eventemitter3": "^4.0.0",
         "preact": "^10.11.3"

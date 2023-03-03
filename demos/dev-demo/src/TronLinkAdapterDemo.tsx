@@ -26,7 +26,13 @@ export function TronLinkAdapterDemo() {
     useEffect(() => {
         setConnectState(adapter.state);
         setAccount(adapter.address || '');
-        setReadyState(adapter.readyState)
+        setReadyState(adapter.readyState);
+        adapter.network().then((res) => {
+            console.log(res);
+            setChainId(res.chainId)
+        }).catch(e => {
+            console.log(e)
+        })
 
         adapter.on('readyStateChanged', () => {
             console.log('readyState: ', adapter.readyState)
@@ -91,6 +97,8 @@ export function TronLinkAdapterDemo() {
     async function handleConnect() {
         try {
             await adapter?.connect()
+            const res = await adapter.network();
+            setChainId(res.chainId);
         } catch(e: any) {
             console.log(e.error?.message || e.message);
         }
