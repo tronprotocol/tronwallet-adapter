@@ -41,6 +41,12 @@ export function TronLinkAdapterDemo() {
         adapter.on('connect', () => {
             console.log('connect: ', adapter.address);
             setAccount(adapter.address || '');
+            adapter.network().then((res) => {
+                console.log(res);
+                setChainId(res.chainId)
+            }).catch(e => {
+                console.log(e)
+            })
         });
         adapter.on('stateChanged', (state) => {
             console.log('stateChanged: ', state);
@@ -97,8 +103,6 @@ export function TronLinkAdapterDemo() {
     async function handleConnect() {
         try {
             await adapter?.connect()
-            const res = await adapter.network();
-            setChainId(res.chainId);
         } catch(e: any) {
             console.log(e.error?.message || e.message);
         }

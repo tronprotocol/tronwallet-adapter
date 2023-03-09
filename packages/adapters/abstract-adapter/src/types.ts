@@ -2,6 +2,10 @@ export enum NetworkType {
     Mainnet = 'Mainnet',
     Shasta = 'Shasta',
     Nile = 'Nile',
+    /**
+     * When use custom node
+     */
+    Unknown = 'Unknown',
 }
 
 export type Network = {

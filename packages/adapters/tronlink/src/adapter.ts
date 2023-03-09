@@ -156,7 +156,7 @@ export class TronLinkAdapter extends Adapter {
                 const { blockID = '' } = await wallet.tronWeb.trx.getBlockByNumber(0);
                 const chainId = `0x${blockID.slice(-8)}`;
                 return {
-                    networkType: chainIdNetworkMap[chainId],
+                    networkType: chainIdNetworkMap[chainId] || NetworkType.Unknown,
                     chainId,
                     fullNode: wallet.tronWeb.fullNode?.host || '',
                     solidityNode: wallet.tronWeb.solidityNode?.host || '',

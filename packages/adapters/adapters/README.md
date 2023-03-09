@@ -251,13 +251,17 @@ try {
         dappName?: string;
     }
     ```
--   `network()` method is support to get current network information. The return value is of type `Network` as follows:
+-   `network()` method is supported to get current network information. The type of returned value is `Network` as follows:
 
     ```typescript
     export enum NetworkType {
         Mainnet = 'Mainnet',
         Shasta = 'Shasta',
         Nile = 'Nile',
+        /**
+         * When use custom node
+         */
+        Unknown = 'Unknown',
     }
 
     export type Network = {
@@ -299,7 +303,7 @@ try {
     }
     ```
     More detail about WalletConnect client options please refer to the [WalletConnect document](https://docs.walletconnect.com/2.0/javascript/sign/dapp-usage).
--   `multiSign()` is not supported yet.
+-   `multiSign()` and `switchChain(chainId: string)` are not supported.
 
 ### LedgerAdapter
 
@@ -389,4 +393,4 @@ try {
         // { address: 'some address', publicKey: 'publicKey for address' }
         ```
 
--   `multiSign()` is not supported yet.
+-   `multiSign()` and `switchChain(chainId: string)` are not supported.
