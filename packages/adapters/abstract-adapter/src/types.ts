@@ -21,8 +21,16 @@ export type Network = {
     solidityNode: string;
     eventServer: string;
 };
-
-export type { Network as NetworkNodeConfig };
+/**
+ * @deprecated Use Network instead.
+ */
+export type NetworkNodeConfig = {
+    chainId: string;
+    chain: string;
+    fullNode: string;
+    solidityNode: string;
+    eventServer: string;
+};
 // types should be defined in @tronweb3/web3.js, such as tronweb
 // as no ts in tronweb
 // just defined here
