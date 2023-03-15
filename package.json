@@ -1,7 +1,7 @@
 {
     "name": "tronwallet-adapter",
     "description": "wallet adapters for TRON blockchain",
-    "version": "1.1.4",
+    "version": "1.1.5",
     "main": "index.js",
     "sideEffects": false,
     "private": true,
@@ -25,7 +25,7 @@
         "build:other": "pnpm --recursive --filter \"@tronweb3/*\" run build",
         "build:clean": "pnpm run clean && pnpm run build && pnpm run package",
         "package": "pnpm --recursive run package",
-        "release": "pnpm build:clean && pnpm test && changeset publish",
+        "release": "pnpm prerelease && pnpm build:clean && pnpm test && changeset publish",
         "watch": "pnpm run watch:ts",
         "watch:ts": "tsc --build --verbose --watch tsconfig.all.json",
         "dev": "pnpm watch & pnpm run --filter {demos/dev-demo} dev",
@@ -35,7 +35,8 @@
         "test": "pnpm --recursive --filter \"@tronweb3/*\" run test",
         "example": "pnpm run --filter {demos/react-ui/vite-app} dev",
         "prepare": "husky install",
-        "update-version": "pnpm changeset add && pnpm changeset version"
+        "update-version": "pnpm changeset add && pnpm changeset version",
+        "prerelease": "node ./scripts/check-dep-version.js"
     },
     "devDependencies": {
         "@changesets/cli": "^2.26.0",

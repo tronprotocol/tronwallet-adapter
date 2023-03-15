@@ -58,7 +58,7 @@ describe('TronLinkAdapter', function () {
                 request: noop,
             };
             const adapter = new TronLinkAdapter();
-            jest.advanceTimersByTime(300);
+            jest.advanceTimersByTime(3000);
             expect(adapter.state).toEqual(AdapterState.Disconnect);
             expect(adapter.connected).toEqual(false);
         });
@@ -70,7 +70,7 @@ describe('TronLinkAdapter', function () {
                 },
             };
             const adapter = new TronLinkAdapter();
-            jest.advanceTimersByTime(300);
+            jest.advanceTimersByTime(3000);
             expect(adapter.state).toEqual(AdapterState.Connected);
             expect(adapter.connected).toEqual(true);
             expect(adapter.address).toEqual('xxx');
@@ -83,7 +83,7 @@ describe('TronLinkAdapter', function () {
                 return Promise.resolve(['xxx']);
             });
             const adapter = new TronLinkAdapter();
-            jest.advanceTimersByTime(300);
+            jest.advanceTimersByTime(3000);
             expect(adapter.state).toEqual(AdapterState.Disconnect);
 
             await adapter.connect();
@@ -99,7 +99,7 @@ describe('TronLinkAdapter', function () {
             tron.on = onMethod;
             tron.removeListener = removeListenerMethod;
             const adapter = new TronLinkAdapter();
-            jest.advanceTimersByTime(500);
+            jest.advanceTimersByTime(3000);
             expect(adapter.state).toEqual(AdapterState.Connected);
             expect(adapter.address).toEqual('xxx');
             // accountsChanged, chainChanged
@@ -129,7 +129,7 @@ describe('TronLinkAdapter', function () {
                 },
             };
             const connecor = new TronLinkAdapter();
-            jest.advanceTimersByTime(300);
+            jest.advanceTimersByTime(3000);
             try {
                 await connecor.connect();
             } catch (e) {
@@ -150,7 +150,7 @@ describe('TronLinkAdapter', function () {
                 },
             };
             const connecor = new TronLinkAdapter();
-            jest.advanceTimersByTime(300);
+            jest.advanceTimersByTime(3000);
             try {
                 await connecor.connect();
             } catch (e) {
@@ -171,7 +171,7 @@ describe('TronLinkAdapter', function () {
                 },
             };
             const connecor = new TronLinkAdapter();
-            jest.advanceTimersByTime(300);
+            jest.advanceTimersByTime(3000);
             try {
                 await connecor.connect();
             } catch (e) {
@@ -190,7 +190,7 @@ describe('TronLinkAdapter', function () {
                 request: noop,
             };
             const adapter = new TronLinkAdapter();
-            jest.advanceTimersByTime(300);
+            jest.advanceTimersByTime(3000);
             await adapter.connect();
             expect(adapter.state).toEqual(AdapterState.Connected);
             expect(adapter.address).toEqual(address);
@@ -211,6 +211,7 @@ describe('TronLinkAdapter', function () {
                 ready: false,
             };
             const adapter = new TronLinkAdapter();
+            jest.advanceTimersByTime(3000);
             expect(adapter.signMessage('some str')).rejects.toThrow(WalletDisconnectedError);
         });
         test('should work fine when TronLink is connected', async function () {
@@ -235,6 +236,7 @@ describe('TronLinkAdapter', function () {
                 ready: false,
             };
             const adapter = new TronLinkAdapter();
+            jest.advanceTimersByTime(3000);
             try {
                 await adapter.signTransaction({} as any);
             } catch (e) {
@@ -267,14 +269,14 @@ describe('TronLinkAdapter', function () {
                 ready: false,
             };
             const adapter = new TronLinkAdapter();
-            jest.advanceTimersByTime(300);
+            jest.advanceTimersByTime(3000);
             await expect(adapter.switchChain('0x39483')).rejects.toThrowError(WalletSwitchChainError);
         });
         test('should work fine when TronLink support Tron protocol', async function () {
             (window as any).tron = new MockTron('address');
             window.tron!.request = jest.fn();
             const adapter = new TronLinkAdapter();
-            jest.advanceTimersByTime(300);
+            jest.advanceTimersByTime(3000);
             await adapter.switchChain('0x39483');
             expect(window.tron!.request).toBeCalledTimes(1);
         });
@@ -303,7 +305,7 @@ describe('Events should work fine', function () {
             tronLink._unlock();
             tronLink._emit('connect', 'address');
         }, 100);
-        jest.advanceTimersByTime(200);
+        jest.advanceTimersByTime(3000);
         await wait();
         expect(_onConnect).toHaveBeenCalled();
     });
@@ -315,7 +317,7 @@ describe('Events should work fine', function () {
             tronLink = window.tronLink = new MockTronLink('address');
             tronLink._unlock();
             adapter = new TronLinkAdapter();
-            jest.advanceTimersByTime(300);
+            jest.advanceTimersByTime(3000);
         });
         test('when switch to a connected account', async () => {
             const _onAccountsChanged = jest.fn();
@@ -347,8 +349,8 @@ describe('Events should work fine', function () {
     test('chainChanged event should work fine', () => {
         const _onChainChanged = jest.fn();
         adapter.on('chainChanged', _onChainChanged);
+        jest.advanceTimersByTime(3000);
         tronLink._emit('setNode', { address: 'address' });
-        jest.advanceTimersByTime(200);
         expect(_onChainChanged).toHaveBeenCalled();
     });
 
@@ -357,7 +359,7 @@ describe('Events should work fine', function () {
         const _onDisconnect = jest.fn();
         const adapter = new TronLinkAdapter();
         adapter.on('disconnect', _onDisconnect);
-        jest.advanceTimersByTime(200);
+        jest.advanceTimersByTime(3000);
         tronLink._emit('disconnect', {});
         waitFor(() => {
             expect(_onDisconnect).toHaveBeenCalled();
@@ -369,7 +371,7 @@ describe('Events should work fine', function () {
         const _onDisconnect = jest.fn();
         const adapter = new TronLinkAdapter();
         adapter.on('disconnect', _onDisconnect);
-        jest.advanceTimersByTime(200);
+        jest.advanceTimersByTime(3000);
         tronLink._emit('disconnect', false);
         expect(_onDisconnect).not.toHaveBeenCalled();
     });

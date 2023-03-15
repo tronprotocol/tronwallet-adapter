@@ -4,6 +4,10 @@ import type { TronLinkWallet } from '../../src/adapter.js';
 import type { Tron, TronWeb } from '../../src/types.js';
 
 export class MockTronWeb implements TronWeb {
+    fullNode = { host: 'http://api.nileex.io' };
+    solidityNode = { host: 'http://api.nileex.io' };
+    eventServer = { host: 'http://api.nileex.io' };
+
     defaultAddress: {
         base58: string;
         hex: string;
@@ -20,6 +24,11 @@ export class MockTronWeb implements TronWeb {
         },
         multiSign() {
             return Promise.resolve();
+        },
+        async getBlockByNumber() {
+            return Promise.resolve({
+                blockID: '0000000a93d9e9372efcd8690dc',
+            });
         },
     } as any;
     constructor(address: string) {

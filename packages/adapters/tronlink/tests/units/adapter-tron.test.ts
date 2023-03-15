@@ -501,7 +501,7 @@ describe('methods should work fine', () => {
             adapter = new TronLinkAdapter();
             const onError = jest.fn();
             adapter.on('error', onError);
-            jest.advanceTimersByTime(300);
+            jest.advanceTimersByTime(3000);
             const res = adapter.switchChain('id');
             expect(res).rejects.toThrow(WalletSwitchChainError);
             expect(res).rejects.toThrow("Current version of TronLink doesn't support switch chain operation.");
@@ -544,7 +544,7 @@ describe('methods should work fine', () => {
             window.tronLink = new MockTronLink('address');
             window.tronLink.ready = true;
             adapter = new TronLinkAdapter();
-            jest.advanceTimersByTime(300);
+            jest.advanceTimersByTime(3000);
             expect(adapter.state).toEqual(AdapterState.Connected);
             const _onDisconnect = jest.fn();
             adapter.on('disconnect', _onDisconnect);
@@ -570,6 +570,42 @@ describe('methods should work fine', () => {
             expect(adapter.address).toEqual(null);
             await Promise.resolve();
             expect(_onDisconnect).toHaveBeenCalled();
+        });
+    });
+    describe('network() should work fine', () => {
+        test('when there is no wallet', async () => {
+            window.tron = undefined;
+            window.tronLink = undefined;
+            window.tronWeb = undefined;
+            adapter = new TronLinkAdapter();
+            jest.advanceTimersByTime(ONE_MINUTE);
+            const onError = jest.fn();
+            adapter.on('error', onError);
+
+            expect(adapter.network()).rejects.toThrow(WalletDisconnectedError);
+            waitFor(() => {
+                expect(onError).toHaveBeenCalled();
+            });
+        });
+        test('when there is only window.tronLink', async () => {
+            window.tron = undefined;
+            window.removeEventListener = jest.fn();
+            window.tronLink = new MockTronLink('address');
+            window.tronLink.ready = true;
+            adapter = new TronLinkAdapter();
+            jest.advanceTimersByTime(3000);
+            const network = await adapter.network();
+            expect(network.chainId).toEqual('0xcd8690dc');
+        });
+        test('when there is window.tron', async () => {
+            tron = window.tron = new MockTron('address');
+            tron._unlock();
+            tron.removeListener = jest.fn();
+            adapter = new TronLinkAdapter();
+            jest.advanceTimersByTime(300);
+            expect(adapter.state).toEqual(AdapterState.Connected);
+            const network = await adapter.network();
+            expect(network.chainId).toEqual('0xcd8690dc');
         });
     });
 });

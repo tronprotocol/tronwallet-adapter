@@ -12,9 +12,10 @@ import {
     WalletNotSelectedError,
     AdapterState,
     isInBrowser,
+    WalletNotFoundError,
+    WalletReadyState,
 } from '@tronweb3/tronwallet-abstract-adapter';
 import type { AdapterName } from '@tronweb3/tronwallet-abstract-adapter';
-import { WalletNotFoundError } from '@tronweb3/tronwallet-abstract-adapter';
 
 type TestRefType = {
     getState(): WalletContextState;
@@ -59,6 +60,7 @@ describe('useWallet', function () {
         disconnectMethod: any = () => Promise.resolve();
         address: string | null = null;
         _connected = false;
+        readyState = WalletReadyState.Found;
         get connected() {
             return this._connected;
         }

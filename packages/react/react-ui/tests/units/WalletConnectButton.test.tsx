@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import type { FC, PropsWithChildren } from 'react';
 import React from 'react';
-import { render, waitFor } from '@testing-library/react';
+import { act, render, waitFor } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import 'jest-localstorage-mock';
 
@@ -69,23 +69,27 @@ describe('when a wallet is seleted', () => {
     describe('when tronlink is avaliable', () => {
         test('should auto connect and be disabled when antoConnect enabled', async () => {
             const { getByTestId } = makeSut({});
-            await waitFor(() => {
-                jest.advanceTimersByTime(500);
+            act(() => {
+                jest.advanceTimersByTime(4000);
             });
-            const el = getByTestId('wallet-connect-button');
-            expect(el).toBeInTheDocument();
-            expect(el).toBeDisabled();
-            expect(el).toHaveTextContent('Connected');
+            await waitFor(() => {
+                const el = getByTestId('wallet-connect-button');
+                expect(el).toBeInTheDocument();
+                expect(el).toBeDisabled();
+                expect(el).toHaveTextContent('Connected');
+            });
         });
         test('tronlink is connected when antoConnect disabled', async () => {
             const { getByTestId } = makeSutNoAutoConnect({});
-            await waitFor(() => {
-                jest.advanceTimersByTime(500);
+            act(() => {
+                jest.advanceTimersByTime(5000);
             });
-            const el = getByTestId('wallet-connect-button');
-            expect(el).toBeInTheDocument();
-            expect(el).toBeDisabled();
-            expect(el).toHaveTextContent('Connected');
+            await waitFor(() => {
+                const el = getByTestId('wallet-connect-button');
+                expect(el).toBeInTheDocument();
+                expect(el).toBeDisabled();
+                expect(el).toHaveTextContent('Connected');
+            });
         });
     });
 

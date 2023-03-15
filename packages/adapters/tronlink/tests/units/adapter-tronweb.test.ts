@@ -14,7 +14,7 @@ describe('when only tronWeb is avaliable', () => {
         adapter = new TronLinkAdapter();
     });
     test('initial state should be fine', () => {
-        jest.advanceTimersByTime(300);
+        jest.advanceTimersByTime(3000);
         expect(adapter.state).toEqual(AdapterState.Connected);
         expect(adapter.address).toEqual('address');
     });
@@ -48,7 +48,7 @@ test('should work fine when tronWeb is not ready', () => {
     window.tronWeb = new MockTronWeb('address');
     window.tronWeb.ready = false;
     const adapter = new TronLinkAdapter();
-    jest.advanceTimersByTime(400);
+    jest.advanceTimersByTime(4000);
     expect(adapter.state).toEqual(AdapterState.Disconnect);
 });
 describe('when tronWeb is not found', () => {
@@ -57,7 +57,7 @@ describe('when tronWeb is not found', () => {
     });
     test('should work fine ', async () => {
         const adapter = new TronLinkAdapter();
-        jest.advanceTimersByTime(400);
+        jest.advanceTimersByTime(4000);
         expect(adapter.state).toEqual(AdapterState.Loading);
         jest.advanceTimersByTime(ONE_MINUTE);
         await Promise.resolve();
