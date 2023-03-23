@@ -10,6 +10,7 @@ import { WalletProvider } from '@tronweb3/tronwallet-adapter-react-hooks';
 import { WalletModalProvider } from '../../src/WalletModalProvider.js';
 import { MockTronLink } from './MockTronLink.js';
 import { WalletDisconnectButton } from '../../src/WalletDisconnectButton.js';
+import { act } from 'react-dom/test-utils';
 
 const Providers: FC<PropsWithChildren> = function (props) {
     return (
@@ -69,23 +70,27 @@ describe('when a wallet is seleted', () => {
     describe('when tronlink is avaliable', () => {
         test('should auto connect and not be disabled when antoConnect enabled', async () => {
             const { getByTestId } = makeSut({});
-            await waitFor(() => {
-                jest.advanceTimersByTime(500);
+            act(() => {
+                jest.advanceTimersByTime(4000);
             });
             const el = getByTestId('wallet-disconnect-button');
-            expect(el).toBeInTheDocument();
-            expect(el).not.toBeDisabled();
-            expect(el).toHaveTextContent('Disconnect');
+            await waitFor(() => {
+                expect(el).toBeInTheDocument();
+                expect(el).not.toBeDisabled();
+                expect(el).toHaveTextContent('Disconnect');
+            });
         });
         test('tronlink is connected when antoConnect disabled', async () => {
             const { getByTestId } = makeSutNoAutoConnect({});
-            await waitFor(() => {
-                jest.advanceTimersByTime(500);
+            act(() => {
+                jest.advanceTimersByTime(3000);
             });
-            const el = getByTestId('wallet-disconnect-button');
-            expect(el).toBeInTheDocument();
-            expect(el).not.toBeDisabled();
-            expect(el).toHaveTextContent('Disconnect');
+            await waitFor(() => {
+                const el = getByTestId('wallet-disconnect-button');
+                expect(el).toBeInTheDocument();
+                expect(el).not.toBeDisabled();
+                expect(el).toHaveTextContent('Disconnect');
+            });
         });
     });
 

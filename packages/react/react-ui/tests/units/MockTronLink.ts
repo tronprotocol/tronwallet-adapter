@@ -15,6 +15,9 @@ export class MockTronLink implements TronLinkWallet {
             defaultAddress: {
                 base58: this.address,
             },
+            fullNode: { host: '' },
+            solidityNode: { host: '' },
+            eventServer: { host: '' },
             toHex(m: string) {
                 return m;
             },

@@ -5,14 +5,22 @@ export interface TronLinkWalletEvents {
     disconnect(...args: unknown[]): unknown;
 }
 
+type Provider = {
+    host: string;
+};
+
 export interface TronWeb {
     ready: boolean;
     toHex(m: string): string;
+    fullNode: Provider;
+    solidityNode: Provider;
+    eventServer: Provider;
     trx: {
         sign(transaction: Transaction, privateKey?: string): Promise<SignedTransaction>;
         sign(message: string, privateKey?: string): Promise<string>;
         multiSign(...args: any[]): Promise<any>;
         signMessageV2(message: string, privateKey?: string): Promise<string>;
+        getBlockByNumber(index: number): Promise<{ blockID: string }>;
         // signMessageV2(...args: unknown[]): Promise<string>;
     };
     defaultAddress?: {

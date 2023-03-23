@@ -180,18 +180,18 @@ Events are as follows:
         chainId: string;
     }
     ```
--   `error(ConnectionError)`: Emit when there are some errors when call the adapter's method. The [ConnectionError Types] is defined as follows.
+-   `error(WalletError)`: Emit when there are some errors when call the adapter's method. The [WalletError Types] is defined as follows.
 
-### ConnectionError
+### WalletError
 
-`ConnectionError` is a superclass which defines the error when using adapter.
+`WalletError` is a superclass which defines the error when using adapter.
 All error types are extended from this class.
 Developers can check the error type according to the error instance.
 
 ```typescript
 try {
     // do something here
-} catch (error: ConnectionError) {
+} catch (error: WalletError) {
     if (error instanceof WalletNotFoundError) {
         console.log('Wallet is not found');
     }
@@ -251,6 +251,28 @@ try {
         dappName?: string;
     }
     ```
+-   `network()` method is supported to get current network information. The type of returned value is `Network` as follows:
+
+    ```typescript
+    export enum NetworkType {
+        Mainnet = 'Mainnet',
+        Shasta = 'Shasta',
+        Nile = 'Nile',
+        /**
+         * When use custom node
+         */
+        Unknown = 'Unknown'
+    }
+
+    export type Network = {
+        networkType: NetworkType;
+        chainId: string;
+        fullNode: string;
+        solidityNode: string;
+        eventServer: string;
+    };
+    ```
+
 -   **Don't support `disconnect` by DApp**. As TronLinkAdapter doesn't support disconnect by DApp website, call `adapter.disconnect()` won't disconnect from TronLink extension really.
 -   **Auto open TronLink app in mobile browser**. If developers call `connect()` method in mobile browser, it will open DApp in TronLink app to get tronlink wallet.
 
@@ -281,7 +303,7 @@ try {
     }
     ```
     More detail about WalletConnect client options please refer to the [WalletConnect document](https://docs.walletconnect.com/2.0/javascript/sign/dapp-usage).
-- `multiSign()` and `switchChain(chainId: string)` are not supported.
+-   `multiSign()` and `switchChain(chainId: string)` are not supported.
 
 ### LedgerAdapter
 
@@ -371,4 +393,4 @@ try {
         // { address: 'some address', publicKey: 'publicKey for address' }
         ```
 
-- `multiSign()` and `switchChain(chainId: string)` are not supported.
+-   `multiSign()` and `switchChain(chainId: string)` are not supported.
