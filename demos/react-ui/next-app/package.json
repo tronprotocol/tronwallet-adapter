@@ -13,9 +13,11 @@
         "@emotion/styled": "^11.10.4",
         "@mui/material": "^5.10.10",
         "@tronweb3/tronwallet-abstract-adapter": "^1.1.0",
+        "@tronweb3/tronwallet-adapter-bitkeep": "^1.0.0",
         "@tronweb3/tronwallet-adapter-ledger": "^1.1.1",
         "@tronweb3/tronwallet-adapter-react-hooks": "^1.0.0",
         "@tronweb3/tronwallet-adapter-react-ui": "^1.1.0",
+        "@tronweb3/tronwallet-adapter-tokenpocket": "^1.0.0",
         "@tronweb3/tronwallet-adapters": "^1.1.1",
         "@types/node": "18.11.9",
         "@types/react": "18.0.26",
@@ -27,6 +29,7 @@
         "react-dom": "^18.2.0",
         "react-hot-toast": "^2.4.0",
         "tronweb": "^4.4.0",
+        "tslib": "^2.5.0",
         "typescript": "4.9.3"
     },
     "devDependencies": {

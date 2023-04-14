@@ -11,6 +11,12 @@
             "path": "../ledger/tsconfig.all.json"
         },
         {
+            "path": "../tokenpocket/tsconfig.all.json"
+        },
+        {
+            "path": "../bitkeep/tsconfig.all.json"
+        },
+        {
             "path": "./tsconfig.cjs.json"
         },
         {

@@ -11,6 +11,7 @@ import './index.css';
 import { AppWraper } from './AppWraper.js';
 const vConsole = new VConsole();
 
+const tron = window.tronLink as any;
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
     <React.StrictMode>
         <ThemeProvider theme={theme}>

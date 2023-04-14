@@ -8,12 +8,14 @@ This repository contains wallet adapters and components for Tron DApps. With out
 
 -   [TronLink App](https://www.tronlink.org/): All versions
 -   [TronLink Extension](https://www.tronlink.org/): All versions
+-   [BitKeep App](https://bitkeep.com/): All versions
+-   [BitKeep Extension](https://bitkeep.com/): All versions
+-   [TokenPocket App](https://www.tokenpocket.pro/): All versions
 -   [Ledger](https://www.ledger.com/): All versions
 -   [WalletConnect](https://walletconnect.org): `v2.0`
 
 ### Coming Soon
 
--   [TokenPocket](https://www.tokenpocket.pro/)
 -   [imToken](https://token.im/)
 
 ## Introduction

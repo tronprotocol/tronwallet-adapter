@@ -32,7 +32,7 @@ a:hover {
 }
 
 body {
-    padding: 30px;
+    padding: 10px;
     margin: 0;
     display: flex;
     min-width: 320px;
@@ -87,5 +87,8 @@ button {
     p {
         display: flex;
         flex-direction: column;
+    }
+    .adapter-react-button {
+        font-size: 14px;
     }
 }

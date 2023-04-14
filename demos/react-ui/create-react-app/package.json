@@ -33,8 +33,7 @@
         "stream-http": "^3.2.0",
         "tronweb": "^4.4.0",
         "typescript": "^4.8.4",
-        "web-vitals": "^2.1.4",
-        "webpack": "^5.75.0"
+        "web-vitals": "^2.1.4"
     },
     "scripts": {
         "start": "GENERATE_SOURCEMAP=false react-app-rewired start",
@@ -59,5 +58,8 @@
             "last 1 firefox version",
             "last 1 safari version"
         ]
+    },
+    "devDependencies": {
+        "webpack": "^5.78.0"
     }
 }

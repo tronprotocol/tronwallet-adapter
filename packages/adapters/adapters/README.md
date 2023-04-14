@@ -231,7 +231,7 @@ try {
         openUrlWhenWalletNotFound?: boolean;
         /**
          * Timeout in millisecond for checking if TronLink wallet exists.
-         * Default is 30 * 1000ms
+         * Default is 10 * 1000ms
          */
         checkTimeout?: number;
         /**
@@ -394,3 +394,56 @@ try {
         ```
 
 -   `multiSign()` and `switchChain(chainId: string)` are not supported.
+
+### TokenPocketAdapter
+
+-   `Constructor(config: TokenPocketConfig)`
+    ```typescript
+    interface TokenPocketConfig {
+        /**
+         * Set if open Wallet's website url when wallet is not installed.
+         * Default is true.
+         */
+        openUrlWhenWalletNotFound?: boolean;
+        /**
+         * Timeout in millisecond for checking if TokenPocket wallet is supported.
+         * Default is 3 * 1000ms
+         */
+        checkTimeout?: number;
+        /**
+         * Set if open TokenPocket app using DeepLink on mobile device.
+         * Default is true.
+         */
+        openTokenPocketAppOnMobile?: boolean;
+        /**
+         * The icon of your dapp. Used when open TokenPocket app in mobile device browsers.
+         * Default is current website icon.
+         */
+        dappIcon?: string;
+        /**
+         * The name of your dapp. Used when open TokenPocket app in mobile device browsers.
+         * Default is `document.title`.
+         */
+        dappName?: string;
+    }
+    ```
+-   `signMessage()`,`multiSign()`,`switchChain(chainId: string)` are not supported.
+
+### BitKeepConfig
+
+-   `Constructor(config: BitKeepConfig)`
+    ```typescript
+    interface BitKeepConfig {
+        /**
+         * Set if open Wallet's website url when wallet is not installed.
+         * Default is true.
+         */
+        openUrlWhenWalletNotFound?: boolean;
+        /**
+         * Timeout in millisecond for checking if BitKeep wallet is supported.
+         * Default is 3 * 1000ms
+         */
+        checkTimeout?: number;
+    }
+    ```
+-   `signMessage()`,`multiSign()`,`switchChain(chainId: string)` are not supported.

@@ -11,7 +11,7 @@ import {
 } from '@tronweb3/tronwallet-adapter-react-ui';
 import toast from 'react-hot-toast';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Alert } from '@mui/material';
-import { TronLinkAdapter } from '@tronweb3/tronwallet-adapters';
+import { TronLinkAdapter, TokenPocketAdapter, BitKeepAdapter } from '@tronweb3/tronwallet-adapters';
 import { WalletConnectAdapter } from '@tronweb3/tronwallet-adapter-walletconnect';
 import { LedgerAdapter } from '@tronweb3/tronwallet-adapter-ledger';
 import { tronWeb } from './tronweb';
@@ -57,7 +57,9 @@ export function App() {
         const ledger = new LedgerAdapter({
             accountNumber: 2,
         });
-        return [tronLink1, walletConnect1, ledger];
+        const tokenPocket = new TokenPocketAdapter();
+        const bitKeep = new BitKeepAdapter();
+        return [tronLink1, walletConnect1, ledger, tokenPocket, bitKeep];
     }, []);
     return (
         <WalletProvider onError={onError} autoConnect={false} adapters={adapters}>
@@ -77,14 +79,14 @@ function UIComponent() {
             <TableContainer style={{ overflow: 'visible' }} component="div">
                 <Table sx={{}} aria-label="simple table">
                     <TableHead>
-                        <TableRow>
+                        <TableRow sx={{'th': {padding: '5px'}}}>
                             <TableCell>Component</TableCell>
                             <TableCell align="left">React UI</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
                         {rows.map((row) => (
-                            <TableRow key={row.name} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+                            <TableRow key={row.name} sx={{ '&:last-child td, &:last-child th': { border: 0 }, 'td, th': {padding: '5px'} }}>
                                 <TableCell component="th" scope="row">
                                     {row.name}
                                 </TableCell>
