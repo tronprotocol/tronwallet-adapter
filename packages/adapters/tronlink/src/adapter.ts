@@ -41,6 +41,18 @@ export const chainIdNetworkMap: Record<string, NetworkType> = {
     '0x94a9059e': NetworkType.Shasta,
     '0xcd8690dc': NetworkType.Nile,
 };
+
+export async function getNetworkInfoByTronWeb(tronWeb: TronWeb) {
+    const { blockID = '' } = await tronWeb.trx.getBlockByNumber(0);
+    const chainId = `0x${blockID.slice(-8)}`;
+    return {
+        networkType: chainIdNetworkMap[chainId] || NetworkType.Unknown,
+        chainId,
+        fullNode: tronWeb.fullNode?.host || '',
+        solidityNode: tronWeb.solidityNode?.host || '',
+        eventServer: tronWeb.eventServer?.host || '',
+    };
+}
 declare global {
     interface Window {
         tronLink?: TronLinkWallet;
@@ -52,7 +64,7 @@ declare global {
 export interface TronLinkAdapterConfig extends BaseAdapterConfig {
     /**
      * Timeout in millisecond for checking if TronLink wallet exists.
-     * Default is 10 * 1000ms
+     * Default is 30 * 1000ms
      */
     checkTimeout?: number;
     /**
@@ -92,7 +104,7 @@ export class TronLinkAdapter extends Adapter {
     constructor(config: TronLinkAdapterConfig = {}) {
         super();
         const {
-            checkTimeout = 10 * 1000,
+            checkTimeout = 30 * 1000,
             dappIcon = '',
             dappName = '',
             openUrlWhenWalletNotFound = true,
@@ -155,15 +167,7 @@ export class TronLinkAdapter extends Adapter {
             const wallet = this._wallet;
             if (!wallet || !wallet.tronWeb) throw new WalletDisconnectedError();
             try {
-                const { blockID = '' } = await wallet.tronWeb.trx.getBlockByNumber(0);
-                const chainId = `0x${blockID.slice(-8)}`;
-                return {
-                    networkType: chainIdNetworkMap[chainId] || NetworkType.Unknown,
-                    chainId,
-                    fullNode: wallet.tronWeb.fullNode?.host || '',
-                    solidityNode: wallet.tronWeb.solidityNode?.host || '',
-                    eventServer: wallet.tronWeb.eventServer?.host || '',
-                };
+                return await getNetworkInfoByTronWeb(wallet.tronWeb);
             } catch (e: any) {
                 throw new WalletGetNetworkError(e?.message, e);
             }

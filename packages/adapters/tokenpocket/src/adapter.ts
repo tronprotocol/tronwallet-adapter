@@ -8,7 +8,6 @@ import {
     WalletDisconnectedError,
     WalletSignTransactionError,
     isInMobileBrowser,
-    NetworkType,
     WalletGetNetworkError,
 } from '@tronweb3/tronwallet-abstract-adapter';
 import type {
@@ -18,14 +17,14 @@ import type {
     BaseAdapterConfig,
     Network,
 } from '@tronweb3/tronwallet-abstract-adapter';
-import { chainIdNetworkMap } from '@tronweb3/tronwallet-adapter-tronlink';
+import { getNetworkInfoByTronWeb } from '@tronweb3/tronwallet-adapter-tronlink';
 import type { TronLinkWallet } from '@tronweb3/tronwallet-adapter-tronlink';
 import { openTokenPocket, supportTokenPocket } from './utils.js';
 
 export interface TokenPocketAdapterConfig extends BaseAdapterConfig {
     /**
      * Timeout in millisecond for checking if is in TokenPocket App.
-     * Default is 5 * 1000ms
+     * Default is 2 * 1000ms
      */
     checkTimeout?: number;
     /**
@@ -33,14 +32,6 @@ export interface TokenPocketAdapterConfig extends BaseAdapterConfig {
      * Default is true.
      */
     openTokenPocketAppOnMobile?: boolean;
-    /**
-     * The icon of your dapp. Used when open TronLink app in mobile device browsers.
-     */
-    dappIcon?: string;
-    /**
-     * The name of your dapp. Used when open TronLink app in mobile device browsers.
-     */
-    dappName?: string;
 }
 
 export const TokenPocketAdapterName = 'TokenPocket' as AdapterName<'TokenPocket'>;
@@ -60,13 +51,7 @@ export class TokenPocketAdapter extends Adapter {
 
     constructor(config: TokenPocketAdapterConfig = {}) {
         super();
-        const {
-            checkTimeout = 2 * 1000,
-            dappIcon = '',
-            dappName = '',
-            openUrlWhenWalletNotFound = true,
-            openTokenPocketAppOnMobile = true,
-        } = config;
+        const { checkTimeout = 2 * 1000, openUrlWhenWalletNotFound = true, openTokenPocketAppOnMobile = true } = config;
         if (typeof checkTimeout !== 'number') {
             throw new Error('[TokenPocketAdapter] config.checkTimeout should be a number');
         }
@@ -74,8 +59,6 @@ export class TokenPocketAdapter extends Adapter {
             checkTimeout,
             openTokenPocketAppOnMobile,
             openUrlWhenWalletNotFound,
-            dappIcon,
-            dappName,
         };
         this._connecting = false;
         this._wallet = null;
@@ -115,7 +98,7 @@ export class TokenPocketAdapter extends Adapter {
     }
 
     /**
-     * Get network information used by TronLink.
+     * Get network information used by TokenPocket.
      * @returns {Network} Current network information.
      */
     async network(): Promise<Network> {
@@ -125,15 +108,7 @@ export class TokenPocketAdapter extends Adapter {
             const wallet = this._wallet;
             if (!wallet || !wallet.tronWeb) throw new WalletDisconnectedError();
             try {
-                const { blockID = '' } = await wallet.tronWeb.trx.getBlockByNumber(0);
-                const chainId = `0x${blockID.slice(-8)}`;
-                return {
-                    networkType: chainIdNetworkMap[chainId] || NetworkType.Unknown,
-                    chainId,
-                    fullNode: wallet.tronWeb.fullNode?.host || '',
-                    solidityNode: wallet.tronWeb.solidityNode?.host || '',
-                    eventServer: wallet.tronWeb.eventServer?.host || '',
-                };
+                return await getNetworkInfoByTronWeb(wallet.tronWeb);
             } catch (e: any) {
                 throw new WalletGetNetworkError(e?.message, e);
             }
@@ -154,7 +129,6 @@ export class TokenPocketAdapter extends Adapter {
                 }
                 throw new WalletNotFoundError();
             }
-            // lower version only support window.tronWeb, no window.tronLink
             if (!this._wallet) return;
             this._connecting = true;
             const wallet = this._wallet as TronLinkWallet;
@@ -243,11 +217,10 @@ export class TokenPocketAdapter extends Adapter {
     }
 
     private checkIfOpenApp() {
-        const { dappName = '', dappIcon = '' } = this.config;
         if (this.config.openTokenPocketAppOnMobile === false) {
             return;
         }
-        if (openTokenPocket({ dappIcon, dappName })) {
+        if (openTokenPocket()) {
             throw new WalletNotFoundError();
         }
     }

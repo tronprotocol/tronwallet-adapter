@@ -7,9 +7,9 @@ import { Toaster } from 'react-hot-toast';
 import { App } from './App';
 import { ThemeProvider } from '@mui/material/styles';
 import theme from './theme';
-import vConsole from 'vconsole'
-new vConsole();
-
+// import vConsole from 'vconsole'
+// new vConsole();
+console.log(window.tronLink.ready, window.tronWeb.ready, window.tronWeb && window.tronWeb.defaultAddress)
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
     <React.StrictMode>
