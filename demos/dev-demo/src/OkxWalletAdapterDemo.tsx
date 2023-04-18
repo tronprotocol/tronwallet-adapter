@@ -1,14 +1,16 @@
 import type { ReactNode } from 'react';
 import { useEffect, useMemo, useState, useCallback } from 'react';
 // import './App.css';
+import { OkxWalletAdapter } from '@tronweb3/tronwallet-adapters';
 import type { Adapter } from '@tronweb3/tronwallet-abstract-adapter';
 import { AdapterState } from '@tronweb3/tronwallet-abstract-adapter';
-import { BitKeepAdapter } from '@tronweb3/tronwallet-adapter-bitkeep';
 import { Box, Button, Typography, Tooltip, Select, MenuItem, Alert, FormControl, TextField } from '@mui/material';
 import { tronWeb } from './tronweb.js';
 const receiver = 'TMDKznuDWaZwfZHcM61FVFstyYNmK6Njk1';
+// const getTronWeb = () =>  window.okxwallet?.tronLink?.tronWeb as any || null;
+const getTronWeb = () => tronWeb;
 
-export function BitKeepAdapterDemo() {
+export function OkxWalletAdapterDemo() {
     const [connectState, setConnectState] = useState(AdapterState.NotFound);
     const [account, setAccount] = useState('');
     const [readyState, setReadyState] = useState('');
@@ -17,37 +19,38 @@ export function BitKeepAdapterDemo() {
     const [open, setOpen] = useState(false);
     const [signMessage, setSignMessage] = useState('Hello, Adapter');
     const [signedMessage, setSignedMessage] = useState('');
-    const adapter = useMemo(() => new BitKeepAdapter({
-        openUrlWhenWalletNotFound: false,
-        checkTimeout: 3000
-    }), []);
+    const adapter = useMemo(() => new OkxWalletAdapter(), []);
 
     useEffect(() => {
         setConnectState(adapter.state);
         setAccount(adapter.address || '');
         setReadyState(adapter.readyState);
-        adapter.network().then(async (res) => {
-            console.log(res);
-            setChainId(res.chainId);
-            const balance = await tronWeb.trx.getBalance(adapter.address)
-        }).catch(e => {
-            console.log(e)
-        })
-
-        adapter.on('readyStateChanged', async () => {
-            console.log('readyState: ', adapter.readyState)
-            setReadyState(adapter.readyState)
-        })
-        adapter.on('connect', () => {
-            console.log('connect: ', adapter.address);
-            setAccount(adapter.address || '');
-            setConnectState(AdapterState.Connected)
+        if (adapter.connected) {
             adapter.network().then((res) => {
                 console.log(res);
                 setChainId(res.chainId)
             }).catch(e => {
                 console.log(e)
             })
+        }
+
+        adapter.on('readyStateChanged', () => {
+            console.log('readyState: ', adapter.readyState)
+            setReadyState(adapter.readyState)
+        })
+        adapter.on('connect', () => {
+            console.log('connect: ', adapter.address);
+            setAccount(adapter.address || '');
+            adapter.network().then((res) => {
+                console.log(res);
+                setChainId(res.chainId)
+            }).catch(e => {
+                console.log(e)
+            })
+        });
+        adapter.on('stateChanged', (state) => {
+            console.log('stateChanged: ', state);
+            setConnectState(state);
         });
         adapter.on('accountsChanged', (data, preaddr) => {
             console.log('accountsChanged: current', data,' pre: ', preaddr);
@@ -61,7 +64,6 @@ export function BitKeepAdapterDemo() {
 
         adapter.on('disconnect', () => {
             console.log('disconnect');
-            setConnectState(AdapterState.Disconnect)
         });
 
         return () => {
@@ -69,18 +71,17 @@ export function BitKeepAdapterDemo() {
         };
     }, [adapter]);
 
-    // function onSwitchChain() {
-    //     adapter.switchChain(selectedChainId);
-    // }
+    function onSwitchChain() {
+        adapter.switchChain(selectedChainId);
+    }
 
     async function onSignTransaction() {
-        const tronWeb = (window as any).tronWeb as any;
-        console.log(adapter.address)
+        const tronWeb = getTronWeb();
         const transaction = await tronWeb.transactionBuilder.sendTrx(receiver, tronWeb.toSun(0.001), adapter.address);
-        console.log('before signtransaction')
         const signedTransaction = await adapter.signTransaction(transaction);
+        console.log('signedTx', signedTransaction)
+
         // const signedTransaction = await tronWeb.trx.sign(transaction);
-        console.log('after signtransaction')
         const res = await tronWeb.trx.sendRawTransaction(signedTransaction);
         setOpen(true);
     }
@@ -95,7 +96,8 @@ export function BitKeepAdapterDemo() {
 
     const onVerifyMessage = useCallback(
         async function () {
-            const address = await tronWeb.trx.verifyMessage(tronWeb.toHex(signMessage), signedMessage);
+            const tronWeb = getTronWeb();
+            const address = await tronWeb.trx.verifyMessageV2(signMessage, signedMessage);
             alert(address === adapter.address ? 'success verify' : 'failed verify');
         },
         [signMessage, signedMessage, adapter]
@@ -110,7 +112,7 @@ export function BitKeepAdapterDemo() {
     }
     return (
         <Box sx={{ width: '100%', maxWidth: 900 }}>
-            <h1>BitKeep Demo</h1>
+            <h1>OkxWallet Demo</h1>
             <Typography variant="h6" gutterBottom>
                 Your account address:
             </Typography>
@@ -160,23 +162,7 @@ export function BitKeepAdapterDemo() {
                     </a>
                 </Alert>
             )}
-            {/* <Select
-                labelId="demo-simple-select-label"
-                id="demo-simple-select"
-                value={selectedChainId}
-                label="Chain"
-                size="small"
-                onChange={(e) => setSelectedChainId(e.target.value)}
-            >
-                <MenuItem value={'0x2b6653dc'}>Mainnet</MenuItem>
-                <MenuItem value={'0x94a9059e'}>Shasta</MenuItem>
-                <MenuItem value={'0xcd8690dc'}>Nile</MenuItem>
-            </Select>
-
-            <Button style={{ margin: '0 20px' }} onClick={onSwitchChain} variant="contained">
-                Switch Chain to {selectedChainId}
-            </Button> */}
-            {/* <MultiSignDemo address={account} adapter={adapter}></MultiSignDemo> */}
+            <MultiSignDemo address={account} adapter={adapter}></MultiSignDemo>
         </Box>
     );
 }
@@ -189,22 +175,66 @@ function MultiSignDemo(props: { address: string; adapter: Adapter }) {
     const [address1, setAddress1] = useState('');
     const [open, setOpen] = useState(false);
 
+    async function onApprove() {
+        const tronWeb = getTronWeb();
+        const ownerAddress = tronWeb.address.toHex(props.address);
+        const ownerPermission = {
+            type: 0,
+            permission_name: 'owner',
+            threshold: 1,
+            keys: [
+                {
+                    address: ownerAddress,
+                    weight: 1,
+                },
+            ],
+        };
+        const activePermission = {
+            type: 2,
+            permission_name: 'ActivePermission',
+            threshold: 2,
+            keys: [],
+            operations: '7fff1fc0037e0000000000000000000000000000000000000000000000000000',
+        } as any;
+
+        activePermission.keys.push({ address: ownerAddress, weight: 1 });
+        activePermission.keys.push({ address: tronWeb.address.toHex(address1), weight: 1 });
+
+        const updateTransaction = await tronWeb.transactionBuilder.updateAccountPermissions(ownerAddress, ownerPermission, null, [activePermission]);
+        const signed = await props.adapter.signTransaction(updateTransaction);
+        const res = await tronWeb.trx.sendRawTransaction(signed);
+        alert('update successfully.');
+    }
+
     const [transferTransaction, setTransferTransaction] = useState(null);
     const [canSend, setCanSend] = useState(false);
 
     const multiSignWithAddress1 = useCallback(
         async function () {
-            const tronWeb = (window as any).tronWeb1 as any;
+            const tronWeb = getTronWeb();
             const transaction = await tronWeb.transactionBuilder.sendTrx(receiver, tronWeb.toSun(0.1), props.address, { permissionId: 2 });
-            // debugger;
-            console.log('before multiSign', transaction)
             const signedTransaction = await props.adapter.multiSign(transaction, null, 2);
-            console.log('after multiSign', signedTransaction)
             setTransferTransaction(signedTransaction);
         },
         [props.adapter, setTransferTransaction, props.address]
     );
+    const multiSignWithAddress2 = useCallback(
+        async function () {
+            console.log('first multi signed tx:', transferTransaction);
+            const signedTransaction = await props.adapter.multiSign(transferTransaction as any, null, 2);
+            console.log('second multi signed tx:', signedTransaction);
+            setTransferTransaction(signedTransaction);
+            const tronWeb = getTronWeb();
+            const signWeight = await tronWeb.trx.getSignWeight(signedTransaction, 2);
+            console.log('signWeight: ', signWeight);
+            if (signWeight.current_weight >= 2) {
+                setCanSend(true);
+            }
+        },
+        [transferTransaction, setTransferTransaction, setCanSend, props.adapter]
+    );
     async function broadcast() {
+        const tronWeb = getTronWeb();
         const res = await tronWeb.trx.broadcast(transferTransaction);
         setOpen(true);
     }
@@ -224,9 +254,9 @@ function MultiSignDemo(props: { address: string; adapter: Adapter }) {
                 <Button disabled={!props.address} variant="contained" onClick={multiSignWithAddress1}>
                     Sign with 1st Address
                 </Button>
-                {/* <Button disabled={!transferTransaction} style={{ marginLeft: 10 }} variant="contained" onClick={multiSignWithAddress2}>
+                <Button disabled={!transferTransaction} style={{ marginLeft: 10 }} variant="contained" onClick={multiSignWithAddress2}>
                     Sign with 2nd Address
-                </Button> */}
+                </Button>
                 <Button style={{ marginLeft: 10 }} variant="contained" onClick={broadcast}>
                     Send the transaction
                 </Button>

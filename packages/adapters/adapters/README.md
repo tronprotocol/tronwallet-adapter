@@ -6,10 +6,15 @@
 
 As `@tronweb3/tronwallet-adapters` exports adapter of each wallet , you can use this package, or use the individual wallet adapter you want.
 
--   [`@tronweb3/tronwallet-adapters`](https://npmjs.com/package/@tronweb3/tronwallet-adapters): Includes all the wallet adapters.
--   [`@tronweb3/tronwallet-adapter-tronlink`](https://npmjs.com/package/@tronweb3/tronwallet-adapter-tronlink): adapter for [TronLink](https://www.tronlink.org/).
--   [`@tronweb3/tronwallet-adapter-walletconnect`](https://npmjs.com/package/@tronweb3/tronwallet-adapter-walletconnect): adapter for [WalletConnect](https://docs.walletconnect.com/2.0/).
--   [`@tronweb3/tronwallet-adapter-ledger`](https://npmjs.com/package/@tronweb3/tronwallet-adapter-ledger): adapter for [Ledger](https://www.ledger.com/).
+| NPM package                                                                                                          | Description                                                                  | Source Code                                                                                          |
+| -------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------- |
+| [`@tronweb3/tronwallet-adapters`](https://npmjs.com/package/@tronweb3/tronwallet-adapters)                           | Includes all the wallet adapters                                             | [View](https://github.com/tronprotocol/tronwallet-adapter/tree/main/packages/adapters/adapters)      |
+| [`@tronweb3/tronwallet-adapter-tronlink`](https://npmjs.com/package/@tronweb3/tronwallet-adapter-tronlink)           | adapter for [TronLink](https://www.tronlink.org/)                            | [View](https://github.com/tronprotocol/tronwallet-adapter/tree/main/packages/adapters/tronlink)      |
+| [`@tronweb3/tronwallet-adapter-walletconnect`](https://npmjs.com/package/@tronweb3/tronwallet-adapter-walletconnect) | adapter for adapter for [WalletConnect](https://docs.walletconnect.com/2.0/) | [View](https://github.com/tronprotocol/tronwallet-adapter/tree/main/packages/adapters/walletconnect) |
+| [`@tronweb3/tronwallet-adapter-tokenpocket`](https://npmjs.com/package/@tronweb3/tronwallet-adapter-tokenpocket)     | adapter for [TokenPocket](https://tokenpocket.pro/)                          | [View](https://github.com/tronprotocol/tronwallet-adapter/tree/main/packages/adapters/tokenpocket)   |
+| [`@tronweb3/tronwallet-adapter-bitkeep`](https://npmjs.com/package/@tronweb3/tronwallet-adapter-bitkeep)             | adapter for [BitKeep](https://bitkeep.com/)                                  | [View](https://github.com/tronprotocol/tronwallet-adapter/tree/main/packages/adapters/bitkeep)       |
+| [`@tronweb3/tronwallet-adapter-okxwallet`](https://npmjs.com/package/@tronweb3/tronwallet-adapter-okxwallet)         | adapter for [Okx Wallet](https://okx.com/)                                   | [View](https://github.com/tronprotocol/tronwallet-adapter/tree/main/packages/adapters/okxwallet)     |
+| [`@tronweb3/tronwallet-adapter-ledger`](https://npmjs.com/package/@tronweb3/tronwallet-adapter-ledger)               | adapter for [Ledger](https://www.ledger.com/)                                | [View](https://github.com/tronprotocol/tronwallet-adapter/tree/main/packages/adapters/ledger)        |
 
 ## Usage
 
@@ -276,164 +281,4 @@ try {
 -   **Don't support `disconnect` by DApp**. As TronLinkAdapter doesn't support disconnect by DApp website, call `adapter.disconnect()` won't disconnect from TronLink extension really.
 -   **Auto open TronLink app in mobile browser**. If developers call `connect()` method in mobile browser, it will open DApp in TronLink app to get tronlink wallet.
 
-### WalletConnectAdapter
-
--   `Constructor(config: WalletConnectAdapterConfig)`
-    ```typescript
-    interface WalletConnectAdapterConfig {
-        /**
-         * Network to use, one of Mainnet, Shasta, Nile
-         * Default: Nile
-         */
-        network: 'Mainnet' | 'Shasta' | 'Nile';
-        /**
-         * Options passed to WalletConnect client
-         */
-        options: {
-            projectId: '<YOUR PROJECT ID>';
-            // optional parameters
-            relayUrl: '<YOUR RELAY URL>';
-            metadata: {
-                name: 'Wallet name';
-                description: 'A short description for your wallet';
-                url: "<YOUR WALLET'S URL>";
-                icons: ["<URL TO WALLET'S LOGO/ICON>"];
-            };
-        };
-    }
-    ```
-    More detail about WalletConnect client options please refer to the [WalletConnect document](https://docs.walletconnect.com/2.0/javascript/sign/dapp-usage).
--   `multiSign()` and `switchChain(chainId: string)` are not supported.
-
-### LedgerAdapter
-
--   `Constructor(config: LedgerAdapterConfig)`
-
-    ```typescript
-    interface LedgerAdapterConfig {
-        /**
-         * Set if open Wallet's website when wallet is not installed.
-         * Default is true.
-         */
-        openUrlWhenWalletNotFound?: boolean;
-        /**
-         * Initial total accounts to get once connection is created, default is 1
-         */
-        accountNumber?: number;
-
-        /**
-         * Hook function to call before connecting to ledger and geting accounts.
-         * By default, a modal will popup to reminder user to prepare the ledger and enter Tron app.
-         * You can specify a function to disable this modal.
-         */
-        beforeConnect?: () => Promise<unknown> | unknown;
-
-        /**
-         * Hook function to call after connecting to ledger and geting initial accounts.
-         * The function should return the selected account including the index of account.
-         * Following operations such as `signMessage` will use the selected account.
-         */
-        selectAccount?: (params: { accounts: Account[]; ledgerUtils: LedgerUtils }) => Promise<Account>;
-
-        /**
-         * Function to get derivate BIP44 path by index.
-         * Default is `44'/195'/${index}'/0/0`
-         */
-        getDerivationPath?: (index: number) => string;
-    }
-    interface Account {
-        /**
-         * The index to get BIP44 path.
-         */
-        index: number;
-        /**
-         * The BIP44 path to derivate address.
-         */
-        path: string;
-        /**
-         * The derivated address.
-         */
-        address: string;
-    }
-    interface LedgerUtils {
-        /**
-         * Get accounts from ledger by index. `from` is included and `to` is excluded.
-         * User can use the function to load more accounts.
-         */
-        getAccounts: (from: number, to: number) => Promise<Account[]>;
-        /**
-         * Request to get an address with specified index using getDerivationPath(index) to get BIP44 path.
-         * If `display` is true, will request user to approve on ledger.
-         * The promise will resove if user approve and reject if user cancel the operation.
-         */
-        getAddress: (index: number, display: boolean) => Promise<{ publicKey: string; address: string }>;
-    }
-    ```
-
--   Property: `ledgerUtils`
-    `ledgerUtils` on LedgerAdapter is used to get useful functions to interact with Ledger directly. `ledgerUtils` is defined as last section.
-
-    -   `getAccounts(from: number, to: number)` is a wrapped function to get multiple accounts by index range from ledger.
-        For example:
-
-        ```typescript
-        const adapter = new LedgerAdapter();
-        // get 5 accounts from ledger
-        const accounts = await adapter.ledgerUtils.getAcccounts(0, 5);
-        // [{ address: string, index: 0, path: "44'/195'/0'/0/0" }, ...]
-        ```
-
-    -   `getAddress: (index: number, display: boolean)` is a raw function to request an address from ledger.
-        If `display` is true, will request user to approve on ledger.
-        For example, following code will request user approve on Ledger to confirm to connect their ledger.
-
-        ```typescript
-        const adapter = new LedgerAdapter();
-        const result = await adapter.ledgerUtils.getAddress(0, true);
-        // { address: 'some address', publicKey: 'publicKey for address' }
-        ```
-
--   `multiSign()` and `switchChain(chainId: string)` are not supported.
-
-### TokenPocketAdapter
-
--   `Constructor(config: TokenPocketConfig)`
-    ```typescript
-    interface TokenPocketConfig {
-        /**
-         * Set if open Wallet's website when wallet is not installed.
-         * Default is true.
-         */
-        openUrlWhenWalletNotFound?: boolean;
-        /**
-         * Timeout in millisecond for checking if TokenPocket wallet is supported.
-         * Default is 2 * 1000ms
-         */
-        checkTimeout?: number;
-        /**
-         * Set if open TokenPocket app using DeepLink on mobile device.
-         * Default is true.
-         */
-        openTokenPocketAppOnMobile?: boolean;
-    }
-    ```
--   `signMessage()`,`multiSign()`,`switchChain(chainId: string)` are not supported.
-
-### BitKeepConfig
-
--   `Constructor(config: BitKeepConfig)`
-    ```typescript
-    interface BitKeepConfig {
-        /**
-         * Set if open Wallet's website when wallet is not installed.
-         * Default is true.
-         */
-        openUrlWhenWalletNotFound?: boolean;
-        /**
-         * Timeout in millisecond for checking if BitKeep wallet is supported.
-         * Default is 2 * 1000ms
-         */
-        checkTimeout?: number;
-    }
-    ```
--   `signMessage()`,`multiSign()`,`switchChain(chainId: string)` are not supported.
+Others adapters `Constructor` config api can be found in their source code `README`.

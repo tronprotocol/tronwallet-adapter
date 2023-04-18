@@ -10,6 +10,8 @@ This repository contains wallet adapters and components for Tron DApps. With out
 -   [TronLink Extension](https://www.tronlink.org/): All versions
 -   [BitKeep App](https://bitkeep.com/): All versions
 -   [BitKeep Extension](https://bitkeep.com/): All versions
+-   [OkxWallet App](https://okx.com/): All versions
+-   [OkxWallet Extension](https://okx.com/): All versions
 -   [TokenPocket App](https://www.tokenpocket.pro/): All versions
 -   [Ledger](https://www.ledger.com/): All versions
 -   [WalletConnect](https://walletconnect.org): `v2.0`
@@ -124,6 +126,9 @@ tronwallet-adapter
 |   |   ├─tronlink # adapter for tronlink
 |   |   ├─ledger # adapter for ledger
 |   |   ├─walletconnect # adapter for walletconnect
+|   |   ├─tokenpocket # adapter for TokenPocket
+|   |   ├─bitkeep # adapter for BitKeep
+|   |   ├─okxwallet # adapter for Okx Wallet
 |   ├─react
 |   |   ├─react-hooks # react hooks to manage wallet state
 |   |   ├─react-ui # react ui components to select/connect wallets
@@ -143,9 +148,12 @@ You can use the `@tronweb3/tronwallet-adapters` package, or add the individual w
 | package                                     | description                                                      | npm                                                                                                                      |
 | ------------------------------------------- | ---------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ |
 | adapters                                    | Includes all the wallets (with tree shaking)                     | [`@tronweb3/tronwallet-adapters`](https://www.npmjs.com/package/@tronweb3/tronwallet-adapters)                           |
-| [tronlink](https://www.tronlink.org/)       | Adapter for tronlink extention and tronlink app(IOS and Android) | [`@tronweb3/tronwallet-adapter-tronlink`](https://www.npmjs.com/package/@tronweb3/tronwallet-adapter-tronlink)           |
-| [ledger](https://www.ledger.com/)           | Adapter for ledger                                               | [`@tronweb3/tronwallet-adapter-ledger`](https://www.npmjs.com/package/@tronweb3/tronwallet-adapter-ledger)               |
-| [walletconnect](https://walletconnect.com/) | Adapter for walletconnect                                        | [`@tronweb3/tronwallet-adapter-walletconnect`](https://www.npmjs.com/package/@tronweb3/tronwallet-adapter-walletconnect) |
+| [tronlink](https://www.tronlink.org/)       | Adapter for TronLink extention and TronLink app(IOS and Android) | [`@tronweb3/tronwallet-adapter-tronlink`](https://www.npmjs.com/package/@tronweb3/tronwallet-adapter-tronlink)           |
+| [ledger](https://www.ledger.com/)           | Adapter for Ledger                                               | [`@tronweb3/tronwallet-adapter-ledger`](https://www.npmjs.com/package/@tronweb3/tronwallet-adapter-ledger)               |
+| [walletconnect](https://walletconnect.com/) | Adapter for Walletconnect                                        | [`@tronweb3/tronwallet-adapter-walletconnect`](https://www.npmjs.com/package/@tronweb3/tronwallet-adapter-walletconnect) |
+| [tokenpocket](https://tokenpocket.pro/)     | Adapter for TokenPocket App                                      | [`@tronweb3/tronwallet-adapter-tokenpocket`](https://www.npmjs.com/package/@tronweb3/tronwallet-adapter-tokenpocket)     |
+| [bitkeep](https://bitkeep.com/)             | Adapter for BitKeep extension and BitKeep App(IOS and Android)   | [`@tronweb3/tronwallet-adapter-bitkeep`](https://www.npmjs.com/package/@tronweb3/tronwallet-adapter-bitkeep)             |
+| [okxwallet](https://www.okx.com/)           | Adapter for Okx Wallet extension and App(IOS and Android)        | [`@tronweb3/tronwallet-adapter-okxwallet`](https://www.npmjs.com/package/@tronweb3/tronwallet-adapter-okxwallet)         |
 
 ### React Components
 
@@ -165,6 +173,9 @@ This package contains all wallet adapters for Tron including:
 -   [TronLink](https://www.tronlink.org/).
 -   [Ledger](https://www.ledger.com/).
 -   [WalletConnect](https://walletconnect.org).
+-   [TokenPocket](https://tokenpocket.pro/).
+-   [BitKeep](https://bitkeep.com).
+-   [Okx Wallet](https://okx.com).
 
 Code example：
 

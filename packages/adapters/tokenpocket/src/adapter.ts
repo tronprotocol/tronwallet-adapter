@@ -31,7 +31,7 @@ export interface TokenPocketAdapterConfig extends BaseAdapterConfig {
      * Set if open TokenPocket app using DeepLink.
      * Default is true.
      */
-    openTokenPocketAppOnMobile?: boolean;
+    openAppWithDeeplink?: boolean;
 }
 
 export const TokenPocketAdapterName = 'TokenPocket' as AdapterName<'TokenPocket'>;
@@ -51,13 +51,13 @@ export class TokenPocketAdapter extends Adapter {
 
     constructor(config: TokenPocketAdapterConfig = {}) {
         super();
-        const { checkTimeout = 2 * 1000, openUrlWhenWalletNotFound = true, openTokenPocketAppOnMobile = true } = config;
+        const { checkTimeout = 2 * 1000, openUrlWhenWalletNotFound = true, openAppWithDeeplink = true } = config;
         if (typeof checkTimeout !== 'number') {
             throw new Error('[TokenPocketAdapter] config.checkTimeout should be a number');
         }
         this.config = {
             checkTimeout,
-            openTokenPocketAppOnMobile,
+            openAppWithDeeplink,
             openUrlWhenWalletNotFound,
         };
         this._connecting = false;
@@ -217,7 +217,7 @@ export class TokenPocketAdapter extends Adapter {
     }
 
     private checkIfOpenApp() {
-        if (this.config.openTokenPocketAppOnMobile === false) {
+        if (this.config.openAppWithDeeplink === false) {
             return;
         }
         if (openTokenPocket()) {

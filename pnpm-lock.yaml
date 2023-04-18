@@ -71,6 +71,7 @@ importers:
       '@tronweb3/tronwallet-abstract-adapter': ^1.1.0
       '@tronweb3/tronwallet-adapter-bitkeep': ^1.0.0
       '@tronweb3/tronwallet-adapter-ledger': ^1.1.2
+      '@tronweb3/tronwallet-adapter-okxwallet': ^1.0.0
       '@tronweb3/tronwallet-adapter-react-hooks': ^1.0.0
       '@tronweb3/tronwallet-adapter-react-ui': ^1.1.0
       '@tronweb3/tronwallet-adapter-tokenpocket': ^1.0.0
@@ -93,6 +94,7 @@ importers:
       '@tronweb3/tronwallet-abstract-adapter': link:../../packages/adapters/abstract-adapter
       '@tronweb3/tronwallet-adapter-bitkeep': link:../../packages/adapters/bitkeep
       '@tronweb3/tronwallet-adapter-ledger': link:../../packages/adapters/ledger
+      '@tronweb3/tronwallet-adapter-okxwallet': link:../../packages/adapters/okxwallet
       '@tronweb3/tronwallet-adapter-react-hooks': link:../../packages/react/react-hooks
       '@tronweb3/tronwallet-adapter-react-ui': link:../../packages/react/react-ui
       '@tronweb3/tronwallet-adapter-tokenpocket': link:../../packages/adapters/tokenpocket
@@ -293,6 +295,7 @@ importers:
     specifiers:
       '@tronweb3/tronwallet-adapter-bitkeep': ^1.0.0
       '@tronweb3/tronwallet-adapter-ledger': ^1.1.6
+      '@tronweb3/tronwallet-adapter-okxwallet': ^1.0.0
       '@tronweb3/tronwallet-adapter-tokenpocket': ^1.0.0
       '@tronweb3/tronwallet-adapter-tronlink': ^1.1.5
       '@tronweb3/tronwallet-adapter-walletconnect': ^1.0.3
@@ -300,6 +303,7 @@ importers:
     dependencies:
       '@tronweb3/tronwallet-adapter-bitkeep': link:../bitkeep
       '@tronweb3/tronwallet-adapter-ledger': link:../ledger
+      '@tronweb3/tronwallet-adapter-okxwallet': link:../okxwallet
       '@tronweb3/tronwallet-adapter-tokenpocket': link:../tokenpocket
       '@tronweb3/tronwallet-adapter-tronlink': link:../tronlink
       '@tronweb3/tronwallet-adapter-walletconnect': link:../walletconnect
@@ -343,6 +347,21 @@ importers:
     devDependencies:
       '@testing-library/dom': 8.20.0
       shx: 0.3.4
+
+  packages/adapters/okxwallet:
+    specifiers:
+      '@testing-library/dom': ^8.20.0
+      '@tronweb3/tronwallet-abstract-adapter': ^1.1.5
+      '@tronweb3/tronwallet-adapter-tronlink': ^1.1.5
+      jest-environment-jsdom: ^29.3.1
+      shx: ^0.3.4
+    dependencies:
+      '@tronweb3/tronwallet-abstract-adapter': link:../abstract-adapter
+      '@tronweb3/tronwallet-adapter-tronlink': link:../tronlink
+    devDependencies:
+      '@testing-library/dom': registry.npmjs.org/@testing-library/dom/8.20.0
+      jest-environment-jsdom: registry.npmjs.org/jest-environment-jsdom/29.4.2
+      shx: registry.npmjs.org/shx/0.3.4
 
   packages/adapters/tokenpocket:
     specifiers:

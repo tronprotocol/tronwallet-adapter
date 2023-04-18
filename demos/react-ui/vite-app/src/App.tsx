@@ -11,7 +11,7 @@ import {
 } from '@tronweb3/tronwallet-adapter-react-ui';
 import toast from 'react-hot-toast';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Alert } from '@mui/material';
-import { TronLinkAdapter, TokenPocketAdapter, BitKeepAdapter } from '@tronweb3/tronwallet-adapters';
+import { TronLinkAdapter, TokenPocketAdapter, BitKeepAdapter, OkxWalletAdapter } from '@tronweb3/tronwallet-adapters';
 import { WalletConnectAdapter } from '@tronweb3/tronwallet-adapter-walletconnect';
 import { LedgerAdapter } from '@tronweb3/tronwallet-adapter-ledger';
 import { tronWeb } from './tronweb';
@@ -59,7 +59,8 @@ export function App() {
         });
         const tokenPocket = new TokenPocketAdapter();
         const bitKeep = new BitKeepAdapter();
-        return [tronLink1, walletConnect1, ledger, tokenPocket, bitKeep];
+        const okxWalletAdapter = new OkxWalletAdapter();
+        return [tronLink1, walletConnect1, ledger, tokenPocket, bitKeep, okxWalletAdapter];
     }, []);
     return (
         <WalletProvider onError={onError} autoConnect={false} adapters={adapters}>

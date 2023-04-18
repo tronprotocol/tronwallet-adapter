@@ -11,7 +11,7 @@ import {
 } from '@tronweb3/tronwallet-adapter-react-ui';
 import toast from 'react-hot-toast';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Alert } from '@mui/material';
-import { TronLinkAdapter } from '@tronweb3/tronwallet-adapters';
+import { BitKeepAdapter, OkxWalletAdapter, TokenPocketAdapter, TronLinkAdapter } from '@tronweb3/tronwallet-adapters';
 import { WalletConnectAdapter } from '@tronweb3/tronwallet-adapter-walletconnect';
 import { tronWeb } from './tronweb';
 import { LedgerAdapter } from '@tronweb3/tronwallet-adapter-ledger';
@@ -38,8 +38,8 @@ export function App() {
         } else toast.error(e.message);
     }
     const adapters = useMemo(function () {
-        const tronLink1 = new TronLinkAdapter();
-        const walletConnect1 = new WalletConnectAdapter({
+        const tronLinkAdapter = new TronLinkAdapter();
+        const walletConnectAdapter = new WalletConnectAdapter({
             network: 'Nile',
             options: {
                 relayUrl: 'wss://relay.walletconnect.com',
@@ -56,7 +56,10 @@ export function App() {
         const ledger = new LedgerAdapter({
             accountNumber: 2,
         });
-        return [tronLink1, walletConnect1, ledger];
+        const bitKeepAdapter = new BitKeepAdapter();
+        const tokenPocketAdapter = new TokenPocketAdapter();
+        const okxwalletAdapter = new OkxWalletAdapter();
+        return [tronLinkAdapter, bitKeepAdapter, tokenPocketAdapter, okxwalletAdapter, walletConnectAdapter, ledger];
     }, []);
     return (
         <WalletProvider onError={onError} autoConnect={true} adapters={adapters}>

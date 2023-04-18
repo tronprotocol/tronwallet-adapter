@@ -1,41 +1,39 @@
-# `@tronweb3/tronwallet-adapter-tokenpocket`
+# `@tronweb3/tronwallet-adapter-okxwallet`
 
-This package provides an adapter to enable TRON DApps to connect to the [TokenPocket Wallet App](https://tokenpocket.pro/).
+This package provides an adapter to enable TRON DApps to connect to the [Okx Wallet extension](https://www.okx.com/download) and [Okx Wallet Wallet App](https://www.okx.com/download).
 
 ## Demo
 
 ```typescript
-import { TokenPocketAdapter } from '@tronweb3/tronwallet-adapter-tokenpocket';
-import TronWeb from 'tronweb';
+import { OkxWalletAdapter } from '@tronweb3/tronwallet-adapter-okxwallet';
 
-const tronWeb = new TronWeb({
-    fullHost: 'https://api.trongrid.io',
-    headers: { 'TRON-PRO-API-KEY': 'your api key' },
-});
-
-const adapter = new TokenPocketAdapter();
-// connect
+const adapter = new OkxWalletAdapter();
+// connect to TokenPocket
 await adapter.connect();
 
 // then you can get address
 console.log(adapter.address);
 
 // create a send TRX transaction
-const unSignedTransaction = await tronWeb.transactionBuilder.sendTrx(targetAddress, 100, adapter.address);
+const unSignedTransaction = await window.okxwallet.tronLink.tronWeb.transactionBuilder.sendTrx(
+    targetAddress,
+    100,
+    adapter.address
+);
 // using adapter to sign the transaction
 const signedTransaction = await adapter.signTransaction(unSignedTransaction);
 // broadcast the transaction
-await tronWeb.trx.sendRawTransaction(signedTransaction);
+await window.okxwallet.tronLink.tronWeb.trx.sendRawTransaction(signedTransaction);
 ```
 
 ## Documentation
 
 ### API
 
--   `Constructor(config: TokenPocketConfig)`
+-   `Constructor(config: OkxWalletAdapterConfig)`
 
 ```typescript
-interface TokenPocketConfig {
+interface OkxWalletAdapterConfig {
     /**
      * Set if open Wallet's website when wallet is not installed.
      * Default is true.
@@ -78,7 +76,9 @@ interface TokenPocketConfig {
 
 ### Caveats
 
--   TokenPocket App doesn't implement `signMessage()`, `multiSign()` and `switchChain()`.
--   TokenPocket App will be connected automatically and when user change accounts, the page will reload. So there is no need to to listen to `accountsChanged` event.
+-   OkxWallet App and Extension doesn't implement `signMessage()`, `multiSign()` and `switchChain()`.
+-   OkxWallet Extension only support these: `accountsChanged`,`connect`,`disconnect`.
+-   OkxWallet App does not support any events.
+-   Deeplink only works for OKX App **version 6.1.38 or later**.
 
 For more information about tronwallet adapters, please refer to [`@tronweb3/tronwallet-adapters`](https://github.com/tronprotocol/tronwallet-adapter/tree/main/packages/adapters/adapters)

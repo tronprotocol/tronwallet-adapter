@@ -48,5 +48,8 @@ export function checkAdapterState(check: () => boolean): void {
  * Simplily detect mobile device
  */
 export function isInMobileBrowser() {
-    return navigator.userAgent.match(/Android|webOS|iPhone|iPad|iPod|BlackBerry|Windows Phone/i);
+    return (
+        typeof navigator !== 'undefined' &&
+        navigator.userAgent.match(/Android|webOS|iPhone|iPad|iPod|BlackBerry|Windows Phone/i)
+    );
 }

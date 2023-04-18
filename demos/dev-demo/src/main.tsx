@@ -10,8 +10,8 @@ import VConsole from 'vconsole';
 import './index.css';
 import { AppWraper } from './AppWraper.js';
 const vConsole = new VConsole();
+// console.log('load', window.tronWeb?.defaultAddress, window.okxwallet?.tronLink.tronWeb.defaultAddress);
 
-const tron = window.tronLink as any;
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
     <React.StrictMode>
         <ThemeProvider theme={theme}>

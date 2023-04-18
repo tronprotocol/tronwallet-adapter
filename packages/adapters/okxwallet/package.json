@@ -1,11 +1,11 @@
 {
-    "name": "@tronweb3/tronwallet-adapters",
-    "version": "1.1.5",
-    "description": "Wallet adapters to help developers interact with Tron wallets using consistent API.",
+    "name": "@tronweb3/tronwallet-adapter-okxwallet",
+    "version": "1.0.0",
+    "description": "Wallet adapter for TronLink Wallet extension and TronLink app.",
     "keywords": [
         "TRON",
         "TronWeb",
-        "adapters"
+        "TronLink"
     ],
     "author": "tronprotocol",
     "repository": {
@@ -37,17 +37,17 @@
     },
     "scripts": {
         "clean": "shx mkdir -p lib && shx rm -rf lib",
-        "package": "shx echo '{ \"type\": \"commonjs\" }' > lib/cjs/package.json"
+        "package": "shx echo '{ \"type\": \"commonjs\" }' > lib/cjs/package.json",
+        "test": "jest",
+        "test:coverage": "jest  --coverage"
     },
     "dependencies": {
-        "@tronweb3/tronwallet-adapter-bitkeep": "^1.0.0",
-        "@tronweb3/tronwallet-adapter-ledger": "^1.1.6",
-        "@tronweb3/tronwallet-adapter-okxwallet": "^1.0.0",
-        "@tronweb3/tronwallet-adapter-tokenpocket": "^1.0.0",
-        "@tronweb3/tronwallet-adapter-tronlink": "^1.1.5",
-        "@tronweb3/tronwallet-adapter-walletconnect": "^1.0.3"
+        "@tronweb3/tronwallet-abstract-adapter": "^1.1.5",
+        "@tronweb3/tronwallet-adapter-tronlink": "^1.1.5"
     },
     "devDependencies": {
+        "@testing-library/dom": "^8.20.0",
+        "jest-environment-jsdom": "^29.3.1",
         "shx": "^0.3.4"
     }
 }

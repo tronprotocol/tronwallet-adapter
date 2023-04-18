@@ -23,6 +23,9 @@
             "path": "./packages/adapters/bitkeep/tsconfig.all.json"
         },
         {
+            "path": "./packages/adapters/okxwallet/tsconfig.all.json"
+        },
+        {
             "path": "./packages/react/react-hooks/tsconfig.all.json"
         },
         {

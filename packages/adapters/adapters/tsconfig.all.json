@@ -17,6 +17,9 @@
             "path": "../bitkeep/tsconfig.all.json"
         },
         {
+            "path": "../okxwallet/tsconfig.all.json"
+        },
+        {
             "path": "./tsconfig.cjs.json"
         },
         {

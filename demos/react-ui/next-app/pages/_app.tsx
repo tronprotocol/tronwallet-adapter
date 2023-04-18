@@ -4,7 +4,7 @@ import type { WalletError } from '@tronweb3/tronwallet-abstract-adapter';
 import { WalletDisconnectedError, WalletNotFoundError } from '@tronweb3/tronwallet-abstract-adapter';
 // @ts-ignore
 import { toast } from 'react-hot-toast';
-import { BitKeepAdapter, TokenPocketAdapter, TronLinkAdapter, WalletConnectAdapter } from '@tronweb3/tronwallet-adapters';
+import { BitKeepAdapter, OkxWalletAdapter, TokenPocketAdapter, TronLinkAdapter, WalletConnectAdapter } from '@tronweb3/tronwallet-adapters';
 import { useMemo } from 'react';
 import { WalletProvider } from '@tronweb3/tronwallet-adapter-react-hooks';
 import { WalletModalProvider } from '@tronweb3/tronwallet-adapter-react-ui';
@@ -40,7 +40,8 @@ export default function App({ Component, pageProps }: AppProps) {
         });
         const bitKeepAdapter = new BitKeepAdapter();
         const tokenPocketAdapter = new TokenPocketAdapter();
-        return [tronLinkAdapter, bitKeepAdapter, tokenPocketAdapter, walletConnectAdapter, ledger];
+        const okxwalletAdapter = new OkxWalletAdapter();
+        return [tronLinkAdapter, bitKeepAdapter, tokenPocketAdapter, okxwalletAdapter, walletConnectAdapter, ledger];
     }, []);
 
     /**

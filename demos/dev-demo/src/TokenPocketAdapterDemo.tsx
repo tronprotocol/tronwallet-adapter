@@ -18,7 +18,7 @@ export function TokenPocketAdapterDemo() {
     const [signMessage, setSignMessage] = useState('Hello, Adapter');
     const [signedMessage, setSignedMessage] = useState('');
     const adapter = useMemo(() => new TokenPocketAdapter({
-        openTokenPocketAppOnMobile: true,
+        openAppWithDeeplink: true,
         openUrlWhenWalletNotFound: false,
         checkTimeout: 3000
     }), []);
