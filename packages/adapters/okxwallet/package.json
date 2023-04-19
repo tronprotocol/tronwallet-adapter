@@ -1,11 +1,11 @@
 {
     "name": "@tronweb3/tronwallet-adapter-okxwallet",
     "version": "1.0.0",
-    "description": "Wallet adapter for TronLink Wallet extension and TronLink app.",
+    "description": "Wallet adapter for Okx Wallet extension and Okx Wallet app.",
     "keywords": [
         "TRON",
         "TronWeb",
-        "TronLink"
+        "Okx Wallet"
     ],
     "author": "tronprotocol",
     "repository": {

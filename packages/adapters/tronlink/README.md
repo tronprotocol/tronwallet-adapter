@@ -5,7 +5,7 @@ This package provides an adapter to enable TRON DApps to connect to the [TronLin
 ## Demo
 
 ```typescript
-import { TokenPocketAdapter } from '@tronweb3/tronwallet-adapter-tokenpocket';
+import { TronLinkAdapter } from '@tronweb3/tronwallet-adapter-tronlink';
 import TronWeb from 'tronweb';
 
 const tronWeb = new TronWeb({
@@ -13,7 +13,7 @@ const tronWeb = new TronWeb({
     headers: { 'TRON-PRO-API-KEY': 'your api key' },
 });
 
-const adapter = new TokenPocketAdapter();
+const adapter = new TronLinkAdapter();
 // connect
 await adapter.connect();
 
@@ -86,6 +86,6 @@ await tronWeb.trx.sendRawTransaction(signedTransaction);
 
 ### Caveats
 
--   **Don't support `disconnect` by DApp**. As TronLinkAdapter doesn't support disconnect by DApp website, call `adapter.disconnect()` won't disconnect from TronLink extension really.
+-   **TronLink Doesn't support `disconnect` by DApp**. As TronLinkAdapter doesn't support disconnect by DApp website, call `adapter.disconnect()` won't disconnect from TronLink extension really.
 
 For more information about tronwallet adapters, please refer to [`@tronweb3/tronwallet-adapters`](https://github.com/tronprotocol/tronwallet-adapter/tree/main/packages/adapters/adapters)
