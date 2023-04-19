@@ -98,7 +98,7 @@ export class TokenPocketAdapter extends Adapter {
     }
 
     /**
-     * Get network information used by TokenPocket.
+     * Get network information.
      * @returns {Network} Current network information.
      */
     async network(): Promise<Network> {
@@ -251,7 +251,7 @@ export class TokenPocketAdapter extends Adapter {
     private _checkPromise: Promise<boolean> | null = null;
     /**
      * check if wallet exists by interval, the promise only resolve when wallet detected or timeout
-     * @returns if TronLink exists
+     * @returns if wallet exists
      */
     private _checkWallet(): Promise<boolean> {
         if (this.readyState === WalletReadyState.Found) {

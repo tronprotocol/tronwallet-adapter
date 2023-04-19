@@ -1,6 +1,6 @@
 # `@tronweb3/tronwallet-adapter-okxwallet`
 
-This package provides an adapter to enable TRON DApps to connect to the [Okx Wallet extension](https://www.okx.com/download) and [Okx Wallet Wallet App](https://www.okx.com/download).
+This package provides an adapter to enable TRON DApps to connect to the [Okx Wallet extension](https://www.okx.com/download) and [Okx Wallet App](https://www.okx.com/download).
 
 ## Demo
 
