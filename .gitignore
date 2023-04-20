@@ -17,3 +17,4 @@ out
 *.tsbuildinfo
 *.log
 coverage
+!demos/dev-demo/dist/
