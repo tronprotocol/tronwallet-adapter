@@ -24,6 +24,7 @@
         "build:ts": "tsc --build --verbose tsconfig.all.json",
         "build:other": "pnpm --recursive --filter \"@tronweb3/*\" run build",
         "build:clean": "pnpm run clean && pnpm run build && pnpm run package",
+        "build-dev-demo": "pnpm build && pnpm run --filter {demos/dev-demo} build",
         "package": "pnpm --recursive run package",
         "release": "pnpm prerelease && pnpm build:clean && pnpm test && changeset publish",
         "watch": "pnpm run watch:ts",
