@@ -7,8 +7,8 @@ import { AdapterState } from '@tronweb3/tronwallet-abstract-adapter';
 import { Box, Button, Typography, Tooltip, Select, MenuItem, Alert, FormControl, TextField } from '@mui/material';
 import { tronWeb } from './tronweb.js';
 const receiver = 'TMDKznuDWaZwfZHcM61FVFstyYNmK6Njk1';
-// const getTronWeb = () =>  window.okxwallet?.tronLink?.tronWeb as any || null;
-const getTronWeb = () => tronWeb;
+const getTronWeb = () =>  window.okxwallet?.tronLink?.tronWeb as any || null;
+// const getTronWeb = () => tronWeb;
 
 export function OkxWalletAdapterDemo() {
     const [connectState, setConnectState] = useState(AdapterState.NotFound);

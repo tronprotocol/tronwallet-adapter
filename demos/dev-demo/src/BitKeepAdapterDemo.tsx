@@ -62,6 +62,7 @@ export function BitKeepAdapterDemo() {
         adapter.on('disconnect', () => {
             console.log('disconnect');
             setConnectState(AdapterState.Disconnect)
+            setAccount(adapter.address || '');
         });
 
         return () => {

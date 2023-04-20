@@ -272,7 +272,10 @@ export class OkxWalletAdapter extends Adapter {
                     this.setAddress(null);
                     this.setState(AdapterState.Disconnect);
                 }
-                this.emit('accountsChanged', this.address || '', preAddr);
+                const address = this.address || '';
+                if (address !== preAddr) {
+                    this.emit('accountsChanged', this.address || '', preAddr);
+                }
                 if (!preAddr && this.address) {
                     this.emit('connect', this.address);
                 } else if (preAddr && !this.address) {
@@ -280,10 +283,16 @@ export class OkxWalletAdapter extends Adapter {
                 }
             }, 200);
         } else if (message.action === 'connect') {
+            const isCurConnected = this.connected;
+            const preAddress = this.address || '';
             const address = (this._wallet as TronLinkWallet).tronWeb?.defaultAddress?.base58 || '';
             this.setAddress(address);
             this.setState(AdapterState.Connected);
-            this.emit('connect', address);
+            if (!isCurConnected) {
+                this.emit('connect', address);
+            } else if (address !== preAddress) {
+                this.emit('accountsChanged', this.address || '', preAddress);
+            }
         } else if (message.action === 'disconnect') {
             this.setAddress(null);
             this.setState(AdapterState.Disconnect);
