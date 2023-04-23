@@ -96,7 +96,6 @@ export class TronLinkAdapter extends Adapter {
     private _connecting: boolean;
     private _wallet: TronLinkWallet | Tron | null;
     private _address: string | null;
-    private _supportTronLink = false;
     // https://github.com/tronprotocol/tips/blob/master/tip-1193.md
     private _supportNewTronProtocol = false;
     // record if first connect event has emitted or not
@@ -189,7 +188,7 @@ export class TronLinkAdapter extends Adapter {
                 throw new WalletNotFoundError();
             }
             // lower version only support window.tronWeb, no window.tronLink
-            if (!this._wallet || !this._supportTronLink) return;
+            if (!this._wallet) return;
             this._connecting = true;
             if (this._supportNewTronProtocol) {
                 const wallet = this._wallet as Tron;
@@ -210,7 +209,7 @@ export class TronLinkAdapter extends Adapter {
                     }
                     throw new WalletConnectionError(message, error);
                 }
-            } else {
+            } else if (window.tronLink) {
                 const wallet = this._wallet as TronLinkWallet;
                 try {
                     const res = await wallet.request({ method: 'tron_requestAccounts' });
@@ -235,6 +234,13 @@ export class TronLinkAdapter extends Adapter {
                 this.setAddress(address);
                 this.setState(AdapterState.Connected);
                 this._listenTronLinkEvent();
+            } else if (window.tronWeb) {
+                const wallet = this._wallet as TronLinkWallet;
+                const address = wallet.tronWeb.defaultAddress?.base58 || '';
+                this.setAddress(address);
+                this.setState(AdapterState.Connected);
+            } else {
+                throw new WalletConnectionError('Cannot connect wallet.');
             }
             this.connected && this.emit('connect', this.address || '');
         } catch (error: any) {
@@ -502,13 +508,11 @@ export class TronLinkAdapter extends Adapter {
             state = window.tronWeb?.defaultAddress ? AdapterState.Connected : AdapterState.Disconnect;
         } else if (window.tron && window.tron.isTronLink) {
             this._supportNewTronProtocol = true;
-            this._supportTronLink = true;
             this._wallet = window.tron;
             this._listenTronEvent();
             address = (this._wallet.tronWeb && this._wallet.tronWeb?.defaultAddress?.base58) || null;
             state = address ? AdapterState.Connected : AdapterState.Disconnect;
         } else if (window.tronLink) {
-            this._supportTronLink = true;
             this._wallet = window.tronLink;
             this._listenTronLinkEvent();
             address = this._wallet.tronWeb?.defaultAddress?.base58 || null;
