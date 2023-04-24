@@ -9,6 +9,7 @@ import {
     WalletSignTransactionError,
     WalletConnectionError,
     WalletGetNetworkError,
+    isInMobileBrowser,
 } from '@tronweb3/tronwallet-abstract-adapter';
 import { getNetworkInfoByTronWeb } from '@tronweb3/tronwallet-adapter-tronlink';
 import type { TronLinkWallet } from '@tronweb3/tronwallet-adapter-tronlink';
@@ -122,12 +123,14 @@ export class BitKeepAdapter extends Adapter {
                 throw new WalletNotFoundError();
             }
             const wallet = this._wallet as TronLinkWallet;
-            if (!wallet) return;
-            this._connecting = true;
-            try {
-                await wallet.request({ method: 'tron_requestAccounts' });
-            } catch (e: any) {
-                throw new WalletConnectionError(e.message);
+            if (!isInMobileBrowser()) {
+                if (!wallet) return;
+                this._connecting = true;
+                try {
+                    await wallet.request({ method: 'tron_requestAccounts' });
+                } catch (e: any) {
+                    throw new WalletConnectionError(e.message);
+                }
             }
             const address = wallet.tronWeb.defaultAddress?.base58 || '';
             this.setAddress(address);

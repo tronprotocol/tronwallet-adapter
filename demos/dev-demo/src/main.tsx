@@ -9,7 +9,7 @@ import theme from './theme';
 import VConsole from 'vconsole';
 import './index.css';
 import { AppWraper } from './AppWraper.js';
-// const vConsole = new VConsole();
+const vConsole = new VConsole();
 // console.log('load', window.tronWeb?.defaultAddress, window.okxwallet?.tronLink.tronWeb.defaultAddress);
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(

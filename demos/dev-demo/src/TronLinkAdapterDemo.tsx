@@ -66,6 +66,7 @@ export function TronLinkAdapterDemo() {
 
         adapter.on('disconnect', () => {
             console.log('disconnect');
+            setAccount(adapter.address || '')
         });
 
         return () => {

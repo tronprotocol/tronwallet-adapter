@@ -37,6 +37,7 @@ export function BitKeepAdapterDemo() {
         adapter.on('readyStateChanged', async () => {
             console.log('readyState: ', adapter.readyState)
             setReadyState(adapter.readyState)
+            setConnectState(adapter.state)
         })
         adapter.on('connect', () => {
             console.log('connect: ', adapter.address);
