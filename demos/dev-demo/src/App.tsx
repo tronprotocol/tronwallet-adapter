@@ -5,6 +5,9 @@ import { CustomConnectWithSelectAccount } from './LedgerDemo/CustomConnectWithSe
 import { CustomConnectWithGetAccounts } from './LedgerDemo/CustomConnectWithGetAccounts.js';
 import { TronLinkAdapterDemo } from './TronLinkAdapterDemo.js';
 import { ReactHooksDemo } from './ReactHooksDemo.js';
+import { TokenPocketAdapterDemo } from './TokenPocketAdapterDemo.js';
+import { BitKeepAdapterDemo } from './BitKeepAdapterDemo.js';
+import { OkxWalletAdapterDemo } from './OkxWalletAdapterDemo.js';
 interface TabPanelProps {
     children?: React.ReactNode;
     index: number;
@@ -39,6 +42,9 @@ function App() {
                         <Tab label="LedgerAdapter CustomConnectWithSelectAccount" />
                         <Tab label="LedgerAdapter CustomConnectWithGetAccounts" />
                         <Tab label="ReactHooks Demo" />
+                        <Tab label="TokenPocketAdapter Demo" />
+                        <Tab label="BitKeepAdapter Demo" />
+                        <Tab label="OkxWalletAdapter Demo" />
                     </Tabs>
                 </Box>
                 <TabPanel value={value} index={0}>
@@ -55,6 +61,15 @@ function App() {
                 </TabPanel>
                 <TabPanel value={value} index={4}>
                     <ReactHooksDemo></ReactHooksDemo>
+                </TabPanel>
+                <TabPanel value={value} index={5}>
+                    <TokenPocketAdapterDemo></TokenPocketAdapterDemo>
+                </TabPanel>
+                <TabPanel value={value} index={6}>
+                    <BitKeepAdapterDemo></BitKeepAdapterDemo>
+                </TabPanel>
+                <TabPanel value={value} index={7}>
+                    <OkxWalletAdapterDemo></OkxWalletAdapterDemo>
                 </TabPanel>
             </Box>
         </div>

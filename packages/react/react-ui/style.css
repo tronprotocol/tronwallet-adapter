@@ -17,6 +17,7 @@
     line-height: 48px;
     user-select: none;
     -webkit-tap-highlight-color: transparent;
+    white-space: pre;
 }
 .adapter-react-button:focus {
     outline: none;

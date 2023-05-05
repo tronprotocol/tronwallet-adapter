@@ -9,6 +9,7 @@ import {
     WalletConnectionError,
     WalletSignTransactionError,
     WalletSwitchChainError,
+    WalletGetNetworkError,
     isInMobileBrowser,
     NetworkType,
 } from '@tronweb3/tronwallet-abstract-adapter';
@@ -30,17 +31,28 @@ import type {
     TronWeb,
 } from './types.js';
 import { openTronLink, supportTron, supportTronLink } from './utils.js';
-import { WalletGetNetworkError } from './error.js';
 export interface TronLinkWallet {
     ready: boolean;
     tronWeb: TronWeb;
     request(config: Record<string, unknown>): Promise<ReqestAccountsResponse | null>;
 }
-const chainIdNetworkMap: Record<string, NetworkType> = {
+export const chainIdNetworkMap: Record<string, NetworkType> = {
     '0x2b6653dc': NetworkType.Mainnet,
     '0x94a9059e': NetworkType.Shasta,
     '0xcd8690dc': NetworkType.Nile,
 };
+
+export async function getNetworkInfoByTronWeb(tronWeb: TronWeb) {
+    const { blockID = '' } = await tronWeb.trx.getBlockByNumber(0);
+    const chainId = `0x${blockID.slice(-8)}`;
+    return {
+        networkType: chainIdNetworkMap[chainId] || NetworkType.Unknown,
+        chainId,
+        fullNode: tronWeb.fullNode?.host || '',
+        solidityNode: tronWeb.solidityNode?.host || '',
+        eventServer: tronWeb.eventServer?.host || '',
+    };
+}
 declare global {
     interface Window {
         tronLink?: TronLinkWallet;
@@ -84,7 +96,6 @@ export class TronLinkAdapter extends Adapter {
     private _connecting: boolean;
     private _wallet: TronLinkWallet | Tron | null;
     private _address: string | null;
-    private _supportTronLink = false;
     // https://github.com/tronprotocol/tips/blob/master/tip-1193.md
     private _supportNewTronProtocol = false;
     // record if first connect event has emitted or not
@@ -113,6 +124,8 @@ export class TronLinkAdapter extends Adapter {
         this._address = null;
 
         if (!isInBrowser()) {
+            this._readyState = WalletReadyState.NotFound;
+            this.setState(AdapterState.NotFound);
             return;
         }
         if (supportTron() || (isInMobileBrowser() && (window.tronLink || window.tronWeb))) {
@@ -153,15 +166,7 @@ export class TronLinkAdapter extends Adapter {
             const wallet = this._wallet;
             if (!wallet || !wallet.tronWeb) throw new WalletDisconnectedError();
             try {
-                const { blockID = '' } = await wallet.tronWeb.trx.getBlockByNumber(0);
-                const chainId = `0x${blockID.slice(-8)}`;
-                return {
-                    networkType: chainIdNetworkMap[chainId] || NetworkType.Unknown,
-                    chainId,
-                    fullNode: wallet.tronWeb.fullNode?.host || '',
-                    solidityNode: wallet.tronWeb.solidityNode?.host || '',
-                    eventServer: wallet.tronWeb.eventServer?.host || '',
-                };
+                return await getNetworkInfoByTronWeb(wallet.tronWeb);
             } catch (e: any) {
                 throw new WalletGetNetworkError(e?.message, e);
             }
@@ -183,7 +188,7 @@ export class TronLinkAdapter extends Adapter {
                 throw new WalletNotFoundError();
             }
             // lower version only support window.tronWeb, no window.tronLink
-            if (!this._wallet || !this._supportTronLink) return;
+            if (!this._wallet) return;
             this._connecting = true;
             if (this._supportNewTronProtocol) {
                 const wallet = this._wallet as Tron;
@@ -204,7 +209,7 @@ export class TronLinkAdapter extends Adapter {
                     }
                     throw new WalletConnectionError(message, error);
                 }
-            } else {
+            } else if (window.tronLink) {
                 const wallet = this._wallet as TronLinkWallet;
                 try {
                     const res = await wallet.request({ method: 'tron_requestAccounts' });
@@ -229,6 +234,13 @@ export class TronLinkAdapter extends Adapter {
                 this.setAddress(address);
                 this.setState(AdapterState.Connected);
                 this._listenTronLinkEvent();
+            } else if (window.tronWeb) {
+                const wallet = this._wallet as TronLinkWallet;
+                const address = wallet.tronWeb.defaultAddress?.base58 || '';
+                this.setAddress(address);
+                this.setState(AdapterState.Connected);
+            } else {
+                throw new WalletConnectionError('Cannot connect wallet.');
             }
             this.connected && this.emit('connect', this.address || '');
         } catch (error: any) {
@@ -451,14 +463,17 @@ export class TronLinkAdapter extends Adapter {
     private _checkPromise: Promise<boolean> | null = null;
     /**
      * check if wallet exists by interval, the promise only resolve when wallet detected or timeout
-     * @returns if TronLink exists
+     * @returns if wallet exists
      */
     private _checkWallet(): Promise<boolean> {
+        if (this.readyState === WalletReadyState.Found) {
+            return Promise.resolve(true);
+        }
         if (this._checkPromise) {
             return this._checkPromise;
         }
         const interval = 100;
-        const checkTronTimes = Math.floor(3000 / interval);
+        const checkTronTimes = Math.floor(2000 / interval);
         const maxTimes = Math.floor(this.config.checkTimeout / interval);
         let times = 0,
             timer: ReturnType<typeof setInterval>;
@@ -483,15 +498,21 @@ export class TronLinkAdapter extends Adapter {
     private _updateWallet = () => {
         let state = this.state;
         let address = this.address;
-        if (window.tron && window.tron.isTronLink) {
+        if (isInMobileBrowser()) {
+            this._wallet = {
+                ready: !!window.tronWeb?.defaultAddress,
+                tronWeb: window.tronWeb,
+                request: () => Promise.resolve(true) as any,
+            } as TronLinkWallet;
+            address = this._wallet.tronWeb.defaultAddress?.base58 || null;
+            state = window.tronWeb?.defaultAddress ? AdapterState.Connected : AdapterState.Disconnect;
+        } else if (window.tron && window.tron.isTronLink) {
             this._supportNewTronProtocol = true;
-            this._supportTronLink = true;
             this._wallet = window.tron;
             this._listenTronEvent();
-            address = (this._wallet.tronWeb && this._wallet.tronWeb.defaultAddress?.base58) || null;
+            address = (this._wallet.tronWeb && this._wallet.tronWeb?.defaultAddress?.base58) || null;
             state = address ? AdapterState.Connected : AdapterState.Disconnect;
         } else if (window.tronLink) {
-            this._supportTronLink = true;
             this._wallet = window.tronLink;
             this._listenTronLinkEvent();
             address = this._wallet.tronWeb?.defaultAddress?.base58 || null;
@@ -504,17 +525,43 @@ export class TronLinkAdapter extends Adapter {
                 request: () => Promise.resolve(true) as any,
             } as TronLinkWallet;
             address = this._wallet.tronWeb.defaultAddress?.base58 || null;
-            state = window.tronWeb.ready ? AdapterState.Connected : AdapterState.Disconnect;
+            state = this._wallet.ready ? AdapterState.Connected : AdapterState.Disconnect;
         } else {
             // no tronlink support
             this._wallet = null;
             address = null;
             state = AdapterState.NotFound;
         }
+        // In TronLink App, account should be connected
+        if (isInMobileBrowser() && state === AdapterState.Disconnect) {
+            this.checkForWalletReady();
+        }
         this.setAddress(address);
         this.setState(state);
     };
 
+    private checkReadyInterval: ReturnType<typeof setInterval> | null = null;
+    private checkForWalletReady() {
+        if (this.checkReadyInterval) {
+            return;
+        }
+        let times = 0;
+        const maxTimes = Math.floor(this.config.checkTimeout / 200);
+        const check = () => {
+            if (window.tronWeb?.defaultAddress) {
+                this.checkReadyInterval && clearInterval(this.checkReadyInterval);
+                this.checkReadyInterval = null;
+                this._updateWallet();
+                this.emit('connect', this.address || '');
+            } else if (times > maxTimes) {
+                this.checkReadyInterval && clearInterval(this.checkReadyInterval);
+                this.checkReadyInterval = null;
+            } else {
+                times++;
+            }
+        };
+        this.checkReadyInterval = setInterval(check, 200);
+    }
     private setAddress(address: string | null) {
         this._address = address;
     }

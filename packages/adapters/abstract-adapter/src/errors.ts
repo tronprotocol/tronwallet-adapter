@@ -80,3 +80,9 @@ export class WalletWindowClosedError extends WalletError {
 export class WalletSwitchChainError extends WalletError {
     name = 'WalletSwitchChainError';
 }
+/**
+ * Occurs when get network infomation.
+ */
+export class WalletGetNetworkError extends WalletError {
+    name = 'WalletGetNetworkError';
+}

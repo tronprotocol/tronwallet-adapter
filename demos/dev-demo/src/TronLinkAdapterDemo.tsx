@@ -27,12 +27,14 @@ export function TronLinkAdapterDemo() {
         setConnectState(adapter.state);
         setAccount(adapter.address || '');
         setReadyState(adapter.readyState);
-        adapter.network().then((res) => {
-            console.log(res);
-            setChainId(res.chainId)
-        }).catch(e => {
-            console.log(e)
-        })
+        if (adapter.connected) {
+            adapter.network().then((res) => {
+                console.log(res);
+                setChainId(res.chainId)
+            }).catch(e => {
+                console.log(e)
+            })
+        }
 
         adapter.on('readyStateChanged', () => {
             console.log('readyState: ', adapter.readyState)
@@ -64,6 +66,7 @@ export function TronLinkAdapterDemo() {
 
         adapter.on('disconnect', () => {
             console.log('disconnect');
+            setAccount(adapter.address || '')
         });
 
         return () => {

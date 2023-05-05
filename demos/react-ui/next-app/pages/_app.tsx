@@ -4,12 +4,13 @@ import type { WalletError } from '@tronweb3/tronwallet-abstract-adapter';
 import { WalletDisconnectedError, WalletNotFoundError } from '@tronweb3/tronwallet-abstract-adapter';
 // @ts-ignore
 import { toast } from 'react-hot-toast';
-import { TronLinkAdapter, WalletConnectAdapter } from '@tronweb3/tronwallet-adapters';
+import { BitKeepAdapter, OkxWalletAdapter, TokenPocketAdapter, TronLinkAdapter, WalletConnectAdapter } from '@tronweb3/tronwallet-adapters';
 import { useMemo } from 'react';
 import { WalletProvider } from '@tronweb3/tronwallet-adapter-react-hooks';
 import { WalletModalProvider } from '@tronweb3/tronwallet-adapter-react-ui';
 import '@tronweb3/tronwallet-adapter-react-ui/style.css';
 import { LedgerAdapter } from '@tronweb3/tronwallet-adapter-ledger';
+
 export default function App({ Component, pageProps }: AppProps) {
     function onError(e: WalletError) {
         if (e instanceof WalletNotFoundError) {
@@ -19,11 +20,11 @@ export default function App({ Component, pageProps }: AppProps) {
         } else toast.error(e.message);
     }
     const adapters = useMemo(function () {
-        const tronLink1 = new TronLinkAdapter();
+        const tronLinkAdapter = new TronLinkAdapter();
         const ledger = new LedgerAdapter({
             accountNumber: 2,
         });
-        const walletConnect1 = new WalletConnectAdapter({
+        const walletConnectAdapter = new WalletConnectAdapter({
             network: 'Nile',
             options: {
                 relayUrl: 'wss://relay.walletconnect.com',
@@ -37,7 +38,10 @@ export default function App({ Component, pageProps }: AppProps) {
                 },
             },
         });
-        return [tronLink1, walletConnect1, ledger];
+        const bitKeepAdapter = new BitKeepAdapter();
+        const tokenPocketAdapter = new TokenPocketAdapter();
+        const okxwalletAdapter = new OkxWalletAdapter();
+        return [tronLinkAdapter, bitKeepAdapter, tokenPocketAdapter, okxwalletAdapter, walletConnectAdapter, ledger];
     }, []);
 
     /**
