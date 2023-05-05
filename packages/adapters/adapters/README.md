@@ -33,7 +33,7 @@ function App() {
 
     const adapter = useMemo(() => new TronLinkAdapter(), []);
     useEffect(() => {
-        setReadyState(adapter.state);
+        setReadyState(adapter.readyState);
         setAccount(adapter.address!);
 
         adapter.on('connect', () => {
@@ -281,4 +281,12 @@ try {
 -   **TronLink Doesn't support `disconnect` by DApp**. As TronLinkAdapter doesn't support disconnect by DApp website, call `adapter.disconnect()` won't disconnect from TronLink extension really.
 -   **Auto open TronLink app in mobile browser**. If developers call `connect()` method in mobile browser, it will open DApp in TronLink app to get tronlink wallet.
 
+### Others adapters
+
 Others adapters `Constructor` config api can be found in their source code `README`.
+
+-   [TokenPocketAdapter](https://github.com/tronprotocol/tronwallet-adapter/tree/main/packages/adapters/tokenpocket)
+-   [BitKeepAdapter](https://github.com/tronprotocol/tronwallet-adapter/tree/main/packages/adapters/bitkeep)
+-   [OkxWalletAdapter](https://github.com/tronprotocol/tronwallet-adapter/tree/main/packages/adapters/okxwallet)
+-   [WalletConnectAdapter](https://github.com/tronprotocol/tronwallet-adapter/tree/main/packages/adapters/walletconnect)
+-   [LedgerAdapter](https://github.com/tronprotocol/tronwallet-adapter/tree/main/packages/adapters/ledger)

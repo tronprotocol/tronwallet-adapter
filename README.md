@@ -10,7 +10,7 @@ This repository contains wallet adapters and components for Tron DApps. With out
 -   [TronLink Extension](https://www.tronlink.org/): All versions
 -   [BitKeep App](https://bitkeep.com/): All versions
 -   [BitKeep Extension](https://bitkeep.com/): All versions
--   [OkxWallet App](https://okx.com/): All versions
+-   [OkxWallet App](https://okx.com/): Android all versions
 -   [OkxWallet Extension](https://okx.com/): All versions
 -   [TokenPocket App](https://www.tokenpocket.pro/): All versions
 -   [Ledger](https://www.ledger.com/): All versions
@@ -153,7 +153,7 @@ You can use the `@tronweb3/tronwallet-adapters` package, or add the individual w
 | [walletconnect](https://walletconnect.com/) | Adapter for Walletconnect                                        | [`@tronweb3/tronwallet-adapter-walletconnect`](https://www.npmjs.com/package/@tronweb3/tronwallet-adapter-walletconnect) |
 | [tokenpocket](https://tokenpocket.pro/)     | Adapter for TokenPocket App(IOS and Android)                     | [`@tronweb3/tronwallet-adapter-tokenpocket`](https://www.npmjs.com/package/@tronweb3/tronwallet-adapter-tokenpocket)     |
 | [bitkeep](https://bitkeep.com/)             | Adapter for BitKeep extension and BitKeep App(IOS and Android)   | [`@tronweb3/tronwallet-adapter-bitkeep`](https://www.npmjs.com/package/@tronweb3/tronwallet-adapter-bitkeep)             |
-| [okxwallet](https://www.okx.com/)           | Adapter for Okx Wallet extension and App(IOS and Android)        | [`@tronweb3/tronwallet-adapter-okxwallet`](https://www.npmjs.com/package/@tronweb3/tronwallet-adapter-okxwallet)         |
+| [okxwallet](https://www.okx.com/)           | Adapter for Okx Wallet extension and App(Android)                | [`@tronweb3/tronwallet-adapter-okxwallet`](https://www.npmjs.com/package/@tronweb3/tronwallet-adapter-okxwallet)         |
 
 ### React Components
 
