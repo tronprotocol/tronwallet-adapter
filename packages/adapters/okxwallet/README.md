@@ -79,6 +79,7 @@ interface OkxWalletAdapterConfig {
 -   OkxWallet App and Extension doesn't implement `signMessage()`, `multiSign()` and `switchChain()`.
 -   OkxWallet Extension only support these: `accountsChanged`,`connect`,`disconnect`.
 -   OkxWallet App does not support any events.
--   Deeplink only works for OKX App **version 6.1.38 or later** on Android. **OKX App on IOS currently doesn't work fine**.
+-   Deeplink only works for OKX App **version 6.1.38 or later** on Android.
+-   **OKX Wallet App on IOS does not support TRON currently**.
 
 For more information about tronwallet adapters, please refer to [`@tronweb3/tronwallet-adapters`](https://github.com/tronprotocol/tronwallet-adapter/tree/main/packages/adapters/adapters)
