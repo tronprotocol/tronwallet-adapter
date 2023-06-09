@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from 'react';
-import type { WalletError } from '@tronweb3/tronwallet-abstract-adapter';
+import type { Adapter, WalletError } from '@tronweb3/tronwallet-abstract-adapter';
 import { WalletDisconnectedError, WalletNotFoundError } from '@tronweb3/tronwallet-abstract-adapter';
 import { useWallet, WalletProvider } from '@tronweb3/tronwallet-adapter-react-hooks';
 import {
@@ -53,6 +53,31 @@ export function App() {
                     icons: ['https://your-dapp-url.org/mainLogo.svg'],
                 },
             },
+            web3ModalConfig: {
+                themeMode: 'dark',
+                themeVariables: {
+                    '--w3m-z-index': '1000'
+                },
+                // explorerRecommendedWalletIds: 'NONE',
+                enableExplorer: true,
+                explorerRecommendedWalletIds: [
+                  '225affb176778569276e484e1b92637ad061b01e13a048b35a9d280c3b58970f',
+                  '1ae92b26df02f0abca6304df07debccd18262fdf5fe82daa81593582dac9a369',
+                  '4622a2b2d6af1c9844944291e5e7351a6aa24cd7b23099efac1b2fd875da31a0'
+                ]
+                // mobileWallets: [],
+                // desktopWallets: []
+                // explorerExcludedWalletIds: [
+                //   '225affb176778569276e484e1b92637ad061b01e13a048b35a9d280c3b58970f',
+                //   '1ae92b26df02f0abca6304df07debccd18262fdf5fe82daa81593582dac9a369',
+                //   '4622a2b2d6af1c9844944291e5e7351a6aa24cd7b23099efac1b2fd875da31a0',
+                //   '802a2041afdaf4c7e41a2903e98df333c8835897532699ad370f829390c6900f',
+                //   'ecc4036f814562b41a5268adc86270fba1365471402006302e70169465b7ac18',
+                //   '19177a98252e07ddfc9af2083ba8e07ef627cb6103467ffebb3f8f4205fd7927',
+                //   '6464873279d46030c0b6b005b33da6be5ed57a752be3ef1f857dc10eaf8028aa',
+                //   '2c81da3add65899baeac53758a07e652eea46dbb5195b8074772c62a77bbf568'
+                // ]
+            }
         });
         const ledger = new LedgerAdapter({
             accountNumber: 2,
@@ -62,8 +87,17 @@ export function App() {
         const okxWalletAdapter = new OkxWalletAdapter();
         return [tronLink1, walletConnect1, ledger, tokenPocket, bitKeep, okxWalletAdapter];
     }, []);
+    function onConnect() {
+        console.log('onConnect');
+    }
+    async function onAccountsChanged() {
+        console.log('onAccountsChanged')
+    }
+    async function onAdapterChanged(adapter: Adapter | null) {
+        console.log('onAdapterChanged', adapter)
+    }
     return (
-        <WalletProvider onError={onError} autoConnect={false} adapters={adapters}>
+        <WalletProvider onError={onError} onConnect={onConnect} onAccountsChanged={onAccountsChanged} onAdapterChanged={onAdapterChanged} autoConnect={true} adapters={adapters} disableAutoConnectOnLoad={true}>
             <WalletModalProvider>
                 <UIComponent></UIComponent>
                 <Profile></Profile>

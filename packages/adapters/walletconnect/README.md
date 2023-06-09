@@ -2,6 +2,15 @@
 
 This package provides an adapter to enable TRON DApps to connect to [WalletConnect](https://walletconnect.com/).
 
+## Install
+
+```shell
+npm i @tronweb3/tronwallet-adapter-walletconnect
+# yarn add @tronweb3/tronwallet-adapter-walletconnect
+```
+
+> If you are working in a typescript project, you must set `skipLibCheck: true` in `tsconfig.json`.
+
 ## Demo
 
 ```typescript
@@ -25,6 +34,11 @@ const adapter = new WalletConnectAdapter({
             url: 'https://yourdapp-url.com',
             icons: ['https://yourdapp-url.com/icon.png'],
         },
+    },
+    qrcodeModalOptions: {
+        desktopLinks: ['Ledger', 'GoldBit', 'TokenPocket', 'Tokenary', 'Apollox'],
+        // wallet's name can be case insensitive
+        mobileLinks: ['rainbow', 'trust', 'metamask', 'safe'],
     },
 });
 // connect
@@ -66,6 +80,26 @@ await tronWeb.trx.sendRawTransaction(signedTransaction);
                 url: "<YOUR WALLET'S URL>";
                 icons: ["<URL TO WALLET'S LOGO/ICON>"];
             };
+        };
+        /**
+         * Options passed to WalletConnect QRCode Modal
+         */
+        qrcodeModalOptions: {
+            /**
+             * URL to fetch wallets list.
+             * Default is https://registry.walletconnect.com/api/v2/wallets
+             */
+            registryUrl: string;
+            /**
+             * Wallets Names to show on desktop browser like ['Ledger', 'GoldBit'].
+             * Default is all desktop wallets from https://explorer.walletconnect.com/?type=wallet
+             */
+            desktopLinks: string[];
+            /**
+             * Wallets Names to show on IOS mobile browser like ['Trust', 'TokenPocket'].
+             * Default is all mobile wallets from https://explorer.walletconnect.com/?type=wallet
+             */
+            mobileLinks: string[];
         };
     }
     ```

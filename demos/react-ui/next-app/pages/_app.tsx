@@ -4,7 +4,13 @@ import type { WalletError } from '@tronweb3/tronwallet-abstract-adapter';
 import { WalletDisconnectedError, WalletNotFoundError } from '@tronweb3/tronwallet-abstract-adapter';
 // @ts-ignore
 import { toast } from 'react-hot-toast';
-import { BitKeepAdapter, OkxWalletAdapter, TokenPocketAdapter, TronLinkAdapter, WalletConnectAdapter } from '@tronweb3/tronwallet-adapters';
+import {
+    BitKeepAdapter,
+    OkxWalletAdapter,
+    TokenPocketAdapter,
+    TronLinkAdapter,
+    WalletConnectAdapter,
+} from '@tronweb3/tronwallet-adapters';
 import { useMemo } from 'react';
 import { WalletProvider } from '@tronweb3/tronwallet-adapter-react-hooks';
 import { WalletModalProvider } from '@tronweb3/tronwallet-adapter-react-ui';
@@ -37,6 +43,12 @@ export default function App({ Component, pageProps }: AppProps) {
                     icons: ['https://your-dapp-url.org/mainLogo.svg'],
                 },
             },
+            web3ModalConfig: {
+                themeMode: 'dark',
+                themeVariables: {
+                    '--w3m-z-index': '1000',
+                },
+            },
         });
         const bitKeepAdapter = new BitKeepAdapter();
         const tokenPocketAdapter = new TokenPocketAdapter();
@@ -52,7 +64,7 @@ export default function App({ Component, pageProps }: AppProps) {
      * Also you can provide a onError callback to process any error such as ConnectionError
      */
     return (
-        <WalletProvider onError={onError} adapters={adapters}>
+        <WalletProvider onError={onError} adapters={adapters} disableAutoConnectOnLoad={true}>
             <WalletModalProvider>
                 <Component {...pageProps} />
             </WalletModalProvider>

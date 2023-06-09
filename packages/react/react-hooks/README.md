@@ -60,12 +60,9 @@ function Profile() {
 `WalletProvider` and `useWallet` work together like `Context.Provider` and `useContext()`. There is a `WalletProviderContext` underlying which maintains some state and can be obtained with `useWallet`. So developers need to wrap application components with `WalletProvider`.
 
 ```jsx
+import { useWallet, WalletProvider } from '@tronweb3/tronwallet-adapter-react-hooks';
 function App() {
-    return (
-        <div>
-            <WalletProvider>/* here is application components */</WalletProvider>
-        </div>
-    );
+    return <WalletProvider>/* here is application components */</WalletProvider>;
 }
 ```
 
@@ -81,14 +78,11 @@ Used to specify what wallet adapters are supported. All wallet adapters can be i
 
 -   Example
     ```jsx
+    import { useWallet, WalletProvider } from '@tronweb3/tronwallet-adapter-react-hooks';
     import { TronLinkAdapter } from '@tronweb3/tronwallet-adapters';
     function App() {
         const adapters = useMemo(() => [new TronLinkAdapter()]);
-        return (
-            <div>
-                <WalletProvider adapters={adapters}>/* here is application components */</WalletProvider>
-            </div>
-        );
+        return <WalletProvider adapters={adapters}>/* here is application components */</WalletProvider>;
     }
     ```
 
@@ -119,6 +113,15 @@ Used to handle errors occured when use wallet. Developers can use the callback t
 
 Whether connect to the specified wallet automatically when loading the page and selecting a wallet.
 
+#### disableAutoConnectOnLoad
+
+-   Required: `false`
+-   Type: `boolean`
+-   Default: `true`
+
+When `autoConnect` enabled, whether automatically connect to current selected wallet when loading the page.
+If you don't want to connect the wallet when page is first loaded, set `disableAutoConnectOnLoad: true`.
+
 #### localStorageKey
 
 -   Required: `false`
@@ -127,18 +130,55 @@ Whether connect to the specified wallet automatically when loading the page and 
 
 Specified the key used to cache wallet name in `localStorage`. When user select a wallet, applications will cache the wallet name to localStorage.
 
+#### Event handlers
+
+You can provide event handlers for listen adapter events, such as `connect`,`disconnect`,`accountsChanged`. Available event handlers and their types are as follows:
+
+-   `readyStateChanged: (readyState: 'Found' | 'NotFound') => void`: Called when current adapter emits `readyStateChanged` event.
+-   `onConnect: (address: string) => void`: Called when current adapter emits `connect` event.
+-   `onDisconnect: () => void`: Called when current adapter emits `disconnect` event.
+-   `onAccountsChanged: (newAddress: string; preAddress?: string) => void`: Called when current adapter emits `accountsChanged` event.
+-   `onChainChanged: (chainData: unknow) => void`: Called when current adapter emits `chainChanged` event.
+
+An event handler named `onAdapterChanged` is also avaliable to get noticed when selected adapter is changed.
+
+-   `onAdapterChanged: (adapter: Adapter | null) => void`: Called when current adapter is changed.
+
+Here is an example:
+
+```jsx
+import { useWallet, WalletProvider } from '@tronweb3/tronwallet-adapter-react-hooks';
+import { TronLinkAdapter } from '@tronweb3/tronwallet-adapters';
+function App() {
+    const adapters = useMemo(() => [new TronLinkAdapter()]);
+    const onAccountsChanged = useCallback((curAddr, preAddr) => {
+        console.log('new address is: ', curAddr, ' previous address is: ', preAddr);
+    }, []);
+    return (
+        <WalletProvider adapters={adapters} onAccountsChanged={onAccountsChanged}>
+            /* here is application components */
+        </WalletProvider>
+    );
+}
+```
+
 ## `useWallet()`
 
 `useWallet` is a react hook providing a set of properties and methods which can be used to select and connect wallet, get wallet state and so on.
 
 > `useWallet()` must be used in the descendant components of `WalletProvider`!
 
-### Properties
+### ReturnedValue
 
 #### `autoConnect`
 
 -   Type: `boolean`
     Synchronous with `autoConnect` property passed to `WalletProvider`.
+
+#### `disableAutoConnectOnLoad`
+
+-   Type: `boolean`
+    Synchronous with `disableAutoConnectOnLoad` property passed to `WalletProvider`.
 
 #### `wallet`
 

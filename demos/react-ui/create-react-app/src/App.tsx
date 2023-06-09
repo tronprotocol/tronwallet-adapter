@@ -52,6 +52,12 @@ export function App() {
                     icons: ['https://your-dapp-url.org/mainLogo.svg'],
                 },
             },
+            web3ModalConfig: {
+                themeMode: 'dark',
+                themeVariables: {
+                    '--w3m-z-index': '1000'
+                },
+            }
         });
         const ledger = new LedgerAdapter({
             accountNumber: 2,
@@ -62,7 +68,7 @@ export function App() {
         return [tronLinkAdapter, bitKeepAdapter, tokenPocketAdapter, okxwalletAdapter, walletConnectAdapter, ledger];
     }, []);
     return (
-        <WalletProvider onError={onError} autoConnect={true} adapters={adapters}>
+        <WalletProvider onError={onError} autoConnect={true} disableAutoConnectOnLoad={true} adapters={adapters}>
             <WalletModalProvider>
                 <UIComponent></UIComponent>
                 <Profile></Profile>

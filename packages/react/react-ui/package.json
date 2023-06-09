@@ -1,6 +1,6 @@
 {
     "name": "@tronweb3/tronwallet-adapter-react-ui",
-    "version": "1.1.4",
+    "version": "1.1.5",
     "description": "A set of out-of-the-box components to make it easy to interact with Tron wallets.",
     "keywords": [
         "TRON",
@@ -50,7 +50,7 @@
     },
     "dependencies": {
         "@tronweb3/tronwallet-abstract-adapter": "^1.1.5",
-        "@tronweb3/tronwallet-adapter-react-hooks": "^1.1.3"
+        "@tronweb3/tronwallet-adapter-react-hooks": "^1.1.4"
     },
     "devDependencies": {
         "@testing-library/jest-dom": "^5.16.5",
