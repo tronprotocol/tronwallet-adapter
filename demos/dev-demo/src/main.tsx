@@ -10,7 +10,7 @@ import VConsole from 'vconsole';
 import './index.css';
 import { AppWraper } from './AppWraper.js';
 const vConsole = new VConsole();
-
+window.alert(location.href)
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
     <React.StrictMode>
         <ThemeProvider theme={theme}>

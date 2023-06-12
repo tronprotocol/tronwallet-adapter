@@ -20,7 +20,7 @@ import type {
     BaseAdapterConfig,
     Network,
 } from '@tronweb3/tronwallet-abstract-adapter';
-import { supportBitKeep } from './utils.js';
+import { openBitKeep, supportBitKeep } from './utils.js';
 
 export interface BitKeepAdapterConfig extends BaseAdapterConfig {
     /**
@@ -28,6 +28,11 @@ export interface BitKeepAdapterConfig extends BaseAdapterConfig {
      * Default is 2 * 1000ms
      */
     checkTimeout?: number;
+    /**
+     * Set if open BitKeep app using DeepLink.
+     * Default is true.
+     */
+    openAppWithDeeplink?: boolean;
 }
 
 export const BitKeepAdapterName = 'BitKeep' as AdapterName<'BitKeep'>;
@@ -47,13 +52,14 @@ export class BitKeepAdapter extends Adapter {
 
     constructor(config: BitKeepAdapterConfig = {}) {
         super();
-        const { checkTimeout = 2 * 1000, openUrlWhenWalletNotFound = true } = config;
+        const { checkTimeout = 2 * 1000, openUrlWhenWalletNotFound = true, openAppWithDeeplink = true } = config;
         if (typeof checkTimeout !== 'number') {
             throw new Error('[BitKeepAdapter] config.checkTimeout should be a number');
         }
         this.config = {
             checkTimeout,
             openUrlWhenWalletNotFound,
+            openAppWithDeeplink,
         };
         this._connecting = false;
         this._wallet = null;
@@ -114,6 +120,7 @@ export class BitKeepAdapter extends Adapter {
 
     async connect(): Promise<void> {
         try {
+            this.checkIfOpenApp();
             if (this.connected || this.connecting) return;
             await this._checkWallet();
             if (this.readyState === WalletReadyState.NotFound) {
@@ -209,6 +216,7 @@ export class BitKeepAdapter extends Adapter {
     }
 
     private async checkAndGetWallet() {
+        this.checkIfOpenApp();
         await this._checkWallet();
         if (!this.connected) throw new WalletDisconnectedError();
         const wallet = this._wallet;
@@ -273,6 +281,14 @@ export class BitKeepAdapter extends Adapter {
         return this._checkPromise;
     }
 
+    private checkIfOpenApp() {
+        if (this.config.openAppWithDeeplink === false) {
+            return;
+        }
+        if (openBitKeep()) {
+            throw new WalletNotFoundError();
+        }
+    }
     private _updateWallet = () => {
         let state = this.state;
         let address = this.address;
