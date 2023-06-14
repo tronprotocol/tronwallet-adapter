@@ -1,11 +1,58 @@
 import { Box, Button, MenuItem, Select, TextField, Typography } from '@mui/material';
-import type { AdapterName } from '@tronweb3/tronwallet-abstract-adapter';
-import { useWallet } from '@tronweb3/tronwallet-adapter-react-hooks';
-import { useCallback, useState } from 'react';
+import type { Adapter, AdapterName } from '@tronweb3/tronwallet-abstract-adapter';
+import { useWallet, WalletProvider } from '@tronweb3/tronwallet-adapter-react-hooks';
+import { WalletModalProvider } from '@tronweb3/tronwallet-adapter-react-ui';
+import { LedgerAdapter, TronLinkAdapter, WalletConnectAdapter } from '@tronweb3/tronwallet-adapters';
+import { useCallback, useMemo, useState } from 'react';
 import { Detail } from './TronLinkAdapterDemo.js';
 import { tronWeb } from './tronweb.js';
-
-export function ReactHooksDemo() {
+function ReactHooksDemoWrap({ children }: any) {
+    const adapters = useMemo(() => {
+        return [
+            new TronLinkAdapter(),
+            new LedgerAdapter(),
+            new WalletConnectAdapter({
+                network: 'Nile',
+                options: {
+                    relayUrl: 'wss://relay.walletconnect.com',
+                    // example walletconnect app project ID
+                    projectId: 'e899c82be21d4acca2c8aec45e893598',
+                    metadata: {
+                        name: 'Example App',
+                        description: 'Example App',
+                        url: 'https://yourdapp-url.com',
+                        icons: ['https://yourdapp-url.com/icon.png'],
+                    },
+                },
+            }),
+        ];
+    }, []);
+    function onConnect(address: string) {
+        console.log('xxxx onConnect: ', address)
+    }
+    function onAccountsChanged(cur: string, pre?: string) {
+        console.log('xxxx onAccountsChanged, 当前地址: ', cur, ' 上一次使用的地址：', pre);
+    }
+    function onAdapterChanged(adapter: Adapter | null) {
+        console.log('xxxx onAdapterChanged: ', adapter?.name);
+    }
+    function onDisconnect() {
+        console.log('xxxx onDisconnect')
+    }
+    return (
+        <WalletProvider autoConnect={true} disableAutoConnectOnLoad={true} adapters={adapters}
+            onConnect={onConnect}
+            onAccountsChanged={onAccountsChanged}
+            onAdapterChanged={onAdapterChanged}
+            onDisconnect={onDisconnect}
+            onError={console.log}>
+            <WalletModalProvider>
+                {children}
+            </WalletModalProvider>
+        </WalletProvider>
+    )
+}
+function _ReactHooksDemo() {
     const { wallets, address, wallet, connected, select, connect, signMessage, disconnect } = useWallet();
     const [messageToSign, setMessageToSign] = useState('Adapter');
     const [signedMessage, setSignedMessage] = useState('');
@@ -100,4 +147,10 @@ export function ReactHooksDemo() {
             </Detail>
         </Box>
     );
+}
+
+export function ReactHooksDemo() {
+    return <ReactHooksDemoWrap>
+        <_ReactHooksDemo></_ReactHooksDemo>
+    </ReactHooksDemoWrap>
 }

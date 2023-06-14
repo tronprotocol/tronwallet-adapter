@@ -52,6 +52,12 @@ export function App() {
                     icons: ['https://your-dapp-url.org/mainLogo.svg'],
                 },
             },
+            web3ModalConfig: {
+                themeMode: 'dark',
+                themeVariables: {
+                    '--w3m-z-index': '1000'
+                },
+            }
         });
         const ledger = new LedgerAdapter({
             accountNumber: 2,
@@ -62,7 +68,7 @@ export function App() {
         return [tronLinkAdapter, bitKeepAdapter, tokenPocketAdapter, okxwalletAdapter, walletConnectAdapter, ledger];
     }, []);
     return (
-        <WalletProvider onError={onError} autoConnect={true} adapters={adapters}>
+        <WalletProvider onError={onError} autoConnect={true} disableAutoConnectOnLoad={true} adapters={adapters}>
             <WalletModalProvider>
                 <UIComponent></UIComponent>
                 <Profile></Profile>
@@ -133,7 +139,7 @@ function SignDemo() {
     }
 
     async function onSignTransaction() {
-        const transaction = await tronWeb.transactionBuilder.sendTrx(receiver, tronWeb.toSun(0.1), address);
+        const transaction = await tronWeb.transactionBuilder.sendTrx(receiver, tronWeb.toSun(0.001), address);
 
         const signedTransaction = await signTransaction(transaction);
         // const signedTransaction = await tronWeb.trx.sign(transaction);
@@ -157,7 +163,7 @@ function SignDemo() {
             <p>Your sigedMessage is: {signedMessage}</p>
             <h2>Sign a Transaction</h2>
             <p style={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', wordBreak: 'break-all' }}>
-                You can transfer 0.1 Trx to &nbsp;<i>{receiver}</i>&nbsp;by click the button.
+                You can transfer 0.001 Trx to &nbsp;<i>{receiver}</i>&nbsp;by click the button.
             </p>
             <Button onClick={onSignTransaction}>Transfer</Button>
             {open && (

@@ -40,7 +40,7 @@ export function BitKeepAdapterDemo() {
             setConnectState(adapter.state)
         })
         adapter.on('connect', () => {
-            console.log('connect: ', adapter.address);
+            console.log('bitkeep connect: ', adapter.address);
             setAccount(adapter.address || '');
             setConnectState(AdapterState.Connected)
             adapter.network().then((res) => {
@@ -69,7 +69,7 @@ export function BitKeepAdapterDemo() {
         return () => {
             adapter.removeAllListeners();
         };
-    }, [adapter]);
+    }, []);
 
     // function onSwitchChain() {
     //     adapter.switchChain(selectedChainId);
@@ -78,7 +78,7 @@ export function BitKeepAdapterDemo() {
     async function onSignTransaction() {
         const tronWeb = (window as any).tronWeb as any;
         console.log(adapter.address)
-        const transaction = await tronWeb.transactionBuilder.sendTrx(receiver, tronWeb.toSun(0.001), adapter.address);
+        const transaction = await tronWeb.transactionBuilder.sendTrx(receiver, tronWeb.toSun(0.0001), adapter.address);
         console.log('before signtransaction')
         const signedTransaction = await adapter.signTransaction(transaction);
         // const signedTransaction = await tronWeb.trx.sign(transaction);

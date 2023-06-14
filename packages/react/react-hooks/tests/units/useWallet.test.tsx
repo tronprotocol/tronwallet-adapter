@@ -339,6 +339,62 @@ describe('useWallet', function () {
         });
     });
 
+    describe('event handler props should work fine', function () {
+        it('onReadyStateChanged should work fine', async function () {
+            const onConnect = jest.fn();
+            const onReadyStateChanged = jest.fn();
+            const onDisconnect = jest.fn();
+            const onAccountsChanged = jest.fn();
+            const onChainChanged = jest.fn();
+            const onAdapterChanged = jest.fn();
+            mountTest({
+                onConnect,
+                onDisconnect,
+                onReadyStateChanged,
+                onAccountsChanged,
+                onChainChanged,
+                onAdapterChanged,
+            });
+            await act(async function () {
+                await ref.current?.getState().select(adapter1.name);
+                await Promise.resolve();
+            });
+            expect(onAdapterChanged).toHaveBeenCalledTimes(1);
+            expect(onAdapterChanged).toHaveBeenCalledWith(adapter1);
+
+            adapter1.emit('connect', 'fakeaddress');
+            expect(onConnect).toHaveBeenCalledTimes(1);
+            expect(onConnect).toHaveBeenCalledWith('fakeaddress');
+            adapter1.emit('disconnect');
+            expect(onDisconnect).toHaveBeenCalledTimes(1);
+            adapter1.emit('readyStateChanged', WalletReadyState.Found);
+            expect(onReadyStateChanged).toHaveBeenCalledTimes(1);
+            expect(onReadyStateChanged).toHaveBeenCalledWith(WalletReadyState.Found);
+            adapter1.emit('accountsChanged', 'fakeaddress', '');
+            expect(onAccountsChanged).toHaveBeenCalledTimes(1);
+            expect(onAccountsChanged).toHaveBeenCalledWith('fakeaddress', '');
+            adapter1.emit('chainChanged', 'chainChangedData');
+            expect(onChainChanged).toHaveBeenCalledTimes(1);
+            expect(onChainChanged).toHaveBeenCalledWith('chainChangedData');
+        });
+    });
+    it('disableAutoConnectOnLoad property should work fine', async function () {
+        const storageKey = 'AdapterName';
+        localStorage.setItem(storageKey, JSON.stringify(adapter1.name));
+        adapter1._state = AdapterState.Disconnect;
+        adapter2._state = AdapterState.Disconnect;
+        mountTest({ disableAutoConnectOnLoad: true });
+        await act(async function () {
+            await Promise.resolve();
+        });
+        expect(adapter1.connected).toEqual(false);
+        await act(async function () {
+            await ref.current?.getState().select(adapter2.name);
+            await Promise.resolve();
+        });
+        expect(adapter2.connected).toEqual(true);
+    });
+
     describe('connect()', function () {
         describe('given a wallet that is not ready', () => {
             beforeEach(async () => {

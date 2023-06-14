@@ -1,5 +1,11 @@
 import { WalletNotSelectedError, AdapterState } from '@tronweb3/tronwallet-abstract-adapter';
-import type { Adapter, WalletError, AdapterName, Transaction } from '@tronweb3/tronwallet-abstract-adapter';
+import type {
+    Adapter,
+    WalletError,
+    AdapterName,
+    Transaction,
+    WalletReadyState,
+} from '@tronweb3/tronwallet-abstract-adapter';
 import { TronLinkAdapter } from '@tronweb3/tronwallet-adapter-tronlink';
 import type { FC, ReactNode } from 'react';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
@@ -11,8 +17,15 @@ export interface WalletProviderProps {
     children: ReactNode;
     adapters?: Adapter[];
     onError?: (error: WalletError) => void;
+    onConnect?: (address: string) => unknown;
+    onDisconnect?: () => unknown;
+    onAccountsChanged?: (address: string, preAddr?: string) => unknown;
+    onReadyStateChanged?: (state: WalletReadyState) => unknown;
+    onChainChanged?: (chainData: unknown) => unknown;
+    onAdapterChanged?: (adapter: Adapter | null) => unknown;
     localStorageKey?: string;
     autoConnect?: boolean;
+    disableAutoConnectOnLoad?: boolean;
 }
 
 const initialState: {
@@ -31,8 +44,15 @@ export const WalletProvider: FC<WalletProviderProps> = function ({
     children,
     adapters: adaptersPro = null,
     onError = (error) => console.error(error),
+    onReadyStateChanged,
+    onConnect,
+    onDisconnect,
+    onAccountsChanged,
+    onChainChanged,
+    onAdapterChanged,
     localStorageKey = 'tronAdapterName',
     autoConnect = true,
+    disableAutoConnectOnLoad = false,
 }) {
     const [name, setName] = useLocalStorage<AdapterName | null>(localStorageKey, null);
     const [{ wallet, connected, address, adapter }, setState] = useState(initialState);
@@ -110,8 +130,19 @@ export const WalletProvider: FC<WalletProviderProps> = function ({
         [name, wallets]
     );
 
-    const handleConnect = useCallback(
+    const preAdapter = useRef<Adapter | null>(null);
+    useEffect(
         function () {
+            if (adapter !== preAdapter.current) {
+                onAdapterChanged?.(adapter);
+                preAdapter.current = adapter;
+            }
+        },
+        [adapter, onAdapterChanged]
+    );
+
+    const handleConnect = useCallback(
+        function (addr: string) {
             if (!adapter) {
                 return setName(null);
             }
@@ -120,8 +151,9 @@ export const WalletProvider: FC<WalletProviderProps> = function ({
                 connected: adapter.connected,
                 address: adapter.address,
             }));
+            onConnect?.(addr);
         },
-        [adapter, setName]
+        [adapter, setName, onConnect]
     );
 
     const handleError = useCallback(
@@ -131,24 +163,59 @@ export const WalletProvider: FC<WalletProviderProps> = function ({
         },
         [onError]
     );
-    const handleAccountChange = useCallback(function (address: string) {
-        setState((state) => ({ ...state, address }));
-    }, []);
-
+    const handleAccountChange = useCallback(
+        function (address: string, preAddr?: string) {
+            setState((state) => ({ ...state, address }));
+            onAccountsChanged?.(address, preAddr);
+        },
+        [onAccountsChanged]
+    );
+    const handleDisconnect = useCallback(
+        function () {
+            onDisconnect?.();
+        },
+        [onDisconnect]
+    );
+    const handleReadyStateChanged = useCallback(
+        function (readyState: WalletReadyState) {
+            onReadyStateChanged?.(readyState);
+        },
+        [onReadyStateChanged]
+    );
+    const handleChainChanged = useCallback(
+        function (chainData: unknown) {
+            onChainChanged?.(chainData);
+        },
+        [onChainChanged]
+    );
     useEffect(
         function () {
             if (adapter) {
                 adapter.on('connect', handleConnect);
                 adapter.on('error', handleError);
                 adapter.on('accountsChanged', handleAccountChange);
+                adapter.on('chainChanged', handleChainChanged);
+                adapter.on('readyStateChanged', handleReadyStateChanged);
+                adapter.on('disconnect', handleDisconnect);
                 return () => {
                     adapter.off('connect', handleConnect);
                     adapter.off('error', handleError);
                     adapter.off('accountsChanged', handleAccountChange);
+                    adapter.off('chainChanged', handleChainChanged);
+                    adapter.off('readyStateChanged', handleReadyStateChanged);
+                    adapter.off('disconnect', handleDisconnect);
                 };
             }
         },
-        [adapter, handleConnect, handleError, handleAccountChange]
+        [
+            adapter,
+            handleConnect,
+            handleError,
+            handleAccountChange,
+            handleChainChanged,
+            handleReadyStateChanged,
+            handleDisconnect,
+        ]
     );
     // disconnect the previous when wallet changes
     useEffect(() => {
@@ -157,10 +224,12 @@ export const WalletProvider: FC<WalletProviderProps> = function ({
         };
     }, [adapter]);
 
+    const hasManuallySetName = useRef(false);
     // auto connect
     useEffect(
         function () {
-            if (isConnecting.current || !autoConnect || !adapter || adapter.state !== AdapterState.Disconnect) {
+            const canAutoConnect = autoConnect && (!disableAutoConnectOnLoad || hasManuallySetName.current);
+            if (isConnecting.current || !canAutoConnect || !adapter || adapter.state !== AdapterState.Disconnect) {
                 return;
             }
             (async function connect() {
@@ -176,7 +245,14 @@ export const WalletProvider: FC<WalletProviderProps> = function ({
                 }
             })();
         },
-        [isConnecting, autoConnect, adapter, setName]
+        [isConnecting, autoConnect, adapter, setName, disableAutoConnectOnLoad]
+    );
+    const select = useCallback(
+        (name: AdapterName) => {
+            hasManuallySetName.current = true;
+            setName(name);
+        },
+        [setName]
     );
 
     const connect = useCallback(
@@ -240,6 +316,7 @@ export const WalletProvider: FC<WalletProviderProps> = function ({
     return (
         <WalletContext.Provider
             value={{
+                disableAutoConnectOnLoad,
                 autoConnect,
                 wallets,
                 wallet,
@@ -248,7 +325,7 @@ export const WalletProvider: FC<WalletProviderProps> = function ({
                 connected,
                 disconnecting,
 
-                select: setName,
+                select,
                 connect,
                 disconnect,
                 signTransaction,

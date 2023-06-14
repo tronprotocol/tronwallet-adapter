@@ -18,9 +18,12 @@ npm install @tronweb3/tronwallet-adapter-react-ui @tronweb3/tronwallet-adapter-r
 
 `@tronweb3/tronwallet-adapter-react-ui` provide a `Select Wallet Modal` by `Context.Provider`. So developers must wrap `App` content within the `WalletProvider` and `WalletModalProvider`.
 
+> Note: A stylesheet must be imported to make components work fine.
 ```jsx
 import { useWallet, WalletProvider } from '@tronweb3/tronwallet-adapter-react-hooks';
 import { WalletModalProvider, WalletActionButton } from '@tronweb3/tronwallet-adapter-react-ui';
+// This is necessary to keep style normal.
+import '@tronweb3/tronwallet-adapter-react-ui/style.css';
 import { WalletDisconnectedError, WalletError, WalletNotFoundError } from '@tronweb3/tronwallet-abstract-adapter';
 import toast, { Toaster } from 'react-hot-toast';
 

@@ -3,7 +3,7 @@
     "include": ["src"],
     "compilerOptions": {
         "outDir": "lib/esm",
-        "skipLibCheck": false,
+        "skipLibCheck": true,
         "declarationDir": "lib/types"
     }
 }

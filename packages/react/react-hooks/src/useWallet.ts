@@ -6,6 +6,7 @@ export interface Wallet {
     state: AdapterState;
 }
 export interface WalletContextState {
+    disableAutoConnectOnLoad: boolean;
     autoConnect: boolean;
     wallets: Wallet[];
     wallet: Wallet | null;

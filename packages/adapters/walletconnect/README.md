@@ -2,6 +2,15 @@
 
 This package provides an adapter to enable TRON DApps to connect to [WalletConnect](https://walletconnect.com/).
 
+## Install
+
+```shell
+npm i @tronweb3/tronwallet-adapter-walletconnect
+# yarn add @tronweb3/tronwallet-adapter-walletconnect
+```
+
+> If you are working in a typescript project, you must set `skipLibCheck: true` in `tsconfig.json`.
+
 ## Demo
 
 ```typescript
@@ -25,6 +34,22 @@ const adapter = new WalletConnectAdapter({
             url: 'https://yourdapp-url.com',
             icons: ['https://yourdapp-url.com/icon.png'],
         },
+    },
+    web3ModalConfig: {
+        themeMode: 'dark',
+        themeVariables: {
+            '--w3m-z-index': 1000,
+        },
+        /**
+         * Recommended Wallets are fetched from WalletConnect explore api:
+         * https://walletconnect.com/explorer?type=wallet&version=2.
+         * You can copy these ids from the page.
+         */
+        explorerRecommendedWalletIds: [
+            '225affb176778569276e484e1b92637ad061b01e13a048b35a9d280c3b58970f',
+            '1ae92b26df02f0abca6304df07debccd18262fdf5fe82daa81593582dac9a369',
+            '4622a2b2d6af1c9844944291e5e7351a6aa24cd7b23099efac1b2fd875da31a0',
+        ],
     },
 });
 // connect
@@ -67,6 +92,13 @@ await tronWeb.trx.sendRawTransaction(signedTransaction);
                 icons: ["<URL TO WALLET'S LOGO/ICON>"];
             };
         };
+        /**
+         * Config for web3Modal constructor.
+         * Detailed documentation can be found in WalletConnect page: https://docs.walletconnect.com/2.0/web3modal/options.
+         * - `walletConnectVersion` will be ignored and will be set to 2.
+         * - `projectId` will be ignored and will be set with `options.projectId`.
+         */
+        web3ModalConfig?: WalletConnectWeb3ModalConfig;
     }
     ```
     More detail about WalletConnect client options please refer to the [WalletConnect document](https://docs.walletconnect.com/2.0/javascript/sign/dapp-usage).

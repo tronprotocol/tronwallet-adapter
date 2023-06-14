@@ -1,6 +1,6 @@
 {
     "name": "@tronweb3/tronwallet-adapters",
-    "version": "1.1.5",
+    "version": "1.1.6",
     "description": "Wallet adapters to help developers interact with Tron wallets using consistent API.",
     "keywords": [
         "TRON",
@@ -40,12 +40,12 @@
         "package": "shx echo '{ \"type\": \"commonjs\" }' > lib/cjs/package.json"
     },
     "dependencies": {
-        "@tronweb3/tronwallet-adapter-bitkeep": "^1.0.0",
-        "@tronweb3/tronwallet-adapter-ledger": "^1.1.6",
-        "@tronweb3/tronwallet-adapter-okxwallet": "^1.0.0",
-        "@tronweb3/tronwallet-adapter-tokenpocket": "^1.0.0",
-        "@tronweb3/tronwallet-adapter-tronlink": "^1.1.5",
-        "@tronweb3/tronwallet-adapter-walletconnect": "^1.0.3"
+        "@tronweb3/tronwallet-adapter-bitkeep": "workspace:^",
+        "@tronweb3/tronwallet-adapter-ledger": "workspace:^",
+        "@tronweb3/tronwallet-adapter-okxwallet": "workspace:^",
+        "@tronweb3/tronwallet-adapter-tokenpocket": "workspace:^",
+        "@tronweb3/tronwallet-adapter-tronlink": "workspace:^",
+        "@tronweb3/tronwallet-adapter-walletconnect": "workspace:^"
     },
     "devDependencies": {
         "shx": "^0.3.4"

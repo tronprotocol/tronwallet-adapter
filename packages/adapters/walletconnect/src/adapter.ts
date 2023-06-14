@@ -13,6 +13,7 @@ import {
 import type { Transaction, SignedTransaction, AdapterName } from '@tronweb3/tronwallet-abstract-adapter';
 import { ChainNetwork } from '@tronweb3/tronwallet-abstract-adapter';
 import { WalletConnectWallet, WalletConnectChainID } from '@tronweb3/walletconnect-tron';
+import type { WalletConnectWeb3ModalConfig } from '@tronweb3/walletconnect-tron';
 import type { SignClientTypes } from '@walletconnect/types';
 
 export const WalletConnectWalletName = 'WalletConnect' as AdapterName<'WalletConnect'>;
@@ -26,6 +27,10 @@ export interface WalletConnectAdapterConfig {
      * Options to WalletConnect
      */
     options: SignClientTypes.Options;
+    /**
+     * QRCodeModalOptions to WalletConnect
+     */
+    web3ModalConfig?: WalletConnectWeb3ModalConfig;
 }
 
 export class WalletConnectAdapter extends Adapter {
@@ -92,11 +97,12 @@ export class WalletConnectAdapter extends Adapter {
                 wallet = new WalletConnectWallet({
                     network: WalletConnectChainID[this._config.network] || WalletConnectChainID.Nile,
                     options: this._config.options,
+                    web3ModalConfig: this._config.web3ModalConfig,
                 });
 
                 ({ address } = await wallet.connect());
             } catch (error: any) {
-                if (error.constructor.name === 'QRCodeModalError') throw new WalletWindowClosedError();
+                if (error.constructor.name === 'Web3ModalError') throw new WalletWindowClosedError();
                 throw new WalletConnectionError(error?.message, error);
             }
 

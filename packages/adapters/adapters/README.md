@@ -18,6 +18,8 @@ As `@tronweb3/tronwallet-adapters` exports adapter of each wallet , you can use 
 
 ## Usage
 
+> If you are working in a typescript project, you must set `skipLibCheck: true` in `tsconfig.json`.
+
 ### React
 
 You can use `@tronweb3/tronwallet-adapters` in your component. Use `useMemo` to memorize the `adapter` to improve your web performance.

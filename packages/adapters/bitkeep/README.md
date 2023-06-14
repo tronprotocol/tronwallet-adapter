@@ -43,6 +43,11 @@ await tronWeb.trx.sendRawTransaction(signedTransaction);
          * Default is 2 * 1000ms
          */
         checkTimeout?: number;
+        /**
+         * Set if open BitKeep app using DeepLink.
+         * Default is true.
+         */
+        openAppWithDeeplink?: boolean;
     }
     ```
 
