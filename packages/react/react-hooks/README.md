@@ -117,7 +117,7 @@ Whether connect to the specified wallet automatically when loading the page and 
 
 -   Required: `false`
 -   Type: `boolean`
--   Default: `true`
+-   Default: `false`
 
 When `autoConnect` enabled, whether automatically connect to current selected wallet when loading the page.
 If you don't want to connect the wallet when page is first loaded, set `disableAutoConnectOnLoad: true`.
