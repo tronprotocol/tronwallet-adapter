@@ -77,7 +77,7 @@ export function OkxWalletAdapterDemo() {
 
     async function onSignTransaction() {
         const tronWeb = getTronWeb();
-        const transaction = await tronWeb.transactionBuilder.sendTrx(receiver, tronWeb.toSun(0.001), adapter.address);
+        const transaction = await tronWeb.transactionBuilder.sendTrx(receiver, tronWeb.toSun(0.0001), adapter.address);
         const signedTransaction = await adapter.signTransaction(transaction);
         console.log('signedTx', signedTransaction)
 

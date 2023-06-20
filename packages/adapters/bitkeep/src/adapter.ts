@@ -20,14 +20,28 @@ import type {
     BaseAdapterConfig,
     Network,
 } from '@tronweb3/tronwallet-abstract-adapter';
-import { supportBitKeep } from './utils.js';
+import { openBitKeep, supportBitKeep } from './utils.js';
+import type { TronWeb } from '@tronweb3/tronwallet-adapter-tronlink';
 
+declare global {
+    interface Window {
+        bitkeep: {
+            tronLink: TronLinkWallet;
+            tronWeb: TronWeb;
+        };
+    }
+}
 export interface BitKeepAdapterConfig extends BaseAdapterConfig {
     /**
      * Timeout in millisecond for checking if BitKeep is supported.
      * Default is 2 * 1000ms
      */
     checkTimeout?: number;
+    /**
+     * Set if open BitKeep app using DeepLink.
+     * Default is true.
+     */
+    openAppWithDeeplink?: boolean;
 }
 
 export const BitKeepAdapterName = 'BitKeep' as AdapterName<'BitKeep'>;
@@ -47,13 +61,14 @@ export class BitKeepAdapter extends Adapter {
 
     constructor(config: BitKeepAdapterConfig = {}) {
         super();
-        const { checkTimeout = 2 * 1000, openUrlWhenWalletNotFound = true } = config;
+        const { checkTimeout = 2 * 1000, openUrlWhenWalletNotFound = true, openAppWithDeeplink = true } = config;
         if (typeof checkTimeout !== 'number') {
             throw new Error('[BitKeepAdapter] config.checkTimeout should be a number');
         }
         this.config = {
             checkTimeout,
             openUrlWhenWalletNotFound,
+            openAppWithDeeplink,
         };
         this._connecting = false;
         this._wallet = null;
@@ -114,6 +129,7 @@ export class BitKeepAdapter extends Adapter {
 
     async connect(): Promise<void> {
         try {
+            this.checkIfOpenApp();
             if (this.connected || this.connecting) return;
             await this._checkWallet();
             if (this.readyState === WalletReadyState.NotFound) {
@@ -209,6 +225,7 @@ export class BitKeepAdapter extends Adapter {
     }
 
     private async checkAndGetWallet() {
+        this.checkIfOpenApp();
         await this._checkWallet();
         if (!this.connected) throw new WalletDisconnectedError();
         const wallet = this._wallet;
@@ -224,7 +241,7 @@ export class BitKeepAdapter extends Adapter {
         let times = 0;
         const maxTimes = Math.floor(this.config.checkTimeout / 200);
         const check = () => {
-            if (window?.tronWeb?.ready) {
+            if (this._wallet && this._wallet.ready) {
                 this.checkReadyInterval && clearInterval(this.checkReadyInterval);
                 this.checkReadyInterval = null;
                 this._updateWallet();
@@ -273,14 +290,22 @@ export class BitKeepAdapter extends Adapter {
         return this._checkPromise;
     }
 
+    private checkIfOpenApp() {
+        if (this.config.openAppWithDeeplink === false) {
+            return;
+        }
+        if (openBitKeep()) {
+            throw new WalletNotFoundError();
+        }
+    }
     private _updateWallet = () => {
         let state = this.state;
         let address = this.address;
         if (supportBitKeep()) {
-            this._wallet = window.tronLink as TronLinkWallet;
+            this._wallet = (window.bitkeep?.tronLink || window.tronLink) as TronLinkWallet;
             address = this._wallet.tronWeb.defaultAddress?.base58 || null;
-            state = window.tronWeb?.ready ? AdapterState.Connected : AdapterState.Disconnect;
-            if (!window.tronWeb?.ready) {
+            state = this._wallet.ready ? AdapterState.Connected : AdapterState.Disconnect;
+            if (!this._wallet.ready) {
                 this.checkForWalletReady();
             }
         } else {

@@ -1,6 +1,6 @@
 {
     "name": "@tronweb3/tronwallet-adapter-bitkeep",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "description": "Wallet adapter for BitKeep Wallet extension and app.",
     "keywords": [
         "TRON",

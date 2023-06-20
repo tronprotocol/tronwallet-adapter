@@ -2,7 +2,7 @@
     "include": [],
     "exclude": ["./packages/**/__mocks__", "./packages/*/*/lib"],
     "compilerOptions": {
-        "target": "ESNext",
+        "target": "ES2016",
         "module": "ESNext",
         "moduleResolution": "Node",
         "esModuleInterop": true,
