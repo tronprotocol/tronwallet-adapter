@@ -94,7 +94,7 @@ await tronWeb.trx.sendRawTransaction(signedTransaction);
         };
         /**
          * Config for web3Modal constructor.
-         * Detailed documentation can be found in WalletConnect page: https://docs.walletconnect.com/2.0/web3modal/options.
+         * Detailed documentation can be found in WalletConnect page: https://docs.walletconnect.com/2.0/web/web3modal/html/wagmi/options.
          * - `walletConnectVersion` will be ignored and will be set to 2.
          * - `projectId` will be ignored and will be set with `options.projectId`.
          */
