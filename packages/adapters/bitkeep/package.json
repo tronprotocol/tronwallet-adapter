@@ -41,8 +41,8 @@
         "test": "jest"
     },
     "dependencies": {
-        "@tronweb3/tronwallet-abstract-adapter": "^1.1.5",
-        "@tronweb3/tronwallet-adapter-tronlink": "^1.1.5"
+        "@tronweb3/tronwallet-abstract-adapter": "workspace:^",
+        "@tronweb3/tronwallet-adapter-tronlink": "workspace:^"
     },
     "devDependencies": {
         "@testing-library/dom": "^8.20.0",

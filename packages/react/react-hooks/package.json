@@ -45,8 +45,8 @@
         "react-dom": "*"
     },
     "dependencies": {
-        "@tronweb3/tronwallet-abstract-adapter": "^1.1.5",
-        "@tronweb3/tronwallet-adapter-tronlink": "^1.1.5"
+        "@tronweb3/tronwallet-abstract-adapter": "workspace:^",
+        "@tronweb3/tronwallet-adapter-tronlink": "workspace:^"
     },
     "devDependencies": {
         "@types/react": "^18.0.26",

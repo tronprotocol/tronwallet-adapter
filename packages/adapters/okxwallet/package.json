@@ -1,6 +1,6 @@
 {
     "name": "@tronweb3/tronwallet-adapter-okxwallet",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "description": "Wallet adapter for Okx Wallet extension and Okx Wallet app.",
     "keywords": [
         "TRON",
@@ -42,8 +42,8 @@
         "test:coverage": "jest  --coverage"
     },
     "dependencies": {
-        "@tronweb3/tronwallet-abstract-adapter": "^1.1.5",
-        "@tronweb3/tronwallet-adapter-tronlink": "^1.1.5"
+        "@tronweb3/tronwallet-abstract-adapter": "workspace:^",
+        "@tronweb3/tronwallet-adapter-tronlink": "workspace:^"
     },
     "devDependencies": {
         "@testing-library/dom": "^8.20.0",
