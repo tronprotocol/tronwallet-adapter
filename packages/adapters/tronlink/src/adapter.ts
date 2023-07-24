@@ -499,13 +499,17 @@ export class TronLinkAdapter extends Adapter {
         let state = this.state;
         let address = this.address;
         if (isInMobileBrowser()) {
-            this._wallet = {
-                ready: !!window.tronWeb?.defaultAddress,
-                tronWeb: window.tronWeb,
-                request: () => Promise.resolve(true) as any,
-            } as TronLinkWallet;
-            address = this._wallet.tronWeb.defaultAddress?.base58 || null;
-            state = window.tronWeb?.defaultAddress ? AdapterState.Connected : AdapterState.Disconnect;
+            if (window.tronLink) {
+                this._wallet = window.tronLink;
+            } else {
+                this._wallet = {
+                    ready: !!window.tronWeb?.defaultAddress,
+                    tronWeb: window.tronWeb,
+                    request: () => Promise.resolve(true) as any,
+                } as TronLinkWallet;
+            }
+            address = this._wallet.tronWeb?.defaultAddress?.base58 || null;
+            state = address ? AdapterState.Connected : AdapterState.Disconnect;
         } else if (window.tron && window.tron.isTronLink) {
             this._supportNewTronProtocol = true;
             this._wallet = window.tron;
@@ -534,21 +538,21 @@ export class TronLinkAdapter extends Adapter {
         }
         // In TronLink App, account should be connected
         if (isInMobileBrowser() && state === AdapterState.Disconnect) {
-            this.checkForWalletReady();
+            this.checkForWalletReadyForApp();
         }
         this.setAddress(address);
         this.setState(state);
     };
 
     private checkReadyInterval: ReturnType<typeof setInterval> | null = null;
-    private checkForWalletReady() {
+    private checkForWalletReadyForApp() {
         if (this.checkReadyInterval) {
             return;
         }
         let times = 0;
         const maxTimes = Math.floor(this.config.checkTimeout / 200);
         const check = () => {
-            if (window.tronWeb?.defaultAddress) {
+            if (window.tronLink ? window.tronLink.tronWeb?.defaultAddress : window.tronWeb?.defaultAddress) {
                 this.checkReadyInterval && clearInterval(this.checkReadyInterval);
                 this.checkReadyInterval = null;
                 this._updateWallet();
