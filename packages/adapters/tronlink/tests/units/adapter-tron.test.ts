@@ -226,6 +226,7 @@ describe('events should work fine', () => {
         adapter.on('connect', _onConnect);
         adapter.on('disconnect', _onDisconnect);
         adapter.on('accountsChanged', _onAccountsChanged);
+        tron._setAddress('address2');
         tron._emit('accountsChanged', ['address2']);
         await wait();
         expect(_onConnect).not.toHaveBeenCalled();
@@ -233,6 +234,7 @@ describe('events should work fine', () => {
         expect(_onAccountsChanged).toHaveBeenCalledWith('address2', 'address');
         expect(adapter.address).toEqual('address2');
 
+        tron._setAddress('address3');
         tron._emit('accountsChanged', ['address3']);
         await wait();
         expect(_onAccountsChanged).toHaveBeenCalledTimes(2);
@@ -240,6 +242,7 @@ describe('events should work fine', () => {
         expect(_onConnect).not.toHaveBeenCalled();
         expect(adapter.address).toEqual('address3');
 
+        tron._setAddress('');
         tron._emit('accountsChanged', []);
         await wait();
         expect(adapter.address).toEqual(null);
@@ -253,6 +256,7 @@ describe('events should work fine', () => {
         adapter = new TronLinkAdapter();
         const _onConnect = jest.fn();
         adapter.on('connect', _onConnect);
+        tron._setAddress('address2');
         tron._emit('accountsChanged', ['address2']);
         expect(_onConnect).toHaveBeenCalledTimes(1);
         expect(_onConnect).toHaveBeenCalledWith('address2');
@@ -262,6 +266,7 @@ describe('events should work fine', () => {
         tron._setAddress('address');
         const _onDisconnect = jest.fn();
         adapter.on('disconnect', _onDisconnect);
+        tron._setAddress('');
         tron._emit('accountsChanged', []);
         expect(_onDisconnect).toHaveBeenCalledTimes(1);
     });
