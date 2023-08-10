@@ -116,11 +116,11 @@ export function LedgerAdapterDemo() {
                 <Button variant="contained" disabled={adapter?.connected} onClick={onConnect}>
                     Connect
                 </Button>
-                &nbsp;&nbsp;&nbsp;&nbsp;
+                
                 <Button variant="contained" disabled={!adapter?.connected} onClick={() => adapter?.disconnect()}>
                     Disconnect
                 </Button>
-                &nbsp;&nbsp;&nbsp;&nbsp;
+                
                 <Button variant="contained" disabled={!adapter?.connected} onClick={onSignTransaction}>
                     Transfer
                 </Button>
@@ -129,7 +129,7 @@ export function LedgerAdapterDemo() {
                 <Button variant="contained" onClick={onSignMessage}>
                     Sign Message
                 </Button>
-                &nbsp;&nbsp;&nbsp;&nbsp;
+                
                 <Button variant="contained" disabled={!signedMessage} onClick={onVerifyMessage}>
                     Verify Signed Message
                 </Button>

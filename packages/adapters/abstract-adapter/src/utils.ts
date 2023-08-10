@@ -8,7 +8,7 @@ export function isInBrowser() {
 
 /**
  *
- * @param {Function} check funcion to check if adapter is installed. return true if
+ * @param {Function} check funcion to check if wallet is installed. return true if wallet is detected.
  * @returns
  */
 export function checkAdapterState(check: () => boolean): void {

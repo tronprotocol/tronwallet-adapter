@@ -18,7 +18,7 @@ export function TronLinkAdapterDemo() {
     const [signMessage, setSignMessage] = useState('Hello, Adapter');
     const [signedMessage, setSignedMessage] = useState('');
     const adapter = useMemo(() => new TronLinkAdapter({
-        openTronLinkAppOnMobile: false,
+        openTronLinkAppOnMobile: true,
         openUrlWhenWalletNotFound: false,
         checkTimeout: 3000
     }), []);
@@ -136,11 +136,11 @@ export function TronLinkAdapterDemo() {
                 <Button variant="contained" disabled={adapter?.connected} onClick={handleConnect}>
                     Connect
                 </Button>
-                &nbsp;&nbsp;&nbsp;&nbsp;
+                
                 <Button variant="contained" disabled={!adapter?.connected} onClick={() => adapter?.disconnect()}>
                     Disconnect
                 </Button>
-                &nbsp;&nbsp;&nbsp;&nbsp;
+                
                 <Button variant="contained" disabled={!adapter?.connected} onClick={onSignTransaction}>
                     Transfer
                 </Button>
@@ -149,7 +149,7 @@ export function TronLinkAdapterDemo() {
                 <Button variant="contained" onClick={onSignMessage}>
                     Sign Message
                 </Button>
-                &nbsp;&nbsp;&nbsp;&nbsp;
+                
                 <Button variant="contained" disabled={!signedMessage} onClick={onVerifyMessage}>
                     Verify Signed Message
                 </Button>
