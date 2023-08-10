@@ -445,16 +445,17 @@ export class TronLinkAdapter extends Adapter {
         this.emit('chainChanged', data);
     };
 
-    private _onAccountsChanged: TronAccountsChangedCallback = (data) => {
+    private _onAccountsChanged: TronAccountsChangedCallback = () => {
         const preAddr = this.address || '';
-        if (!data?.length) {
+        const curAddr = (this._wallet?.tronWeb && this._wallet?.tronWeb.defaultAddress?.base58) || '';
+        if (!curAddr) {
             // change to a new address and if it's disconnected, data will be empty
             // tronlink will emit accountsChanged many times, only process when connected
             this.setAddress(null);
             console.log('0000 accountsChanged');
             this.setState(AdapterState.Disconnect);
         } else {
-            const address = data[0] as string;
+            const address = curAddr as string;
             this.setAddress(address);
             this.setState(AdapterState.Connected);
         }
