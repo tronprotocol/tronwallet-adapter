@@ -1,7 +1,7 @@
 {
     "name": "tronwallet-adapter",
     "description": "wallet adapters for TRON blockchain",
-    "version": "1.1.8",
+    "version": "1.1.9",
     "main": "index.js",
     "sideEffects": false,
     "private": true,
