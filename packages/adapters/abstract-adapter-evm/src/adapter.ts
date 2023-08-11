@@ -13,11 +13,6 @@ export interface EIP712Domain {
     salt?: string;
 }
 export interface TypedData {
-    /**
-     * Optional address to sign the typed data.
-     * Default is current connected address.
-     */
-    address?: string;
     domain: EIP712Domain;
     primaryType: string;
     types: {
@@ -60,11 +55,13 @@ export interface Asset {
 }
 export interface AdapterEvents extends ProviderEvents {
     /**
-     * Emitted when wallet is ready.
+     * Emitted when wallet's readyState changes.
+     * The initial readyState is Loading.
+     * If the wallet is ready, it will be Found.
+     * If the wallet is unavaliable after checking for a while, it will be NotFound.
      * @param readyState
      */
     readyStateChanged(readyState: WalletReadyState): void;
-    error(error: WalletError): void;
 }
 
 export type AdapterName<T extends string = string> = T & { __brand__: 'AdapterName' };

@@ -153,7 +153,7 @@ export class MetaMaskAdapter extends Adapter {
 
         this.address = accounts?.[0] || null;
         if (this.address) {
-            this.emit('accountsChanged', [this.address]);
+            this.emit('accountsChanged', [...(accounts || null)]);
         }
     }
 }

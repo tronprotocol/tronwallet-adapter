@@ -4,6 +4,7 @@
     "description": "Wallet adapter for Metamask wallet extension and app.",
     "keywords": [
         "EVM",
+        "Ethereum Wallet",
         "Metamask wallet"
     ],
     "author": "tronprotocol",
