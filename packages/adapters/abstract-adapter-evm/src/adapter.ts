@@ -1,7 +1,6 @@
 import EventEmitter from 'eventemitter3';
 import type { EIP1193Provider, ProviderEvents } from './eip1193-provider.js';
 import { WalletDisconnectedError } from './errors.js';
-import type { WalletError } from './errors.js';
 
 export { EventEmitter };
 

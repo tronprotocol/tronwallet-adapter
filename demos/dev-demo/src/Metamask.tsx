@@ -82,10 +82,11 @@ export function MetamaskAdapterDemo() {
 
     async function handleWatchAsset() {
         await adapter.watchAsset({
-            type: 'ERC1155',
+            type: 'ERC20',
             options: {
-                address: '0xDF9C19ceAdf7e4A9db07A57Fc0bFA246938e3BCA',
-                tokenId: '1'
+                address: '0x3883f5e181fccaF8410FA61e12b59BAd963fb645',
+                symbol: 'THETA',
+                decimals: 18
             }
         });
         alert('watch asset successfully.')
