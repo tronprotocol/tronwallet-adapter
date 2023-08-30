@@ -40,3 +40,5 @@ await adapter.sendTransaction(transaction);
     }
     const metaMaskAdapter = new MetaMaskAdapter({ useDeeplink: false });
     ```
+
+More detailed API can be found in [Abstract Adapter](https://github.com/tronprotocol/tronwallet-adapter/blob/main/packages/adapters/abstract-adapter-evm/README.md).
