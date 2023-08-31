@@ -87,9 +87,9 @@ export class MetaMaskAdapter extends Adapter {
         if (!this.connected) {
             throw new WalletDisconnectedError();
         }
-        return provider.request<[string, TypedData], string>({
+        return provider.request<[string, string], string>({
             method: 'eth_signTypedData_v4',
-            params: [address, typedData],
+            params: [address, typeof typedData === 'string' ? typedData : JSON.stringify(typedData)],
         });
     }
 
