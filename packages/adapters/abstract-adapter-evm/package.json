@@ -1,12 +1,7 @@
 {
-    "name": "@tronweb3/tronwallet-adapter-tronlink",
-    "version": "1.1.8",
-    "description": "Wallet adapter for TronLink Wallet extension and TronLink app.",
-    "keywords": [
-        "TRON",
-        "TronWeb",
-        "TronLink"
-    ],
+    "name": "@tronweb3/abstract-adapter-evm",
+    "version": "1.0.0",
+    "description": "Abstract interface definition of Evm Wallet Adapters.",
     "author": "tronprotocol",
     "repository": {
         "type": "git",
@@ -42,11 +37,12 @@
         "test:coverage": "jest  --coverage"
     },
     "dependencies": {
-        "@tronweb3/tronwallet-abstract-adapter": "workspace:^"
+        "eventemitter3": "^4.0.0",
+        "jest": "^29.6.2",
+        "jest-environment-jsdom": "^29.6.2"
     },
     "devDependencies": {
-        "@testing-library/dom": "^8.20.0",
-        "jest-environment-jsdom": "^29.3.1",
-        "shx": "^0.3.4"
+        "shx": "^0.3.4",
+        "tronweb": "^4.4.0"
     }
 }

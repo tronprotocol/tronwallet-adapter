@@ -41,11 +41,11 @@ export function ConnectedSection(props: { adapter: LedgerAdapter }) {
                 <Button variant="contained" disabled={!props.adapter?.connected} onClick={onSignTransaction}>
                     Transfer
                 </Button>
-                &nbsp;&nbsp;&nbsp;&nbsp;
+                
                 <Button variant="contained" onClick={onSignMessage}>
                     Sign Message
                 </Button>
-                &nbsp;&nbsp;&nbsp;&nbsp;
+                
                 <Button variant="contained" disabled={!signedMessage} onClick={onVerifyMessage}>
                     Verify Signed Message
                 </Button>

@@ -14,6 +14,15 @@ const theme = createTheme({
             main: red.A400,
         },
     },
+    components: {
+        MuiButton: {
+            styleOverrides: {
+               root: {
+                margin: '0 10px'
+               } 
+            }
+        }
+    }
 });
 
 export default theme;

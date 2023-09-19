@@ -1,11 +1,11 @@
 {
-    "name": "@tronweb3/tronwallet-adapter-tronlink",
-    "version": "1.1.8",
-    "description": "Wallet adapter for TronLink Wallet extension and TronLink app.",
+    "name": "@tronweb3/tronwallet-adapter-metamask",
+    "version": "1.0.0",
+    "description": "Wallet adapter for Metamask wallet extension and app.",
     "keywords": [
-        "TRON",
-        "TronWeb",
-        "TronLink"
+        "EVM",
+        "Ethereum Wallet",
+        "Metamask wallet"
     ],
     "author": "tronprotocol",
     "repository": {
@@ -42,11 +42,12 @@
         "test:coverage": "jest  --coverage"
     },
     "dependencies": {
-        "@tronweb3/tronwallet-abstract-adapter": "workspace:^"
+        "@tronweb3/abstract-adapter-evm": "workspace:^"
     },
     "devDependencies": {
         "@testing-library/dom": "^8.20.0",
-        "jest-environment-jsdom": "^29.3.1",
+        "jest": "28",
+        "jest-environment-jsdom": "28",
         "shx": "^0.3.4"
     }
 }

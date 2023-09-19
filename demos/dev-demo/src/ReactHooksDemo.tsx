@@ -107,7 +107,7 @@ function _ReactHooksDemo() {
                 <Button variant="contained" disabled={wallet?.adapter?.connected} onClick={() => connect()}>
                     Connect
                 </Button>
-                &nbsp;&nbsp;&nbsp;&nbsp;
+                
                 <Button variant="contained" disabled={!wallet?.adapter?.connected} onClick={() => disconnect()}>
                     Disconnect
                 </Button>
@@ -116,7 +116,7 @@ function _ReactHooksDemo() {
                 <Button variant="contained" onClick={onSignMessage}>
                     Sign Message
                 </Button>
-                &nbsp;&nbsp;&nbsp;&nbsp;
+                
                 <Button variant="contained" disabled={!signedMessage} onClick={onVerifyMessage}>
                     Verify Signed Message
                 </Button>
