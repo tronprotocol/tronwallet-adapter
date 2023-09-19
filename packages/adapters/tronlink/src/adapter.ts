@@ -196,11 +196,9 @@ export class TronLinkAdapter extends Adapter {
                     const res = await wallet.request({ method: 'eth_requestAccounts' });
                     const address = res[0];
                     this.setAddress(address);
-                    console.log('0000 connect', res);
                     this.setState(AdapterState.Connected);
                     this._listenTronEvent();
                 } catch (error: any) {
-                    console.log('0000 error', error);
                     let message = error?.message || error || 'Connect TronLink wallet failed.';
                     if (error.code === -32002) {
                         message =
@@ -263,7 +261,6 @@ export class TronLinkAdapter extends Adapter {
             return;
         }
         this.setAddress(null);
-        console.log('0000 disconnect()');
         this.setState(AdapterState.Disconnect);
         this.emit('disconnect');
     }
@@ -391,7 +388,6 @@ export class TronLinkAdapter extends Adapter {
                     this.setState(AdapterState.Connected);
                 } else {
                     this.setAddress(null);
-                    console.log('0000 old accountsChanged');
                     this.setState(AdapterState.Disconnect);
                 }
                 this.emit('accountsChanged', this.address || '', preAddr);
@@ -410,7 +406,6 @@ export class TronLinkAdapter extends Adapter {
             this.emit('connect', address);
         } else if (message.action === 'disconnect') {
             this.setAddress(null);
-            console.log('0000 old disconnect event');
             this.setState(AdapterState.Disconnect);
             this.emit('disconnect');
         }
@@ -452,7 +447,6 @@ export class TronLinkAdapter extends Adapter {
             // change to a new address and if it's disconnected, data will be empty
             // tronlink will emit accountsChanged many times, only process when connected
             this.setAddress(null);
-            console.log('0000 accountsChanged');
             this.setState(AdapterState.Disconnect);
         } else {
             const address = curAddr as string;
@@ -579,7 +573,6 @@ export class TronLinkAdapter extends Adapter {
 
     private setState(state: AdapterState) {
         const preState = this.state;
-        console.log('0000setAState: ', state);
         if (state !== preState) {
             this._state = state;
             this.emit('stateChanged', state);
