@@ -22,8 +22,12 @@ DIRS.forEach((dir) => {
 });
 
 pkgVersions.forEach(({ name, version }) => {
-    const oldVersion = execSync(`npm view ${name} version`);
-    console.log(`${name}: ${oldVersion.toString().trim()} -> ${version}`);
+    try {
+        const oldVersion = execSync(`npm view ${name} version`);
+        console.log(`${name}: ${oldVersion.toString().trim()} -> ${version}`);
+    } catch (e) {
+        // ignore
+    }
 });
 
 console.log('Tag Content: ');
