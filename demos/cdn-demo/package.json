@@ -1,0 +1,20 @@
+{
+    "name": "dev-demo",
+    "private": true,
+    "version": "0.0.0",
+    "type": "module",
+    "scripts": {
+        "dev": "serve"
+    },
+    "dependencies": {
+        "@tronweb3/abstract-adapter-evm": "^1.0.0",
+        "@tronweb3/tronwallet-abstract-adapter": "^1.1.5",
+        "@tronweb3/tronwallet-adapter-bitkeep": "^1.0.1",
+        "@tronweb3/tronwallet-adapter-ledger": "^1.1.7",
+        "@tronweb3/tronwallet-adapter-metamask": "^1.0.0",
+        "@tronweb3/tronwallet-adapter-okxwallet": "^1.0.1",
+        "@tronweb3/tronwallet-adapter-tokenpocket": "^1.0.1",
+        "@tronweb3/tronwallet-adapter-tronlink": "^1.1.8",
+        "serve": "^14.2.1"
+    }
+}

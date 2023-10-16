@@ -2,3 +2,4 @@ packages:
     - 'packages/*/*'
     - 'demos/*/*'
     - 'demos/dev-demo'
+    - 'demos/cdn-demo'
