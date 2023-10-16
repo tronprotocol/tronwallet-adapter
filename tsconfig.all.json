@@ -32,6 +32,9 @@
             "path": "./packages/adapters/metamask/tsconfig.all.json"
         },
         {
+            "path": "./packages/adapters/tronlink-evm/tsconfig.all.json"
+        },
+        {
             "path": "./packages/react/react-hooks/tsconfig.all.json"
         },
         {

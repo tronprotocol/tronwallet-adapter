@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react';
 import { useEffect, useMemo, useState, useCallback } from 'react';
 import { Box, Button, Typography, Alert, TextField } from '@mui/material';
-import { MetaMaskAdapter } from '@tronweb3/tronwallet-adapter-metamask'
+import { TronLinkEvmAdapter } from '@tronweb3/tronwallet-adapter-tronlink-evm'
 import { Detail } from './TronLinkAdapterDemo.js';
 import { recoverPersonalSignature, recoverTypedSignature, SignTypedDataVersion } from '@metamask/eth-sig-util'
 function toHex(val: number): `0x${string}` {
@@ -14,7 +14,7 @@ export function MetamaskAdapterDemo() {
     const [chainId, setChainId] = useState<string>('');
     const [messageToSign, setMessageToSign] = useState('Hello, Adapter');
     const [signedHash, setSignedHash] = useState('');
-    const adapter = useMemo(() => new MetaMaskAdapter(), []);
+    const adapter = useMemo(() => new TronLinkEvmAdapter(), []);
     const [lastSignType, setLastSignType] = useState('')
 
     useEffect(() => {
@@ -71,9 +71,9 @@ export function MetamaskAdapterDemo() {
     }
 
     async function handleSwitchChain() {
-        console.log('switch chain to: ', toHex(1337))
+        console.log('switch chain to: ', toHex(1))
         try {
-            await adapter.switchChain(toHex(1337));
+            await adapter.switchChain(toHex(1));
             alert('Switch chain successfully.')
         } catch(e) {
             console.log('switchChain error: ', e);
@@ -119,7 +119,8 @@ export function MetamaskAdapterDemo() {
                 data: messageToSign,
                 signature: signedHash
             });
-             valid = address === adapter.address;
+            console.log('recoveredAddress', address);
+             valid = address.toLowerCase() === adapter.address!.toLowerCase();
         } else {
             const address = recoverTypedSignature({
                 version: SignTypedDataVersion.V4,

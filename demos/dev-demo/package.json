@@ -23,6 +23,7 @@
         "@tronweb3/tronwallet-adapter-react-hooks": "^1.0.0",
         "@tronweb3/tronwallet-adapter-react-ui": "^1.1.0",
         "@tronweb3/tronwallet-adapter-tokenpocket": "^1.0.0",
+        "@tronweb3/tronwallet-adapter-tronlink-evm": "^1.0.0",
         "@tronweb3/tronwallet-adapters": "^1.1.2",
         "events": "^3.3.0",
         "ganache": "^7.9.0",
