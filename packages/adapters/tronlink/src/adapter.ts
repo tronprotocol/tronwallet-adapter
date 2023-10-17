@@ -163,10 +163,10 @@ export class TronLinkAdapter extends Adapter {
         try {
             await this._checkWallet();
             if (this.state !== AdapterState.Connected) throw new WalletDisconnectedError();
-            const wallet = this._wallet;
-            if (!wallet || !wallet.tronWeb) throw new WalletDisconnectedError();
+            const tronWeb = this._wallet?.tronWeb || window.tronWeb;
+            if (!tronWeb) throw new WalletDisconnectedError();
             try {
-                return await getNetworkInfoByTronWeb(wallet.tronWeb);
+                return await getNetworkInfoByTronWeb(tronWeb);
             } catch (e: any) {
                 throw new WalletGetNetworkError(e?.message, e);
             }

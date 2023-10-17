@@ -47,7 +47,7 @@ export function TronLinkAdapterDemo() {
                 console.log(res);
                 setChainId(res.chainId)
             }).catch(e => {
-                console.log(e)
+                console.error('network() error:',e)
             })
         });
         adapter.on('stateChanged', (state) => {
