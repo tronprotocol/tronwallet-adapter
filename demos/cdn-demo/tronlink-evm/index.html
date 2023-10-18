@@ -4,7 +4,7 @@
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>MetamaskAdapter Test Demo</title>
-        <script src="../node_modules/@tronweb3/tronwallet-adapter-metamask/lib/umd/index.js"></script>
+        <script src="../node_modules/@tronweb3/tronwallet-adapter-tronlink-evm/lib/umd/index.js"></script>
     </head>
     <body>
         <div id="root">
@@ -19,9 +19,8 @@
             };
             let address;
             const receiver = 'TMDKznuDWaZwfZHcM61FVFstyYNmK6Njk1';
-            const { MetaMaskAdapter } = window['@tronweb3/tronwallet-adapter-metamask'];
-            console.log();
-            const adapter = new MetaMaskAdapter();
+            const { TronLinkEvmAdapter } = window['@tronweb3/tronwallet-adapter-tronlink-evm'];
+            const adapter = new TronLinkEvmAdapter();
 
             adapter.on('readyStateChanged', () => {
                 log('readyState: ', adapter.readyState);

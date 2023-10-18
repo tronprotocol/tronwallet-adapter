@@ -5,34 +5,23 @@ const nodeResolve = require('@rollup/plugin-node-resolve');
 const commonjs = require('@rollup/plugin-commonjs');
 const terser = require('@rollup/plugin-terser');
 const json = require('@rollup/plugin-json');
+const nodePolyfills = require('rollup-plugin-polyfill-node');
+
 const { cwd } = require('process');
 const { resolve } = require('path');
 
 const inputOptions = {
     input: './lib/cjs/index.js',
-    plugins: [commonjs(), nodeResolve(), json()],
-    external: [
-        'eventemitter3',
-        'buffer',
-        'events',
-        'react',
-        'react-dom',
-        '@tronweb3/tronwallet-abstract-adapter',
-        '@tronweb3/tronwallet-adapter-tronlink',
-    ],
+    plugins: [commonjs(), nodeResolve(), json(), nodePolyfills()],
+    external: ['@walletconnect/sign-client'],
 };
 const commonOptions = {
     format: 'umd',
     name: getOutputName(),
     globals: {
-        buffer: 'buffer.Buffer',
-        events: 'EventEmitter',
-        eventemitter3: 'EventEmitter3',
-        react: 'React',
-        'react-dom': 'ReactDOM',
-        '@tronweb3/tronwallet-abstract-adapter': 'TronwalletAbstractAdapter',
-        '@tronweb3/tronwallet-adapter-tronlink': 'TronwalletAdapterTronlink',
+        '@walletconnect/sign-client': '@walletconnect/sign-client',
     },
+    inlineDynamicImports: true,
 };
 const outputOptionsList = [
     {
@@ -71,7 +60,7 @@ async function generateOutputs(bundle) {
 
 function getOutputName() {
     const packageJson = require(resolve(cwd(), 'package.json'));
-    const name = packageJson.name.split('/')[1].replaceAll(/(?:^|-)([a-z])/g, ($0, $1) => $1.toUpperCase());
+    const name = packageJson.name;
     console.log('[build:umd] current name: ' + name);
     return name;
 }

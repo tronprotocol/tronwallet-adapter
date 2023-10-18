@@ -36,10 +36,13 @@ importers:
       pnpm: ^7.12.1
       prettier: 2.7.1
       rollup: ^4.0.2
+      rollup-plugin-polyfill-node: ^0.11.0
       shx: ^0.3.4
       ts-jest: ^29.0.3
       typedoc: ^0.23.15
       typescript: ^4.8.3
+    dependencies:
+      rollup-plugin-polyfill-node: 0.11.0_rollup@4.0.2
     devDependencies:
       '@changesets/cli': 2.26.0
       '@commitlint/cli': 17.4.2
@@ -89,7 +92,7 @@ importers:
       '@tronweb3/tronwallet-abstract-adapter': link:../../packages/adapters/abstract-adapter
       '@tronweb3/tronwallet-adapter-bitkeep': link:../../packages/adapters/bitkeep
       '@tronweb3/tronwallet-adapter-ledger': link:../../packages/adapters/ledger
-      '@tronweb3/tronwallet-adapter-metamask': link:../../packages/adapters/tronlink-evm
+      '@tronweb3/tronwallet-adapter-metamask': link:../../packages/adapters/metamask
       '@tronweb3/tronwallet-adapter-okxwallet': link:../../packages/adapters/okxwallet
       '@tronweb3/tronwallet-adapter-tokenpocket': link:../../packages/adapters/tokenpocket
       '@tronweb3/tronwallet-adapter-tronlink': link:../../packages/adapters/tronlink
@@ -110,6 +113,7 @@ importers:
       '@tronweb3/tronwallet-adapter-react-hooks': ^1.0.0
       '@tronweb3/tronwallet-adapter-react-ui': ^1.1.0
       '@tronweb3/tronwallet-adapter-tokenpocket': ^1.0.0
+      '@tronweb3/tronwallet-adapter-tronlink-evm': ^1.0.0
       '@tronweb3/tronwallet-adapters': ^1.1.2
       '@types/react': ^18.0.26
       '@types/react-dom': ^18.0.8
@@ -134,11 +138,12 @@ importers:
       '@tronweb3/tronwallet-abstract-adapter': link:../../packages/adapters/abstract-adapter
       '@tronweb3/tronwallet-adapter-bitkeep': link:../../packages/adapters/bitkeep
       '@tronweb3/tronwallet-adapter-ledger': link:../../packages/adapters/ledger
-      '@tronweb3/tronwallet-adapter-metamask': link:../../packages/adapters/tronlink-evm
+      '@tronweb3/tronwallet-adapter-metamask': link:../../packages/adapters/metamask
       '@tronweb3/tronwallet-adapter-okxwallet': link:../../packages/adapters/okxwallet
       '@tronweb3/tronwallet-adapter-react-hooks': link:../../packages/react/react-hooks
       '@tronweb3/tronwallet-adapter-react-ui': link:../../packages/react/react-ui
       '@tronweb3/tronwallet-adapter-tokenpocket': link:../../packages/adapters/tokenpocket
+      '@tronweb3/tronwallet-adapter-tronlink-evm': link:../../packages/adapters/tronlink-evm
       '@tronweb3/tronwallet-adapters': link:../../packages/adapters/adapters
       events: 3.3.0
       ganache: 7.9.0
@@ -4889,6 +4894,21 @@ packages:
       magic-string: 0.27.0
     dev: true
 
+  /@rollup/plugin-inject/5.0.3_rollup@4.0.2:
+    resolution: {integrity: sha512-411QlbL+z2yXpRWFXSmw/teQRMkXcAAC8aYTemc15gwJRpvEVDQwoe+N/HTFD8RFG8+88Bme9DK2V9CVm7hJdA==}
+    engines: {node: '>=14.0.0'}
+    peerDependencies:
+      rollup: ^1.20.0||^2.0.0||^3.0.0
+    peerDependenciesMeta:
+      rollup:
+        optional: true
+    dependencies:
+      '@rollup/pluginutils': 5.0.2_rollup@4.0.2
+      estree-walker: 2.0.2
+      magic-string: 0.27.0
+      rollup: 4.0.2
+    dev: false
+
   /@rollup/plugin-json/6.0.1_rollup@4.0.2:
     resolution: {integrity: sha512-RgVfl5hWMkxN1h/uZj8FVESvPuBJ/uf6ly6GTj0GONnkfoBN5KC0MSz+PN2OLDgYXMhtG0mWpTrkiOjoxAIevw==}
     engines: {node: '>=14.0.0'}
@@ -4999,14 +5019,12 @@ packages:
       estree-walker: 2.0.2
       picomatch: 2.3.1
       rollup: 4.0.2
-    dev: true
 
   /@rollup/rollup-android-arm-eabi/4.0.2:
     resolution: {integrity: sha512-xDvk1pT4vaPU2BOLy0MqHMdYZyntqpaBf8RhBiezlqG9OjY8F50TyctHo8znigYKd+QCFhCmlmXHOL/LoaOl3w==}
     cpu: [arm]
     os: [android]
     requiresBuild: true
-    dev: true
     optional: true
 
   /@rollup/rollup-android-arm64/4.0.2:
@@ -5014,7 +5032,6 @@ packages:
     cpu: [arm64]
     os: [android]
     requiresBuild: true
-    dev: true
     optional: true
 
   /@rollup/rollup-darwin-arm64/4.0.2:
@@ -5022,7 +5039,6 @@ packages:
     cpu: [arm64]
     os: [darwin]
     requiresBuild: true
-    dev: true
     optional: true
 
   /@rollup/rollup-darwin-x64/4.0.2:
@@ -5030,7 +5046,6 @@ packages:
     cpu: [x64]
     os: [darwin]
     requiresBuild: true
-    dev: true
     optional: true
 
   /@rollup/rollup-linux-arm-gnueabihf/4.0.2:
@@ -5038,7 +5053,6 @@ packages:
     cpu: [arm]
     os: [linux]
     requiresBuild: true
-    dev: true
     optional: true
 
   /@rollup/rollup-linux-arm64-gnu/4.0.2:
@@ -5046,7 +5060,6 @@ packages:
     cpu: [arm64]
     os: [linux]
     requiresBuild: true
-    dev: true
     optional: true
 
   /@rollup/rollup-linux-arm64-musl/4.0.2:
@@ -5054,7 +5067,6 @@ packages:
     cpu: [arm64]
     os: [linux]
     requiresBuild: true
-    dev: true
     optional: true
 
   /@rollup/rollup-linux-x64-gnu/4.0.2:
@@ -5062,7 +5074,6 @@ packages:
     cpu: [x64]
     os: [linux]
     requiresBuild: true
-    dev: true
     optional: true
 
   /@rollup/rollup-linux-x64-musl/4.0.2:
@@ -5070,7 +5081,6 @@ packages:
     cpu: [x64]
     os: [linux]
     requiresBuild: true
-    dev: true
     optional: true
 
   /@rollup/rollup-win32-arm64-msvc/4.0.2:
@@ -5078,7 +5088,6 @@ packages:
     cpu: [arm64]
     os: [win32]
     requiresBuild: true
-    dev: true
     optional: true
 
   /@rollup/rollup-win32-ia32-msvc/4.0.2:
@@ -5086,7 +5095,6 @@ packages:
     cpu: [ia32]
     os: [win32]
     requiresBuild: true
-    dev: true
     optional: true
 
   /@rollup/rollup-win32-x64-msvc/4.0.2:
@@ -5094,7 +5102,6 @@ packages:
     cpu: [x64]
     os: [win32]
     requiresBuild: true
-    dev: true
     optional: true
 
   /@rushstack/eslint-patch/1.2.0:
@@ -10259,7 +10266,6 @@ packages:
 
   /estree-walker/2.0.2:
     resolution: {integrity: sha512-Rfkk/Mp/DL7JVje3u18FxFujQlTNR2q6QfMSMB7AvCBx91NGj/ba3kCfza0f6dVDbw7YlRf/nDrn7pQrCCyQ/w==}
-    dev: true
 
   /esutils/2.0.3:
     resolution: {integrity: sha512-kVscqXk4OCp68SZ0dkgEKVi6/8ij300KBWTJq32P/dYeWTSwK41WyTxalN1eRmA5Z9UU/LX9D7FWSmV9SAYx6g==}
@@ -14459,7 +14465,6 @@ packages:
     engines: {node: '>=12'}
     dependencies:
       '@jridgewell/sourcemap-codec': 1.4.14
-    dev: true
 
   /make-dir/3.1.0:
     resolution: {integrity: sha512-g3FeP20LNwhALb/6Cz6Dd4F2ngze0jz7tbzrD2wAV+o9FeNHe4rL+yK2md0J/fiSf1sa1ADhXqi5+oVwOM/eGw==}
@@ -17012,6 +17017,15 @@ packages:
       '@rollup/plugin-inject': 5.0.3
     dev: true
 
+  /rollup-plugin-polyfill-node/0.11.0_rollup@4.0.2:
+    resolution: {integrity: sha512-5t+qhq4LAQKQBgbPOQJEoxxGzU5b+zLfvzpUAGy9u0MCMs8y+mrjUAv8+xrkWdxnwXQwJtjmCMnA9lCflsMzNw==}
+    peerDependencies:
+      rollup: ^1.20.0 || ^2.0.0 || ^3.0.0
+    dependencies:
+      '@rollup/plugin-inject': 5.0.3_rollup@4.0.2
+      rollup: 4.0.2
+    dev: false
+
   /rollup-plugin-terser/7.0.2_rollup@2.79.1:
     resolution: {integrity: sha512-w3iIaU4OxcF52UUXiZNsNeuXIMDvFrr+ZXK6bFZ0Q60qyVfq4uLptoS4bbq3paG3x216eQllFZX7zt6TIImguQ==}
     deprecated: This package has been deprecated and is no longer maintained. Please use @rollup/plugin-terser
@@ -17058,7 +17072,6 @@ packages:
       '@rollup/rollup-win32-ia32-msvc': 4.0.2
       '@rollup/rollup-win32-x64-msvc': 4.0.2
       fsevents: 2.3.2
-    dev: true
 
   /rpc-websockets/7.5.1:
     resolution: {integrity: sha512-kGFkeTsmd37pHPMaHIgN1LVKXMi0JD782v4Ds9ZKtLlwdTKjn+CxM9A9/gLT2LaOuEcEFGL98h1QWQtlOIdW0w==}

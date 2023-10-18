@@ -3,8 +3,9 @@
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>MetamaskAdapter Test Demo</title>
-        <script src="../node_modules/@tronweb3/tronwallet-adapter-metamask/lib/umd/index.js"></script>
+        <title>Adapters Test Demo</title>
+        <script src="../node_modules/@walletconnect/sign-client/dist/index.umd.js"></script>
+        <script src="../node_modules/@tronweb3/tronwallet-adapters/lib/umd/index.js"></script>
     </head>
     <body>
         <div id="root">
@@ -19,9 +20,43 @@
             };
             let address;
             const receiver = 'TMDKznuDWaZwfZHcM61FVFstyYNmK6Njk1';
-            const { MetaMaskAdapter } = window['@tronweb3/tronwallet-adapter-metamask'];
-            console.log();
-            const adapter = new MetaMaskAdapter();
+            const { TronLinkAdapter, BitKeepAdapter, WalletConnectAdapter } = window['@tronweb3/tronwallet-adapters'];
+            let adapter;
+            const tronlinkAdapter = new TronLinkAdapter({
+                openTronLinkAppOnMobile: true,
+                openUrlWhenWalletNotFound: false,
+                checkTimeout: 3000,
+            });
+
+            const bitkeepAdapter = new BitKeepAdapter({
+                openTronLinkAppOnMobile: true,
+                openUrlWhenWalletNotFound: false,
+                checkTimeout: 3000,
+            });
+
+            const walletconnectAdapter = new WalletConnectAdapter({
+                network: 'Nile',
+                options: {
+                    relayUrl: 'wss://relay.walletconnect.com',
+                    // example WC app project ID
+                    projectId: '5fc507d8fc7ae913fff0b8071c7df231',
+                    metadata: {
+                        name: 'Test DApp',
+                        description: 'JustLend WalletConnect',
+                        url: 'https://your-dapp-url.org/',
+                        icons: ['https://your-dapp-url.org/mainLogo.svg'],
+                    },
+                },
+                web3ModalConfig: {
+                    themeMode: 'dark',
+                    themeVariables: {
+                        '--w3m-z-index': '1000'
+                    },
+                }
+            });
+
+
+            adapter = walletconnectAdapter;
 
             adapter.on('readyStateChanged', () => {
                 log('readyState: ', adapter.readyState);
@@ -29,6 +64,14 @@
             adapter.on('connect', () => {
                 log('connect2222: ', adapter.address);
                 address = adapter.address;
+                adapter
+                    .network()
+                    .then((res) => {
+                        log(res);
+                    })
+                    .catch((e) => {
+                        log(e);
+                    });
             });
             adapter.on('stateChanged', (state) => {
                 log('stateChanged: ', state);
@@ -69,18 +112,16 @@
 
             async function onSignMessage() {
                 const m = 'Hello world';
-                const res = await adapter.signMessage({ message: m });
+                const res = await adapter.signMessage(m);
                 log('sign message successfully: ', res);
+                const address = await tronWeb.trx.verifyMessageV2(m, res);
+                log('verify successfully');
             }
 
             async function onSignTransaction() {
-                const transaction = {
-                    value: '0x' + Number(0.01 * Math.pow(10, 18)).toString(16), // 0.01 is 0.01ETH
-                    to: '0x18B0FDE2FEA85E960677C2a41b80e7557AdcbAE0',
-                    from: adapter.address,
-                };
-                console.log('sendTransaction: ', transaction);
-                await adapter.sendTransaction(transaction);
+                const transaction = await tronWeb.transactionBuilder.sendTrx(receiver, tronWeb.toSun(0.1), adapter.address);
+                const signedTransaction = await adapter.signTransaction(transaction);
+                const res = await tronWeb.trx.sendRawTransaction(signedTransaction);
                 log('send successfully.');
             }
         </script>

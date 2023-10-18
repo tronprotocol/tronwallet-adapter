@@ -4,9 +4,6 @@
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>TokenPocketAdapter Test Demo</title>
-        <script src="https://unpkg.com/eventemitter3@latest/dist/eventemitter3.umd.min.js"></script>
-        <script src="../node_modules/@tronweb3/tronwallet-abstract-adapter/lib/umd/index.js"></script>
-        <script src="../node_modules/@tronweb3/tronwallet-adapter-tronlink/lib/umd/index.js"></script>
         <script src="../node_modules/@tronweb3/tronwallet-adapter-tokenpocket/lib/umd/index.js"></script>
     </head>
     <body>
@@ -22,7 +19,7 @@
             };
             let address;
             const receiver = 'TMDKznuDWaZwfZHcM61FVFstyYNmK6Njk1';
-            const { TokenPocketAdapter } = window.TronwalletAdapterTokenpocket;
+            const { TokenPocketAdapter } = window['@tronweb3/tronwallet-adapter-tokenpocket'];
             const adapter = new TokenPocketAdapter({
                 openTronLinkAppOnMobile: true,
                 openUrlWhenWalletNotFound: false,

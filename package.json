@@ -91,5 +91,8 @@
         "extends": [
             "@commitlint/config-conventional"
         ]
+    },
+    "dependencies": {
+        "rollup-plugin-polyfill-node": "^0.11.0"
     }
 }
