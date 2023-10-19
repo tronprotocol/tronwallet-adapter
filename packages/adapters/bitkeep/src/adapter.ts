@@ -22,16 +22,7 @@ import type {
     Network,
 } from '@tronweb3/tronwallet-abstract-adapter';
 import { openBitgetWallet, supportBitgetWallet } from './utils.js';
-import type { TronWeb } from '@tronweb3/tronwallet-adapter-tronlink';
 
-declare global {
-    interface Window {
-        bitkeep: {
-            tronLink: TronLinkWallet;
-            tronWeb: TronWeb;
-        };
-    }
-}
 export interface BitKeepAdapterConfig extends BaseAdapterConfig {
     /**
      * Timeout in millisecond for checking if Bitget Wallet is supported.

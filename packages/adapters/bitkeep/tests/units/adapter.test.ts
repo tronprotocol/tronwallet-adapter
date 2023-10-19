@@ -6,6 +6,6 @@ describe('BitKeepAdapter', () => {
     });
     test('#constructor() should work fine', () => {
         const adapter = new BitKeepAdapter();
-        expect(adapter.name).toEqual('BitKeep');
+        expect(adapter.name).toEqual('Bitget Wallet');
     });
 });

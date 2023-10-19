@@ -26,12 +26,13 @@ export function BitKeepAdapterDemo() {
         setConnectState(adapter.state);
         setAccount(adapter.address || '');
         setReadyState(adapter.readyState);
+        console.log('current adapter name: ', adapter.name);
         adapter.network().then(async (res) => {
             console.log(res);
             setChainId(res.chainId);
             const balance = await tronWeb.trx.getBalance(adapter.address)
         }).catch(e => {
-            console.log(e)
+            console.error('[useEffect network()]', e)
         })
 
         adapter.on('readyStateChanged', async () => {
@@ -112,7 +113,7 @@ export function BitKeepAdapterDemo() {
     }
     return (
         <Box sx={{ width: '100%', maxWidth: 900 }}>
-            <h1>BitKeep Demo</h1>
+            <h1>BitKeep Demo <img src={adapter.icon} alt="adapter" style={{width: 30, height: 30}} /></h1>
             <Typography variant="h6" gutterBottom>
                 Your account address:
             </Typography>
