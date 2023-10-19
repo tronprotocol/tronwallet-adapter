@@ -42,6 +42,7 @@
         "build:umd": "node ../../../scripts/build-umd.js"
     },
     "dependencies": {
+        "@bitget-wallet/web3-sdk": "^0.0.8",
         "@tronweb3/tronwallet-abstract-adapter": "workspace:^",
         "@tronweb3/tronwallet-adapter-tronlink": "workspace:^"
     },
