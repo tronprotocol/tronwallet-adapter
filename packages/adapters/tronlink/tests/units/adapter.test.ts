@@ -77,6 +77,9 @@ describe('TronLinkAdapter', function () {
         });
     });
     describe('Tron protocol for TIP1193', function () {
+        beforeEach(() => {
+            jest.useFakeTimers();
+        });
         test('should work fine when tron is disconnected', async function () {
             const tron = ((window as any).tron = new MockTron(''));
             tron.request = jest.fn(() => {
@@ -85,8 +88,10 @@ describe('TronLinkAdapter', function () {
             const adapter = new TronLinkAdapter();
             jest.advanceTimersByTime(3000);
             expect(adapter.state).toEqual(AdapterState.Disconnect);
-
+            tron._unlock();
+            tron._setAddress('xxx');
             await adapter.connect();
+            jest.advanceTimersByTime(1000);
             expect(adapter.state).toEqual(AdapterState.Connected);
             expect(adapter.address).toEqual('xxx');
         });

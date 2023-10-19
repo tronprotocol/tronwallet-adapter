@@ -288,6 +288,8 @@ describe('methods should work fine', () => {
     });
     describe('connect() should work fine', () => {
         test('when connect successfully', async () => {
+            tron._unlock();
+            tron._setAddress('address22');
             tron.request = () => Promise.resolve(['address22']);
             await adapter.connect();
             expect(adapter.state).toEqual(AdapterState.Connected);
@@ -515,6 +517,8 @@ describe('methods should work fine', () => {
         });
         test('when switchChain successfully', async () => {
             tron.request = () => Promise.resolve(['999']);
+            tron._unlock();
+            tron._setAddress('xxx');
             await adapter.connect();
             await adapter.switchChain('99');
             expect(true).toBeTruthy;
@@ -524,6 +528,8 @@ describe('methods should work fine', () => {
             adapter.on('error', onError);
             jest.advanceTimersByTime(300);
             tron.request = () => Promise.resolve(['999']);
+            tron._unlock();
+            tron._setAddress('xxx');
             await adapter.connect();
             tron.request = () => Promise.reject({ code: 1001, message: 'errormessage' });
             const res = adapter.switchChain('id');

@@ -198,7 +198,9 @@ export class TronLinkAdapter extends Adapter {
                     this.setAddress(address);
                     this.setState(AdapterState.Connected);
                     this._listenTronEvent();
-                    await waitTronwebReady(this._wallet as Tron);
+                    if (!this._wallet.tronWeb) {
+                        await waitTronwebReady(this._wallet as Tron);
+                    }
                 } catch (error: any) {
                     let message = error?.message || error || 'Connect TronLink wallet failed.';
                     if (error.code === -32002) {
