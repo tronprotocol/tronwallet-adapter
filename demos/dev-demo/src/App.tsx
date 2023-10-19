@@ -9,6 +9,8 @@ import { TokenPocketAdapterDemo } from './TokenPocketAdapterDemo.js';
 import { BitKeepAdapterDemo } from './BitKeepAdapterDemo.js';
 import { OkxWalletAdapterDemo } from './OkxWalletAdapterDemo.js';
 import { MetamaskAdapterDemo } from './Metamask.js';
+import { TronLinkEvmAdapter } from '@tronweb3/tronwallet-adapter-tronlink-evm';
+import { TronLinkEvmAdapterDemo } from './TronLinkEvmDemo.js';
 interface TabPanelProps {
     children?: React.ReactNode;
     index: number;
@@ -47,6 +49,7 @@ function App() {
                         <Tab label="BitKeepAdapter Demo" />
                         <Tab label="OkxWalletAdapter Demo" />
                         <Tab label="MetaMaskWalletAdapter Demo" />
+                        <Tab label="TronlinkEvmWalletAdapter Demo" />
                     </Tabs>
                 </Box>
                 <TabPanel value={value} index={0}>
@@ -75,6 +78,9 @@ function App() {
                 </TabPanel>
                 <TabPanel value={value} index={8}>
                     <MetamaskAdapterDemo></MetamaskAdapterDemo>
+                </TabPanel>
+                <TabPanel value={value} index={9}>
+                    <TronLinkEvmAdapterDemo></TronLinkEvmAdapterDemo>
                 </TabPanel>
             </Box>
         </div>

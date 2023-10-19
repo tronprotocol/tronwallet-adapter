@@ -7,7 +7,7 @@ import { recoverPersonalSignature, recoverTypedSignature, SignTypedDataVersion }
 function toHex(val: number): `0x${string}` {
     return `0x${Number(val).toString(16)}`
 }
-export function MetamaskAdapterDemo() {
+export function TronLinkEvmAdapterDemo() {
     const [isConnected, setIsConnected] = useState(false);
     const [account, setAccount] = useState('');
     const [readyState, setReadyState] = useState('');
