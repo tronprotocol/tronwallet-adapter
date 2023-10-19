@@ -40,7 +40,7 @@ export function TronLinkAdapterDemo() {
             console.log('readyState: ', adapter.readyState)
             setReadyState(adapter.readyState)
         })
-        adapter.on('connect', () => {
+        adapter.on('connect', async () => {
             console.log('connect2222: ', adapter.address);
             setAccount(adapter.address || '');
             adapter.network().then((res) => {
@@ -105,7 +105,7 @@ export function TronLinkAdapterDemo() {
 
     async function handleConnect() {
         try {
-            await adapter?.connect()
+            await adapter?.connect();
         } catch(e: any) {
             console.log(e.error?.message || e.message);
         }
