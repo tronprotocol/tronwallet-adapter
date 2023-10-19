@@ -12,6 +12,7 @@
             <button id="disconnectBtn">disconnect</button>
             <button id="signMessageBtn">signMessage</button>
             <button id="signTransactionBtn">signTransaction</button>
+            <img id="icon" src="" alt="" style="width: 30px; height: 30px;">
         </div>
         <script>
             const log = function (...args) {
@@ -48,11 +49,13 @@
             const disconnectBtn = document.querySelector('#disconnectBtn');
             const signMessageBtn = document.querySelector('#signMessageBtn');
             const signTransactionBtn = document.querySelector('#signTransactionBtn');
+            const iconImg = document.querySelector('#icon');
 
             connectBtn.addEventListener('click', onConnect);
             disconnectBtn.addEventListener('click', onDisconnect);
             signMessageBtn.addEventListener('click', onSignMessage);
             signTransactionBtn.addEventListener('click', onSignTransaction);
+            iconImg.src = adapter.icon;
 
             async function onConnect() {
                 const res = await adapter.connect();

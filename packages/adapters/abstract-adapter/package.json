@@ -1,6 +1,6 @@
 {
     "name": "@tronweb3/tronwallet-abstract-adapter",
-    "version": "1.1.5",
+    "version": "1.1.6",
     "description": "Abstract interface definition of Tron Wallet Adapters.",
     "author": "tronprotocol",
     "repository": {

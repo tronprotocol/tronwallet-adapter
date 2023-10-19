@@ -1,6 +1,6 @@
 # `@tronweb3/tronwallet-adapter-tronlink-evm`
 
-This package provides an adapter to enable TRON DApps to connect to the [TronLink Wallet extension]() and [TronLink Wallet App](https://tronlink.org/).
+This package provides an adapter to enable DApps to connect to the [TronLink Wallet extension](https://chrome.google.com/webstore/detail/tronlink/ibnejdfjmmkpcnlpebklmnkoeoihofec).
 
 ## Demo
 

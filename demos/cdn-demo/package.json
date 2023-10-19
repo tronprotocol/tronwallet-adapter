@@ -1,23 +1,23 @@
 {
     "name": "cdn-demo",
     "private": true,
-    "version": "0.0.0",
+    "version": "0.0.1",
     "type": "module",
     "scripts": {
         "dev": "serve"
     },
     "dependencies": {
-        "@tronweb3/abstract-adapter-evm": "^1.0.0",
-        "@tronweb3/tronwallet-abstract-adapter": "^1.1.5",
-        "@tronweb3/tronwallet-adapter-bitkeep": "^1.0.1",
-        "@tronweb3/tronwallet-adapter-ledger": "^1.1.7",
-        "@tronweb3/tronwallet-adapter-metamask": "^1.0.0",
-        "@tronweb3/tronwallet-adapter-okxwallet": "^1.0.1",
-        "@tronweb3/tronwallet-adapter-tokenpocket": "^1.0.1",
-        "@tronweb3/tronwallet-adapter-tronlink": "^1.1.8",
-        "@tronweb3/tronwallet-adapter-tronlink-evm": "^1.0.0",
-        "@tronweb3/tronwallet-adapter-walletconnect": "^1.0.4",
-        "@tronweb3/tronwallet-adapters": "^1.1.8",
+        "@tronweb3/abstract-adapter-evm": "^1.0.1",
+        "@tronweb3/tronwallet-abstract-adapter": "^1.1.6",
+        "@tronweb3/tronwallet-adapter-bitkeep": "^1.0.2",
+        "@tronweb3/tronwallet-adapter-ledger": "^1.1.8",
+        "@tronweb3/tronwallet-adapter-metamask": "^1.0.1",
+        "@tronweb3/tronwallet-adapter-okxwallet": "^1.0.2",
+        "@tronweb3/tronwallet-adapter-tokenpocket": "^1.0.2",
+        "@tronweb3/tronwallet-adapter-tronlink": "^1.1.9",
+        "@tronweb3/tronwallet-adapter-tronlink-evm": "^1.0.1",
+        "@tronweb3/tronwallet-adapter-walletconnect": "^1.0.5",
+        "@tronweb3/tronwallet-adapters": "^1.1.9",
         "@walletconnect/sign-client": "^2.1.4",
         "serve": "^14.2.1"
     }

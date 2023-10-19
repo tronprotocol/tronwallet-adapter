@@ -1,6 +1,6 @@
 {
     "name": "@tronweb3/tronwallet-adapter-react-ui",
-    "version": "1.1.7",
+    "version": "1.1.8",
     "description": "A set of out-of-the-box components to make it easy to interact with Tron wallets.",
     "keywords": [
         "TRON",
