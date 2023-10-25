@@ -20,7 +20,7 @@
         "reinstall": "pnpm run nuke && pnpm install",
         "clean": "pnpm --recursive run clean && shx rm -rf **/*.tsbuildinfo",
         "ts": "pnpm run build:ts",
-        "build": "pnpm run build:ts && pnpm run build:other",
+        "build": "pnpm run build:ts && pnpm run build:other && build:umd",
         "build:ts": "tsc --build --verbose tsconfig.all.json",
         "build:other": "pnpm --recursive --filter \"@tronweb3/*\" run build",
         "build:clean": "pnpm run clean && pnpm run build && pnpm run package",

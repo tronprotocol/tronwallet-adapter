@@ -235,11 +235,11 @@ export class BitKeepAdapter extends Adapter {
         }
         let times = 0;
         const maxTimes = Math.floor(this.config.checkTimeout / 200);
-        const check = () => {
+        const check = async () => {
             if (this._wallet && this._wallet.ready) {
                 this.checkReadyInterval && clearInterval(this.checkReadyInterval);
                 this.checkReadyInterval = null;
-                this._updateWallet();
+                await this._updateWallet();
                 this.emit('connect', this.address || '');
             } else if (times > maxTimes) {
                 this.checkReadyInterval && clearInterval(this.checkReadyInterval);

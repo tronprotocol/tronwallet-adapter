@@ -8,7 +8,7 @@ import { Box, Button, Typography, Tooltip, Select, MenuItem, Alert, FormControl,
 import { tronWeb } from './tronweb.js';
 const receiver = 'TMDKznuDWaZwfZHcM61FVFstyYNmK6Njk1';
 
-export function BitKeepAdapterDemo() {
+export function BitgetAdapterDemo() {
     const [connectState, setConnectState] = useState(AdapterState.NotFound);
     const [account, setAccount] = useState('');
     const [readyState, setReadyState] = useState('');
@@ -113,7 +113,7 @@ export function BitKeepAdapterDemo() {
     }
     return (
         <Box sx={{ width: '100%', maxWidth: 900 }}>
-            <h1>BitKeep Demo <img src={adapter.icon} alt="adapter" style={{width: 30, height: 30}} /></h1>
+            <h1>Bitget Demo <img src={adapter.icon} alt="adapter" style={{width: 30, height: 30}} /></h1>
             <Typography variant="h6" gutterBottom>
                 Your account address:
             </Typography>
