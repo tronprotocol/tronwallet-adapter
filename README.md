@@ -26,7 +26,7 @@ This repository contains wallet adapters and components for Tron DApps. With out
 
 Wallet adapters help you to access to TRON wallets with consistent API.
 
-There are many wallets supporting TRON network such as TronLink, Ledger and so on . **Different wallets** and **different versions** of one wallet may have different interface to use. The aim of **Adapters** relavant pacakges is to shield these differences and offer consistent interface for DApp developers. DApps don't need to change their code frequently if they have accessed to the tron wallet dapters code.
+There are many wallets supporting TRON network such as TronLink, Ledger and so on . **Different wallets** and **different versions** of one wallet may have different interface to use. The aim of **Adapters** relavant packages is to shield these differences and offer consistent interface for DApp developers. DApps don't need to change their code frequently if they have accessed to the tron wallet adapters code.
 
 For example if you want to connect to different wallets, you have to use different methods:
 
@@ -95,10 +95,10 @@ function Comp() {
 
 `useWallet()` only contains logic to manage wallet state. Besides, we provide a set of out-of-box components to help you interact with wallets:
 
--   `WalletSelectButton`: Show wallets dialog to select a wallet
--   `WalletConnectButton`: Connect to the selected wallet
--   `WalletDisconnectButton`: Disconnect to the selected wallet
--   `WalletActionButton`: A Button with multiple actions include `select/connect/disconnect`
+-   `WalletSelectButton`: Shows a wallet dialog to select a wallet
+-   `WalletConnectButton`: Connects to the selected wallet
+-   `WalletDisconnectButton`: Disconnects from the selected wallet
+-   `WalletActionButton`: A button with multiple actions include `select/connect/disconnect`
 
 Here is the demo image:
 
