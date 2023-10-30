@@ -1,6 +1,6 @@
 # `@tronweb3/tronwallet-adapter-bitkeep`
 
-This package provides an adapter to enable TRON DApps to connect to the [Bitget(BitKeep) Wallet extension and App](https://bitkeep.com/).
+This package provides an adapter to enable TRON DApps to connect to the [Bitget(Former BitKeep) Wallet extension and App](https://www.bitget.com/).
 
 ## Demo
 
