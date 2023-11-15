@@ -22,16 +22,7 @@ import type {
     Network,
 } from '@tronweb3/tronwallet-abstract-adapter';
 import { openBitgetWallet, supportBitgetWallet } from './utils.js';
-import type { TronWeb } from '@tronweb3/tronwallet-adapter-tronlink';
 
-declare global {
-    interface Window {
-        bitkeep: {
-            tronLink: TronLinkWallet;
-            tronWeb: TronWeb;
-        };
-    }
-}
 export interface BitKeepAdapterConfig extends BaseAdapterConfig {
     /**
      * Timeout in millisecond for checking if Bitget Wallet is supported.
@@ -244,11 +235,11 @@ export class BitKeepAdapter extends Adapter {
         }
         let times = 0;
         const maxTimes = Math.floor(this.config.checkTimeout / 200);
-        const check = () => {
+        const check = async () => {
             if (this._wallet && this._wallet.ready) {
                 this.checkReadyInterval && clearInterval(this.checkReadyInterval);
                 this.checkReadyInterval = null;
-                this._updateWallet();
+                await this._updateWallet();
                 this.emit('connect', this.address || '');
             } else if (times > maxTimes) {
                 this.checkReadyInterval && clearInterval(this.checkReadyInterval);

@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>MetamaskAdapter Test Demo</title>
+        <script src="../node_modules/@tronweb3/tronwallet-adapter-tronlink-evm/lib/umd/index.js"></script>
+    </head>
+    <body>
+        <div id="root">
+            <button id="connectBtn">connect</button>
+            <button id="disconnectBtn">disconnect</button>
+            <button id="signMessageBtn">signMessage</button>
+            <button id="signTransactionBtn">signTransaction</button>
+            <img id="icon" src="" alt="" style="width: 30px; height: 30px;">
+        </div>
+        <script>
+            const log = function (...args) {
+                console.log('Adapter:', ...args);
+            };
+            let address;
+            const receiver = 'TMDKznuDWaZwfZHcM61FVFstyYNmK6Njk1';
+            const { TronLinkEvmAdapter } = window['@tronweb3/tronwallet-adapter-tronlink-evm'];
+            const adapter = new TronLinkEvmAdapter();
+
+            adapter.on('readyStateChanged', () => {
+                log('readyState: ', adapter.readyState);
+            });
+            adapter.on('connect', () => {
+                log('connect2222: ', adapter.address);
+                address = adapter.address;
+            });
+            adapter.on('stateChanged', (state) => {
+                log('stateChanged: ', state);
+            });
+            adapter.on('accountsChanged', (data, preaddr) => {
+                log('accountsChanged: current', data, ' pre: ', preaddr);
+            });
+
+            adapter.on('chainChanged', (data) => {
+                log('chainChanged: ', data);
+            });
+
+            adapter.on('disconnect', () => {
+                log('disconnect');
+            });
+
+            const connectBtn = document.querySelector('#connectBtn');
+            const disconnectBtn = document.querySelector('#disconnectBtn');
+            const signMessageBtn = document.querySelector('#signMessageBtn');
+            const signTransactionBtn = document.querySelector('#signTransactionBtn');
+            const iconImg = document.querySelector('#icon');
+
+            connectBtn.addEventListener('click', onConnect);
+            disconnectBtn.addEventListener('click', onDisconnect);
+            signMessageBtn.addEventListener('click', onSignMessage);
+            signTransactionBtn.addEventListener('click', onSignTransaction);
+            iconImg.src = adapter.icon;
+
+            async function onConnect() {
+                const res = await adapter.connect();
+                log('connect successfully: ', adapter.address);
+                address = adapter.address;
+            }
+
+            async function onDisconnect() {
+                await adapter.disconnect();
+                log('disconnect successfully ');
+                address = undefined;
+            }
+
+            async function onSignMessage() {
+                const m = 'Hello world';
+                const res = await adapter.signMessage({ message: m });
+                log('sign message successfully: ', res);
+            }
+
+            async function onSignTransaction() {
+                const transaction = {
+                    value: '0x' + Number(0.01 * Math.pow(10, 18)).toString(16), // 0.01 is 0.01ETH
+                    to: '0x18B0FDE2FEA85E960677C2a41b80e7557AdcbAE0',
+                    from: adapter.address,
+                };
+                console.log('sendTransaction: ', transaction);
+                await adapter.sendTransaction(transaction);
+                log('send successfully.');
+            }
+        </script>
+    </body>
+</html>

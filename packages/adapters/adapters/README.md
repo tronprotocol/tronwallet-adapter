@@ -120,6 +120,48 @@ export default {
 }
 ```
 
+### Vanilla js usage
+
+To use adapters without bundle tools like `webpack`, you can install the package and get the `umd` format file.
+
+1. Add script in your HTML file
+   Put the script in your `head` tag:
+
+```html
+<script src="../node_modules/@tronweb3/tronwallet-adapters/lib/umd/index.js"></script>
+```
+
+**Note**: You should adjust the relative path according to the position of the HTML file.
+
+2. Get specified adapter
+
+```js
+const { TronLinkAdapter, BitKeepAdapter, WalletConnectAdapter, OkxWalletAdapter } =
+    window['@tronweb3/tronwallet-adapters'];
+const tronlinkAdapter = new TronLinkAdapter({
+    openTronLinkAppOnMobile: true,
+    openUrlWhenWalletNotFound: false,
+    checkTimeout: 3000,
+});
+```
+
+A demo with cdn file can be found [here](https://github.com/tronprotocol/tronwallet-adapter/tree/main/demos/cdn-demo).
+
+#### WalletConnectAdapter
+
+If you want to use `WalletConnectAdapter`, you should install another dependency in addition:
+
+```bash
+npm i @walletconnect/sign-client
+```
+
+And add a script tag for `@walletconnect/sign-client` before the adapters `umd` file:
+
+```diff
++ <script src="../node_modules/@walletconnect/sign-client/dist/index.umd.js"></script>
+<script src="../node_modules/@tronweb3/tronwallet-adapters/lib/umd/index.js"></script>
+```
+
 ## API Reference
 
 ### Adapter

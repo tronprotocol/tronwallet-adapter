@@ -1,0 +1,18 @@
+{
+    // "extends": [],
+    "parser": "@typescript-eslint/parser",
+    "env": {
+        "node": true
+    },
+    "rules": {
+        "require-extensions/require-extensions": "off"
+    },
+    "overrides": [
+        {
+            "files": "./scripts/*.cjs",
+            "rules": {
+                "@typescript-eslint/no-var-requires": "off"
+            }
+        }
+    ]
+}

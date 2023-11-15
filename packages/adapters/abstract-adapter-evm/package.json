@@ -1,6 +1,6 @@
 {
     "name": "@tronweb3/abstract-adapter-evm",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "description": "Abstract interface definition of Evm Wallet Adapters.",
     "author": "tronprotocol",
     "repository": {
@@ -34,7 +34,8 @@
         "clean": "shx mkdir -p lib && shx rm -rf lib",
         "package": "shx echo '{ \"type\": \"commonjs\" }' > lib/cjs/package.json",
         "test": "jest",
-        "test:coverage": "jest  --coverage"
+        "test:coverage": "jest  --coverage",
+        "build:umd": "node ../../../scripts/build-umd.js"
     },
     "dependencies": {
         "eventemitter3": "^4.0.0",

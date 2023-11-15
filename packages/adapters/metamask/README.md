@@ -1,6 +1,6 @@
 # `@tronweb3/tronwallet-adapter-metamask`
 
-This package provides an adapter to enable TRON DApps to connect to the [MetaMask Wallet extension](https://chrome.google.com/webstore/detail/metamask/nkbihfbeogaeaoehlefnkodbefgpgknn) and [MetaMask Wallet App](https://metamask.io/).
+This package provides an adapter to enable DApps to connect to the [MetaMask Wallet extension](https://chrome.google.com/webstore/detail/metamask/nkbihfbeogaeaoehlefnkodbefgpgknn) and [MetaMask Wallet App](https://metamask.io/).
 
 ## Demo
 

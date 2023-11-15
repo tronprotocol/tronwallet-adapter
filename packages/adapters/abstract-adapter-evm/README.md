@@ -216,7 +216,7 @@ All errors are as follows:
 Following exmaple shows how to get original error info with `WalletError`:
 
 ```js
-const adapter = new TronLinkAdapter();
+const adapter = new MetaMaskAdapter();
 try {
     await adapter.connect();
 } catch (e: any) {
