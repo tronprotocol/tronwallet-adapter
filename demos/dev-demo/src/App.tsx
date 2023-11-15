@@ -6,9 +6,11 @@ import { CustomConnectWithGetAccounts } from './LedgerDemo/CustomConnectWithGetA
 import { TronLinkAdapterDemo } from './TronLinkAdapterDemo.js';
 import { ReactHooksDemo } from './ReactHooksDemo.js';
 import { TokenPocketAdapterDemo } from './TokenPocketAdapterDemo.js';
-import { BitKeepAdapterDemo } from './BitKeepAdapterDemo.js';
+import { BitgetAdapterDemo } from './BitgetAdapterDemo.js';
 import { OkxWalletAdapterDemo } from './OkxWalletAdapterDemo.js';
 import { MetamaskAdapterDemo } from './Metamask.js';
+import { TronLinkEvmAdapter } from '@tronweb3/tronwallet-adapter-tronlink-evm';
+import { TronLinkEvmAdapterDemo } from './TronLinkEvmDemo.js';
 interface TabPanelProps {
     children?: React.ReactNode;
     index: number;
@@ -44,9 +46,10 @@ function App() {
                         <Tab label="LedgerAdapter CustomConnectWithGetAccounts" />
                         <Tab label="ReactHooks Demo" />
                         <Tab label="TokenPocketAdapter Demo" />
-                        <Tab label="BitKeepAdapter Demo" />
+                        <Tab label="BitgetAdapter Demo" />
                         <Tab label="OkxWalletAdapter Demo" />
                         <Tab label="MetaMaskWalletAdapter Demo" />
+                        <Tab label="TronlinkEvmWalletAdapter Demo" />
                     </Tabs>
                 </Box>
                 <TabPanel value={value} index={0}>
@@ -68,13 +71,16 @@ function App() {
                     <TokenPocketAdapterDemo></TokenPocketAdapterDemo>
                 </TabPanel>
                 <TabPanel value={value} index={6}>
-                    <BitKeepAdapterDemo></BitKeepAdapterDemo>
+                    <BitgetAdapterDemo></BitgetAdapterDemo>
                 </TabPanel>
                 <TabPanel value={value} index={7}>
                     <OkxWalletAdapterDemo></OkxWalletAdapterDemo>
                 </TabPanel>
                 <TabPanel value={value} index={8}>
                     <MetamaskAdapterDemo></MetamaskAdapterDemo>
+                </TabPanel>
+                <TabPanel value={value} index={9}>
+                    <TronLinkEvmAdapterDemo></TronLinkEvmAdapterDemo>
                 </TabPanel>
             </Box>
         </div>

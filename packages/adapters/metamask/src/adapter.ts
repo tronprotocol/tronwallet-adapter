@@ -40,10 +40,8 @@ export class MetaMaskAdapter extends Adapter {
             this.autoConnect(provider);
         } else {
             this.getProvider().then((res) => {
-                console.log('contructor getProvider then', res);
                 if (res) {
                     this.readyState = WalletReadyState.Found;
-                    console.log('readyState', this.readyState);
                     this.listenEvents(res);
                     this.autoConnect(res);
                 } else {

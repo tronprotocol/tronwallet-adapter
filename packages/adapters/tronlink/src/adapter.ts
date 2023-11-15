@@ -30,7 +30,7 @@ import type {
     TronLinkMessageEvent,
     TronWeb,
 } from './types.js';
-import { openTronLink, supportTron, supportTronLink } from './utils.js';
+import { openTronLink, supportTron, supportTronLink, waitTronwebReady } from './utils.js';
 export interface TronLinkWallet {
     ready: boolean;
     tronWeb: TronWeb;
@@ -163,10 +163,10 @@ export class TronLinkAdapter extends Adapter {
         try {
             await this._checkWallet();
             if (this.state !== AdapterState.Connected) throw new WalletDisconnectedError();
-            const wallet = this._wallet;
-            if (!wallet || !wallet.tronWeb) throw new WalletDisconnectedError();
+            const tronWeb = this._wallet?.tronWeb || window.tronWeb;
+            if (!tronWeb) throw new WalletDisconnectedError();
             try {
-                return await getNetworkInfoByTronWeb(wallet.tronWeb);
+                return await getNetworkInfoByTronWeb(tronWeb);
             } catch (e: any) {
                 throw new WalletGetNetworkError(e?.message, e);
             }
@@ -198,6 +198,9 @@ export class TronLinkAdapter extends Adapter {
                     this.setAddress(address);
                     this.setState(AdapterState.Connected);
                     this._listenTronEvent();
+                    if (!this._wallet.tronWeb) {
+                        await waitTronwebReady(this._wallet as Tron);
+                    }
                 } catch (error: any) {
                     let message = error?.message || error || 'Connect TronLink wallet failed.';
                     if (error.code === -32002) {

@@ -138,6 +138,7 @@ tronwallet-adapter
 |   |   ├─vite-app # demo for vitejs
 |   |   ├─next-app # demo for nextjs
 |   ├─dev-demo # demo for development
+|   ├─cdn-demo # demo for cdn usage of adapters
 ```
 
 ### TronWallet Adapters

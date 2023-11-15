@@ -12,6 +12,7 @@ import {
     isInMobileBrowser,
 } from '@tronweb3/tronwallet-abstract-adapter';
 import { getNetworkInfoByTronWeb } from '@tronweb3/tronwallet-adapter-tronlink';
+import { WalletInfo, TronLinkAdapter } from '@bitget-wallet/web3-sdk';
 import type { TronLinkWallet } from '@tronweb3/tronwallet-adapter-tronlink';
 import type {
     Transaction,
@@ -20,38 +21,32 @@ import type {
     BaseAdapterConfig,
     Network,
 } from '@tronweb3/tronwallet-abstract-adapter';
-import { openBitKeep, supportBitKeep } from './utils.js';
-import type { TronWeb } from '@tronweb3/tronwallet-adapter-tronlink';
+import { openBitgetWallet, supportBitgetWallet } from './utils.js';
 
-declare global {
-    interface Window {
-        bitkeep: {
-            tronLink: TronLinkWallet;
-            tronWeb: TronWeb;
-        };
-    }
-}
 export interface BitKeepAdapterConfig extends BaseAdapterConfig {
     /**
-     * Timeout in millisecond for checking if BitKeep is supported.
+     * Timeout in millisecond for checking if Bitget Wallet is supported.
      * Default is 2 * 1000ms
      */
     checkTimeout?: number;
     /**
-     * Set if open BitKeep app using DeepLink.
+     * Set if open Wallet's website url when wallet is not installed.
+     * Default is true.
+     */
+    openUrlWhenWalletNotFound?: boolean;
+    /**
+     * Set if open Bitget Wallet app using DeepLink.
      * Default is true.
      */
     openAppWithDeeplink?: boolean;
 }
 
-export const BitKeepAdapterName = 'BitKeep' as AdapterName<'BitKeep'>;
+export const BitgetWalletAdapterName = WalletInfo?.name as AdapterName<'Bitget Wallet'>;
 
 export class BitKeepAdapter extends Adapter {
-    name = BitKeepAdapterName;
-    url = 'https://bitkeep.com';
-    icon =
-        'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTI4IiBoZWlnaHQ9IjEyOCIgdmlld0JveD0iMCAwIDEyOCAxMjgiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIxMjgiIGhlaWdodD0iMTI4IiByeD0iNjQiIGZpbGw9IiM3NTI0RjkiLz4KPHBhdGggZmlsbC1ydWxlPSJldmVub2RkIiBjbGlwLXJ1bGU9ImV2ZW5vZGQiIGQ9Ik0xMDIgNDUuNjAyN1Y0OS44MjA0QzEwMi4wMDEgNTAuMjI4MyAxMDEuODkzIDUwLjYyOTIgMTAxLjY4NyA1MC45ODI3QzEwMS40ODEgNTEuMzM2MSAxMDEuMTg1IDUxLjYyOTYgMTAwLjgyOCA1MS44MzM1TDg3LjA5MDggNTkuNjgwMUw5OS4zNjMzIDY2LjY3MUMxMDAuMTY1IDY3LjEyOTUgMTAwLjgzMSA2Ny43ODkyIDEwMS4yOTQgNjguNTgzNkMxMDEuNzU3IDY5LjM3OCAxMDIuMDAxIDcwLjI3OTEgMTAyIDcxLjE5NjJWODIuNDQyNEMxMDIuMDAxIDgzLjM2IDEwMS43NTggODQuMjYxNyAxMDEuMjk1IDg1LjA1NjdDMTAwLjgzMiA4NS44NTE2IDEwMC4xNjYgODYuNTExNyA5OS4zNjMzIDg2Ljk3MDVMNjcuMDg2OSAxMDUuM0M2Ni4yODUzIDEwNS43NTkgNjUuMzc1OSAxMDYgNjQuNDUwMiAxMDZDNjMuNTI0NSAxMDYgNjIuNjE1MSAxMDUuNzU5IDYxLjgxMzUgMTA1LjNMNTEuMjUyIDk5LjI2MTFDNTEuMDczNyA5OS4xNTkzIDUwLjkyNTYgOTkuMDEyOCA1MC44MjI3IDk4LjgzNjNDNTAuNzE5OCA5OC42NTk5IDUwLjY2NTYgOTguNDU5NyA1MC42NjU2IDk4LjI1NkM1MC42NjU2IDk4LjA1MjIgNTAuNzE5OCA5Ny44NTIgNTAuODIyNyA5Ny42NzU2QzUwLjkyNTYgOTcuNDk5MSA1MS4wNzM3IDk3LjM1MjcgNTEuMjUyIDk3LjI1MDhMODYuMTE1MiA3Ny4zODM1Qzg2LjIwNCA3Ny4zMzI1IDg2LjI3NzcgNzcuMjU5MyA4Ni4zMjkgNzcuMTcxMkM4Ni4zODAyIDc3LjA4MzIgODYuNDA3MiA3Ni45ODMzIDg2LjQwNzIgNzYuODgxN0M4Ni40MDcyIDc2Ljc4IDg2LjM4MDIgNzYuNjgwMiA4Ni4zMjkgNzYuNTkyMUM4Ni4yNzc3IDc2LjUwNCA4Ni4yMDQgNzYuNDMwOCA4Ni4xMTUyIDc2LjM3OThMNzMuMTcxOSA2OC45NzcxQzcyLjgxNTYgNjguNzczNCA3Mi40MTE0IDY4LjY2NjIgNzIgNjguNjY2MkM3MS41ODg2IDY4LjY2NjIgNzEuMTg0NCA2OC43NzM0IDcwLjgyODEgNjguOTc3MUwzNS40MTcgODkuMTcyMkMzNS4xNDk4IDg5LjMyNSAzNC44NDY3IDg5LjQwNTQgMzQuNTM4MSA4OS40MDU0QzM0LjIyOTUgODkuNDA1NCAzMy45MjY0IDg5LjMyNSAzMy42NTkyIDg5LjE3MjJMMjkuNjQ4NCA4Ni45MDA5QzI4Ljg0MjQgODYuNDQyOCAyOC4xNzI5IDg1Ljc4MiAyNy43MDc4IDg0Ljk4NTNDMjcuMjQyNyA4NC4xODg2IDI2Ljk5ODUgODMuMjg0MyAyNyA4Mi4zNjQxVjc3Ljc2NjRDMjYuOTk5OCA3Ny40NjA3IDI3LjA4MDkgNzcuMTYwMyAyNy4yMzUyIDc2Ljg5NTVDMjcuMzg5NSA3Ni42MzA3IDI3LjYxMTUgNzYuNDEwOSAyNy44Nzg5IDc2LjI1OEw3OC42NTA0IDQ3LjM2OTNDNzguNzM5MiA0Ny4zMTgzIDc4LjgxMjkgNDcuMjQ1MSA3OC44NjQxIDQ3LjE1N0M3OC45MTU0IDQ3LjA2ODkgNzguOTQyMyA0Ni45NjkxIDc4Ljk0MjMgNDYuODY3NEM3OC45NDIzIDQ2Ljc2NTggNzguOTE1NCA0Ni42NjU5IDc4Ljg2NDEgNDYuNTc3OUM3OC44MTI5IDQ2LjQ4OTggNzguNzM5MiA0Ni40MTY2IDc4LjY1MDQgNDYuMzY1Nkw2NS42ODY1IDM4LjkzNjdDNjUuMzMwMiAzOC43MzMxIDY0LjkyNjEgMzguNjI1OCA2NC41MTQ2IDM4LjYyNThDNjQuMTAzMiAzOC42MjU4IDYzLjY5OTEgMzguNzMzMSA2My4zNDI4IDM4LjkzNjdMMjguNzU3OCA1OC42M0MyOC41Nzk4IDU4LjczMTggMjguMzc3OCA1OC43ODU0IDI4LjE3MjIgNTguNzg1NUMyNy45NjY2IDU4Ljc4NTUgMjcuNzY0NiA1OC43MzIgMjcuNTg2NSA1OC42MzAzQzI3LjQwODQgNTguNTI4NiAyNy4yNjA0IDU4LjM4MjMgMjcuMTU3NSA1OC4yMDYxQzI3LjA1NDUgNTguMDI5OSAyNy4wMDAyIDU3LjgzIDI3IDU3LjYyNjRWNDUuNTQ3NkMyNi45OTg5IDQ0LjYzIDI3LjI0MiA0My43MjgzIDI3LjcwNDkgNDIuOTMzNEMyOC4xNjc4IDQyLjEzODQgMjguODM0MSA0MS40NzgzIDI5LjYzNjcgNDEuMDE5NUw2MS45MDcyIDIyLjY5NTRDNjIuNzA3MSAyMi4yMzk4IDYzLjYxMzggMjIgNjQuNTM2NiAyMkM2NS40NTk0IDIyIDY2LjM2NjEgMjIuMjM5OCA2Ny4xNjYgMjIuNjk1NEw5OS4zNjMzIDQxLjA4MzNDMTAwLjE2NSA0MS41NDE0IDEwMC44MyA0Mi4yMDAxIDEwMS4yOTMgNDIuOTkzNEMxMDEuNzU2IDQzLjc4NjcgMTAyIDQ0LjY4NjYgMTAyIDQ1LjYwMjdaIiBmaWxsPSJ3aGl0ZSIvPgo8L3N2Zz4K';
-
+    name = BitgetWalletAdapterName;
+    url = WalletInfo?.homepage;
+    icon = WalletInfo?.logolist?.base64;
     config: Required<BitKeepAdapterConfig>;
     private _readyState: WalletReadyState = WalletReadyState.Loading;
     private _state: AdapterState = AdapterState.Loading;
@@ -79,7 +74,7 @@ export class BitKeepAdapter extends Adapter {
             this.setState(AdapterState.NotFound);
             return;
         }
-        if (supportBitKeep()) {
+        if (supportBitgetWallet()) {
             this._readyState = WalletReadyState.Found;
             this._updateWallet();
         } else {
@@ -240,11 +235,11 @@ export class BitKeepAdapter extends Adapter {
         }
         let times = 0;
         const maxTimes = Math.floor(this.config.checkTimeout / 200);
-        const check = () => {
+        const check = async () => {
             if (this._wallet && this._wallet.ready) {
                 this.checkReadyInterval && clearInterval(this.checkReadyInterval);
                 this.checkReadyInterval = null;
-                this._updateWallet();
+                await this._updateWallet();
                 this.emit('connect', this.address || '');
             } else if (times > maxTimes) {
                 this.checkReadyInterval && clearInterval(this.checkReadyInterval);
@@ -275,7 +270,7 @@ export class BitKeepAdapter extends Adapter {
         this._checkPromise = new Promise((resolve) => {
             const check = () => {
                 times++;
-                const isSupport = supportBitKeep();
+                const isSupport = supportBitgetWallet();
                 if (isSupport || times > maxTimes) {
                     timer && clearInterval(timer);
                     this._readyState = isSupport ? WalletReadyState.Found : WalletReadyState.NotFound;
@@ -294,15 +289,18 @@ export class BitKeepAdapter extends Adapter {
         if (this.config.openAppWithDeeplink === false) {
             return;
         }
-        if (openBitKeep()) {
+        if (openBitgetWallet()) {
             throw new WalletNotFoundError();
         }
     }
-    private _updateWallet = () => {
+    private _updateWallet = async () => {
         let state = this.state;
         let address = this.address;
-        if (supportBitKeep()) {
-            this._wallet = (window.bitkeep?.tronLink || window.tronLink) as TronLinkWallet;
+        if (supportBitgetWallet()) {
+            const adapter = new TronLinkAdapter();
+            this._wallet =
+                ((await adapter?.getProvider().tronLink) as TronLinkWallet) ||
+                (window.bitkeep?.tronLink as TronLinkWallet);
             address = this._wallet.tronWeb.defaultAddress?.base58 || null;
             state = this._wallet.ready ? AdapterState.Connected : AdapterState.Disconnect;
             if (!this._wallet.ready) {
