@@ -1,0 +1,215 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap');
+
+/** button **/
+.adapter-vue-button {
+    display: inline-flex;
+    color: #fff;
+    cursor: pointer;
+    height: 48px;
+    background-color: #0f111a;
+    border: none;
+    border-radius: 4px;
+    align-items: center;
+    padding: 0 24px;
+    font-family: DM Sans, Roboto, Helvetica Neue, Helvetica, Arial, sans-serif;
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 48px;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+    white-space: pre;
+}
+.adapter-vue-button:focus {
+    outline: none;
+}
+.adapter-vue-button:focus-visible {
+    outline: 2px solid white;
+}
+.adapter-vue-button:not([disabled]):hover {
+    background-color: #373c47;
+}
+.adapter-vue-button[disabled] {
+    background: #404144;
+    color: #999;
+    cursor: not-allowed;
+}
+.adapter-vue-button .button-icon {
+    margin-right: 12px;
+}
+.adapter-vue-button .button-icon,
+.adapter-vue-button .button-icon img {
+    display: block;
+    width: 28px;
+    height: 28px;
+}
+
+/* modal */
+.adapter-modal {
+    position: fixed;
+    left: 0;
+    top: 0;
+    box-sizing: border-box;
+    width: 100vw;
+    height: 100vh;
+    inset: 0; /* inset sets all 4 values (top right bottom left) much like how we set padding, margin etc., */
+    background-color: rgba(0, 0, 0, 0.6);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease-in-out;
+    overflow: hidden;
+    z-index: 999;
+    padding: 40px 20px 20px;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.adapter-modal-fade-in {
+    opacity: 1;
+    pointer-events: auto;
+    transform: scale(1);
+}
+
+.adapter-modal-wrapper {
+    width: 100%;
+    max-width: 400px;
+    max-width: 400px;
+    background-color: #282c34;
+    border-radius: 10px;
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    font-size: 2rem;
+    box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.6);
+    font-family: 'DM Sans', 'Roboto', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+}
+.adapter-modal-wrapper .adapter-list {
+    padding-bottom: 48px;
+}
+.adapter-modal-header {
+    position: relative;
+    padding: 64px 48px 48px;
+}
+.adapter-modal-header .adapter-modal-title {
+    font-size: 24px;
+    font-weight: 500;
+    line-height: 34px;
+    text-align: center;
+}
+@media (max-width: 374px) {
+    .adapter-modal-header .adapter-modal-title {
+        font-size: 18px;
+    }
+}
+.adapter-modal-header .close-button {
+    width: 40px;
+    height: 40px;
+    position: absolute;
+    cursor: pointer;
+    background: #1a1f2e;
+    border: none;
+    border-radius: 50%;
+    justify-content: center;
+    align-items: center;
+    padding: 12px;
+    display: flex;
+    top: 18px;
+    right: 18px;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.adapter-modal-header .close-button:focus {
+    outline: none;
+}
+.adapter-modal-header .close-button:focus-visible {
+    outline: 2px solid white;
+}
+.adapter-modal-header .close-button::before,
+.adapter-modal-header .close-button::after {
+    content: '';
+    display: block;
+    width: 19px;
+    height: 2px;
+    background-color: #777;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: auto;
+}
+.adapter-modal-header .close-button::before {
+    transform: rotate(45deg);
+}
+.adapter-modal-header .close-button::after {
+    transform: rotate(-45deg);
+}
+.adapter-modal-header .close-button:hover::before,
+.adapter-modal-header .close-button:hover::after {
+    background-color: antiquewhite;
+}
+
+/** WalletItem */
+.adapter-wallet-item .adapter-vue-button {
+    width: 100%;
+    background-color: transparent;
+}
+
+.adapter-wallet-item .status-text {
+    opacity: 0.6;
+    margin-left: auto;
+    font-size: 14px;
+    font-weight: 400;
+}
+
+/** dropdown */
+.adapter-dropdown {
+    position: relative;
+    z-index: 99;
+    display: inline-block;
+}
+.adapter-dropdown-collapse {
+    position: relative;
+    margin: auto;
+    display: flex;
+    z-index: 1000;
+}
+.adapter-dropdown-list {
+    margin: 0 auto;
+    width: 150px;
+    list-style-type: none;
+    border-radius: 10px;
+    font-family: DM Sans, Roboto, Helvetica Neue, Helvetica, Arial, sans-serif;
+    flex-direction: column;
+    position: relative;
+    top: 5px;
+    padding: 5px;
+    overflow: hidden;
+    height: min-content;
+    background: #2c2d30;
+}
+.adapter-dropdown-list li {
+    display: block;
+    margin: auto;
+    color: white;
+    cursor: pointer;
+    white-space: nowrap;
+    box-sizing: border-box;
+    width: 100%;
+    height: 37px;
+    border: none;
+    border-radius: 6px;
+    outline: none;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: 0 20px;
+    font-size: 14px;
+    font-weight: 600;
+    display: flex;
+}
+
+.adapter-dropdown-list li:not([disabled]):hover {
+    background-color: #373c47;
+}

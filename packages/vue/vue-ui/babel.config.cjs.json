@@ -1,0 +1,5 @@
+{
+    "plugins": ["@vue/babel-plugin-jsx"],
+    "presets": ["@babel/preset-env", "@babel/preset-typescript"],
+    "sourceMaps": true
+}

@@ -1,0 +1,8 @@
+{
+    "plugins": ["@vue/babel-plugin-jsx"],
+    "presets": [["@babel/preset-env", { "modules": false }], "@babel/preset-typescript"],
+    "sourceMaps": true,
+    "targets": {
+        "esmodules": true
+    }
+}
