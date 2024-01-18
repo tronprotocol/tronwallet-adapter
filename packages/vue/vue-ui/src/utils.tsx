@@ -12,7 +12,7 @@ export function copyData(copyText: string) {
 
 export function createWrapperAndAppendToBody(wrapperId?: string) {
     if (!wrapperId) {
-        wrapperId = `wallet-${crypto.randomUUID()}`;
+        wrapperId = `wallet-${String(Math.random()).replace('.', '')}`;
     }
     const wrapperElement = document.createElement('div');
     wrapperElement.setAttribute('id', wrapperId);
