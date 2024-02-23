@@ -304,9 +304,7 @@ export class OkxWalletAdapter extends Adapter {
         if (this.config.openAppWithDeeplink === false) {
             return;
         }
-        alert('deeplink333');
         if (openOkxWallet()) {
-            alert('deeplink222');
             throw new WalletNotFoundError();
         }
     }
