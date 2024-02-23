@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useWallet } from '@tronweb3/tronwallet-adapter-vue-hooks';
 import { ElButton, ElOption, ElSelect } from 'element-plus';
-const { wallets, wallet, address, connected, connecting, disconnecting, adapter,  select, connect, disconnect, signMessage, signTransaction} = useWallet();
+const { wallets, wallet, address, connected, select, connect, disconnect, signMessage, signTransaction} = useWallet();
 console.log(wallets,wallet, address, connected, )
 const receiver = 'TMDKznuDWaZwfZHcM61FVFstyYNmK6Njk1';
 
@@ -17,7 +17,7 @@ async function onConnect() {
 async function onDisconnect() {
     await disconnect();
 }
-~
+
 async function onSignMessage() {
     const res = await signMessage('Hello world!');
     alert(res)
@@ -25,7 +25,7 @@ async function onSignMessage() {
 
 async function onSignTransaction() {
     const tronWeb = (window.tron as any).tronWeb as any;
-    const transaction = await tronWeb.transactionBuilder.sendTrx(receiver, tronWeb.toSun(0.1), adapter.value.address);
+    const transaction = await tronWeb.transactionBuilder.sendTrx(receiver, tronWeb.toSun(0.1), wallet.value?.adapter.address);
     const signedTransaction = await signTransaction(transaction);
     // const signedTransaction = await tronWeb.trx.sign(transaction);
     const res = await tronWeb.trx.sendRawTransaction(signedTransaction);

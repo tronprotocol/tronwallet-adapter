@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import VueUiDemo from './components/VueUiDemo.vue';
+import HooksDemo from './components/HooksDemo.vue';
 import { WalletProvider } from '@tronweb3/tronwallet-adapter-vue-hooks';
 import { Adapter } from '@tronweb3/tronwallet-abstract-adapter';
 import {
@@ -85,6 +86,7 @@ function onChainChanged(chainInfo: any) {
     >
         <WalletModalProvider>
             <VueUiDemo />
+            <HooksDemo></HooksDemo>
         </WalletModalProvider>
     </WalletProvider>
 </template>

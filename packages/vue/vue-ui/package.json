@@ -42,7 +42,7 @@
     "scripts": {
         "clean": "shx mkdir -p lib && shx rm -rf lib",
         "package": "shx echo '{ \"type\": \"commonjs\" }' > lib/cjs/package.json",
-        "build:types": "vue-tsc --declaration --emitDeclarationOnly",
+        "build:types": "tsc -p tsconfig.esm.json",
         "build:cjs": "babel ./src --out-dir lib/cjs --extensions .tsx,.ts --config-file ./babel.config.cjs.json",
         "build:esm": "babel ./src --out-dir lib/esm --extensions .tsx,.ts --config-file ./babel.config.esm.json",
         "build": "pnpm build:cjs & pnpm build:esm",
