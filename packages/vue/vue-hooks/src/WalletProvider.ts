@@ -23,13 +23,13 @@ interface State {
     wallet: Wallet | null;
     address: string | null;
     connected: boolean;
-    adapter: Adapter | null;
+    adapter?: Adapter;
 }
 const initialState: State = {
     wallet: null,
     address: null,
     connected: false,
-    adapter: null,
+    adapter: undefined,
 };
 function useRef<T>(initialValue: T | (() => T)): [Ref<T>, (v: T) => void] {
     const v = typeof initialValue === 'function' ? (initialValue as () => T)() : initialValue;
