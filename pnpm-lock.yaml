@@ -375,6 +375,7 @@ importers:
 
   demos/vue-ui/vite-app:
     specifiers:
+      '@tronweb3/tronwallet-abstract-adapter': ^1.1.6
       '@tronweb3/tronwallet-adapter-tronlink': ^1.1.9
       '@tronweb3/tronwallet-adapter-vue-hooks': ^1.0.0
       '@tronweb3/tronwallet-adapter-vue-ui': ^1.0.0
@@ -386,6 +387,7 @@ importers:
       vue: ^3.3.8
       vue-tsc: ^1.8.22
     dependencies:
+      '@tronweb3/tronwallet-abstract-adapter': link:../../../packages/adapters/abstract-adapter
       '@tronweb3/tronwallet-adapter-tronlink': link:../../../packages/adapters/tronlink
       '@tronweb3/tronwallet-adapter-vue-hooks': link:../../../packages/vue/vue-hooks
       '@tronweb3/tronwallet-adapter-vue-ui': link:../../../packages/vue/vue-ui
