@@ -94,7 +94,7 @@ Used to specify what wallet adapters are supported. All wallet adapters can be i
 -   Type: `boolean`
 -   Default: `true`
 
-Whether connect to the specified wallet automatically when loading the page and selecting a wallet.
+Whether connect to the specified wallet automatically after a wallet is selected.
 
 #### disableAutoConnectOnLoad
 
@@ -102,7 +102,7 @@ Whether connect to the specified wallet automatically when loading the page and 
 -   Type: `boolean`
 -   Default: `false`
 
-When `autoConnect` enabled, whether automatically connect to current selected wallet when loading the page.
+Whether automatically connect to current selected wallet after the page is loaded when `autoConnect` enabled.
 If you don't want to connect the wallet when page is first loaded, set `disableAutoConnectOnLoad: true`.
 
 #### localStorageKey
@@ -222,12 +222,12 @@ enum AdapterState {
 -   Type: `() => Promise<void>`
     Disconnect from current selected wallet.
 
-### signTransaction
+#### signTransaction
 
 -   Type: `(transaction: Transaction) => Promise<SignedTransaction>`
     Sign a unsigned transaction. This method is the same as TronWeb API.
 
-### signMessage
+#### signMessage
 
 -   Type: `(message: string) => Promise<string>`
     Sign a message.

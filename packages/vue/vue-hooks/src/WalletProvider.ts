@@ -1,4 +1,4 @@
-import { AdapterState, WalletNotSelectedError } from '@tronweb3/tronwallet-abstract-adapter';
+import { WalletNotSelectedError } from '@tronweb3/tronwallet-abstract-adapter';
 import type {
     Transaction,
     Adapter,
@@ -189,16 +189,11 @@ export const WalletProvider = defineComponent({
 
         const hasManuallySetName = ref(false);
         watch(
-            [() => props.autoConnect, () => props.disableAutoConnectOnLoad, hasManuallySetName, () => state.adapter],
+            [() => props.autoConnect, () => props.disableAutoConnectOnLoad, () => state.adapter],
             () => {
                 const canAutoConnect =
                     props.autoConnect && (!props.disableAutoConnectOnLoad || hasManuallySetName.value);
-                if (
-                    isConnecting ||
-                    !canAutoConnect ||
-                    !state.adapter ||
-                    state.adapter.state !== AdapterState.Disconnect
-                ) {
+                if (isConnecting || !canAutoConnect || !state.adapter) {
                     return;
                 }
                 (async function connect() {

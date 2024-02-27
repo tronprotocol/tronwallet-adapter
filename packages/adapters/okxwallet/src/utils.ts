@@ -8,10 +8,7 @@ export const isOKApp = /OKApp/i.test(navigator.userAgent);
 
 export function openOkxWallet() {
     if (!isOKApp && isInMobileBrowser()) {
-        const encodedUrl =
-            'https://www.okx.com/download?deeplink=' +
-            encodeURIComponent('okx://wallet/dapp/url?dappUrl=' + encodeURIComponent(window.location.href));
-        window.location.href = encodedUrl;
+        window.location.href = 'okx://wallet/dapp/url?dappUrl=' + encodeURIComponent(window.location.href);
         return true;
     }
     return false;
