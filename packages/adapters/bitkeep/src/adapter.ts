@@ -143,7 +143,8 @@ export class BitKeepAdapter extends Adapter {
                     throw new WalletConnectionError(e.message);
                 }
             }
-            const address = wallet.tronWeb.defaultAddress?.base58 || '';
+            const address =
+                wallet.tronWeb.defaultAddress?.base58 || window.bitkeep?.tronWeb?.defaultAddress?.base58 || '';
             this.setAddress(address);
             this.setState(AdapterState.Connected);
             this.emit('connect', this.address || '');
