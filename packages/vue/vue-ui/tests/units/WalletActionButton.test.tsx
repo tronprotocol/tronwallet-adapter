@@ -16,11 +16,13 @@ async function wait() {
 }
 const Providers = defineComponent({
     components: { WalletProvider, WalletModalProvider, WalletActionButton },
-    template: `<WalletProvider><WalletModalProvider><WalletActionButton v-bind="$attrs"><slot></slot></WalletActionButton> </WalletModalProvider></WalletProvider>`,
+    props: ['className', 'tabIndex', 'style'],
+    template: `<WalletProvider><WalletModalProvider><WalletActionButton v-bind="$props"><slot></slot></WalletActionButton> </WalletModalProvider></WalletProvider>`,
 });
 const NoAutoConnectProviders = defineComponent({
     components: { WalletProvider, WalletModalProvider, WalletActionButton },
-    template: `<WalletProvider :autoConnect="false"><WalletModalProvider><WalletActionButton v-bind="$attrs"></WalletActionButton></WalletModalProvider></WalletProvider>`,
+    props: ['className', 'tabIndex', 'style'],
+    template: `<WalletProvider :autoConnect="false"><WalletModalProvider><WalletActionButton v-bind="$props"></WalletActionButton></WalletModalProvider></WalletProvider>`,
 });
 
 const makeSut = (props: any = {}, children = '') => {

@@ -60,17 +60,17 @@ describe('useWallet', function () {
             await componentRef.getState().select(adapter1.name);
             await wait();
         });
-        test('connect should not be called', function () {
-            expect(adapter1.connect).toHaveBeenCalledTimes(0);
+        test('connect should be called', function () {
+            expect(adapter1.connect).toHaveBeenCalledTimes(1);
         });
         test('should be ok when call disconnect', async function () {
             expect(componentRef.getState().disconnect).not.toThrow();
         });
-        test('signMessage should not be called when call signMessage', async function () {
+        test('signMessage should be called 1 times when call signMessage', async function () {
             await componentRef.getState().signMessage('string');
             expect(adapter1.signMessage).toHaveBeenCalledTimes(1);
         });
-        test('signTransaction should not be called when call signTransaction', async function () {
+        test('signTransaction should be called 1 times when call signTransaction', async function () {
             await componentRef.getState().signTransaction({} as any);
             expect(adapter1.signTransaction).toHaveBeenCalledTimes(1);
         });

@@ -11,7 +11,8 @@ import { WalletItem, WalletSelectModal } from '../../src/index.js';
 
 const Providers = defineComponent({
     components: { WalletProvider, WalletModalProvider, WalletSelectButton },
-    template: `<WalletProvider><WalletModalProvider><WalletSelectButton v-bind="$attrs"></WalletSelectButton> </WalletModalProvider></WalletProvider>`,
+    props: ['className', 'tabIndex', 'style'],
+    template: `<WalletProvider><WalletModalProvider><WalletSelectButton v-bind="$props"></WalletSelectButton> </WalletModalProvider></WalletProvider>`,
 });
 
 const makeSut = (props: any = {}, children = '') => {

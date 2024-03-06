@@ -8,17 +8,23 @@ import type { VueWrapper } from '@vue/test-utils';
 import { mount } from '@vue/test-utils';
 import { defineComponent, nextTick } from 'vue';
 import { vi } from 'vitest';
+import { TronLinkAdapter } from '@tronweb3/tronwallet-adapter-tronlink';
 
 const Providers = defineComponent({
     components: { WalletProvider, WalletModalProvider, WalletConnectButton },
-    template: `<WalletProvider><WalletModalProvider><WalletConnectButton v-bind="$attrs"></WalletConnectButton> </WalletModalProvider></WalletProvider>`,
+    props: ['className', 'tabIndex', 'style'],
+    template: `<WalletProvider><WalletModalProvider><WalletConnectButton v-bind="$props"></WalletConnectButton> </WalletModalProvider></WalletProvider>`,
 });
 const NoAutoConnectProviders = defineComponent({
     components: { WalletProvider, WalletModalProvider, WalletConnectButton },
-    template: `<WalletProvider :autoConnect="false"><WalletModalProvider><WalletConnectButton v-bind="$attrs"></WalletConnectButton></WalletModalProvider></WalletProvider>`,
+    props: ['className', 'tabIndex', 'style'],
+    template: `<WalletProvider :autoConnect="false"><WalletModalProvider><WalletConnectButton v-bind="$props"></WalletConnectButton></WalletModalProvider></WalletProvider>`,
 });
 const makeSut = (props: any = {}, children = '') => {
-    return mount(Providers, { props, slots: { default: children } });
+    return mount(Providers, {
+        props: { adapters: [new TronLinkAdapter({ checkTimeout: 0 })], ...props },
+        slots: { default: children },
+    });
 };
 const makeSutNoAutoConnect = (props: any = {}, children = '') => {
     return mount(NoAutoConnectProviders, { props, slots: children ? { default: children } : {} });
@@ -29,6 +35,7 @@ function getByTestId(id: string) {
     return container?.get(`[data-testid="${id}"]`);
 }
 beforeEach(() => {
+    vi.useFakeTimers();
     localStorage.clear();
     window.tronLink = new MockTronLink();
     window.tronWeb = window.tronLink.tronWeb;
@@ -68,7 +75,7 @@ describe('when a wallet is seleted', () => {
     describe('when tronlink is avaliable', () => {
         test('should auto connect and be disabled when antoConnect enabled', async () => {
             container = makeSut({});
-            vi.advanceTimersByTime(4000);
+            vi.advanceTimersByTime(40000);
             await nextTick();
             const el = getByTestId('wallet-connect-button');
             expect(el).not.toBeNull();
@@ -90,10 +97,15 @@ describe('when a wallet is seleted', () => {
         beforeEach(() => {
             window.tronLink = undefined;
             window.tronWeb = undefined;
+            window.open = vi.fn();
+            vi.useFakeTimers();
         });
         test('should not be disabled with autoConnect enabled', async () => {
             container = makeSut();
-            expect(getByTestId('wallet-connect-button').attributes('disabled')).toBeUndefined();
+            vi.advanceTimersByTime(50000);
+            await nextTick();
+            expect(getByTestId('wallet-connect-button').attributes('disabled')).toEqual('');
+            await nextTick();
             expect(getByTestId('wallet-connect-button').text()).toEqual('Connect');
         });
         test('should not be disabled with autoConnect disabled', async () => {

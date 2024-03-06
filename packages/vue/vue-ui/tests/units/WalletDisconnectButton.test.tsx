@@ -11,11 +11,13 @@ import { vi } from 'vitest';
 
 const Providers = defineComponent({
     components: { WalletProvider, WalletModalProvider, WalletDisconnectButton },
-    template: `<WalletProvider><WalletModalProvider><WalletDisconnectButton v-bind="$attrs"></WalletDisconnectButton> </WalletModalProvider></WalletProvider>`,
+    props: ['className', 'tabIndex', 'style'],
+    template: `<WalletProvider><WalletModalProvider><WalletDisconnectButton v-bind="$props"></WalletDisconnectButton> </WalletModalProvider></WalletProvider>`,
 });
 const NoAutoConnectProviders = defineComponent({
     components: { WalletProvider, WalletModalProvider, WalletDisconnectButton },
-    template: `<WalletProvider :autoConnect="false"><WalletModalProvider><WalletDisconnectButton v-bind="$attrs"></WalletDisconnectButton></WalletModalProvider></WalletProvider>`,
+    props: ['className', 'tabIndex', 'style'],
+    template: `<WalletProvider :autoConnect="false"><WalletModalProvider><WalletDisconnectButton v-bind="$props"></WalletDisconnectButton></WalletModalProvider></WalletProvider>`,
 });
 const makeSut = (props: any = {}, children = '') => {
     return mount(Providers, { props, slots: { default: children } });
