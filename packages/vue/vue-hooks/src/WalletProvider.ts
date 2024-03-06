@@ -232,6 +232,10 @@ export const WalletProvider = defineComponent({
         const select = markRaw((name: AdapterName) => {
             hasManuallySetName.value = true;
             setName(name);
+            setConnecting(false);
+            setDisconnecting(false);
+            isConnecting = false;
+            isDisconnecting = false;
         });
         const connect = markRaw(async () => {
             if (isConnecting || isDisconnecting || state.connected) {
