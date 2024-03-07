@@ -75,7 +75,7 @@ export function LedgerAdapterDemo() {
     }, [adapter]);
 
     async function onSignTransaction() {
-        const transaction = await tronWeb.transactionBuilder.sendTrx(receiver, tronWeb.toSun(0.1), adapter.address);
+        const transaction = await tronWeb.transactionBuilder.sendTrx(receiver, tronWeb.toSun(0.000001), adapter.address);
         const signedTransaction = await adapter.signTransaction(transaction);
         const res = await tronWeb.trx.sendRawTransaction(signedTransaction);
         setOpen(true);

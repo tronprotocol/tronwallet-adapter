@@ -25,7 +25,7 @@ export function ConnectedSection(props: { adapter: LedgerAdapter }) {
         [signMessage, signedMessage, props.adapter]
     );
     async function onSignTransaction() {
-        const transaction = await tronWeb.transactionBuilder.sendTrx(receiver, tronWeb.toSun(0.1), props.adapter.address);
+        const transaction = await tronWeb.transactionBuilder.sendTrx(receiver, tronWeb.toSun(0.000001), props.adapter.address);
         const signedTransaction = await props.adapter.signTransaction(transaction);
         const res = await tronWeb.trx.sendRawTransaction(signedTransaction);
         setOpen(true);

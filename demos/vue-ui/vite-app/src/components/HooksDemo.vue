@@ -25,11 +25,11 @@ async function onSignMessage() {
 }
 
 async function onSignTransaction() {
-    const transaction = await tronWeb.transactionBuilder.sendTrx(receiver, tronWeb.toSun(0.1), wallet.value?.adapter.address);
+    const transaction = await tronWeb.transactionBuilder.sendTrx(receiver, tronWeb.toSun(0.000001), wallet.value?.adapter.address);
     const signedTransaction = await signTransaction(transaction);
     // const signedTransaction = await tronWeb.trx.sign(transaction);
     const res = await tronWeb.trx.sendRawTransaction(signedTransaction);
-    alert(res)
+    alert(JSON.stringify(res))
 }
 
 </script>

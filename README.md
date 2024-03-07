@@ -1,6 +1,6 @@
 # tronwallet-adapter
 
-This repository contains wallet adapters and components for Tron DApps. With out-of-box components and unified methods, developers can easily interact with multiple wallets, `select/connect/disconnect` wallets and sign a message or transaction.
+This repository contains wallet adapters and components for Tron DApps. With out-of-box components and unified methods, developers can easily interact with multiple wallets, `select/connect/disconnect` wallets and `sign` a message or transaction.
 
 ## Wallet Integrations
 
@@ -127,16 +127,21 @@ tronwallet-adapter
 |   |   ├─ledger # adapter for ledger
 |   |   ├─walletconnect # adapter for walletconnect
 |   |   ├─tokenpocket # adapter for TokenPocket
-|   |   ├─bitkeep # adapter for BitKeep
+|   |   ├─bitkeep # adapter for Bitget Wallet
 |   |   ├─okxwallet # adapter for Okx Wallet
 |   ├─react
 |   |   ├─react-hooks # react hooks to manage wallet state
 |   |   ├─react-ui # react ui components to select/connect wallets
+|   ├─vue
+|   |   ├─vue-hooks # vue hooks to manage wallet state
+|   |   ├─vue-ui # vue ui components to select/connect wallets
 ├─demos
 |   ├─react-ui
 |   |   ├─create-react-app # demo created by create-react-app
 |   |   ├─vite-app # demo for vitejs
 |   |   ├─next-app # demo for nextjs
+|   ├─vue-ui
+|   |   ├─vite-app # demo for vitejs
 |   ├─dev-demo # demo for development
 |   ├─cdn-demo # demo for cdn usage of adapters
 ```
@@ -260,6 +265,93 @@ function App() {
 }
 ```
 
+### @tronweb3/tronwallet-adapter-vue-hooks
+
+This package contains vue hooks to easily `select/connect/disconnect` wallets and manage the wallet state.
+
+Code example：
+
+```html
+<script setup>
+    import { defineComponent, h } from 'vue';
+    import { WalletProvider, useWallet } from '@tronweb3/tronwallet-adapter-vue-hooks';
+    import { TronLinkAdapter } from '@tronweb3/tronwallet-adapters';
+    const tronLink = new TronLinkAdapter();
+
+    const adapters = [tronLink];
+
+    function onConnect(address) {
+        console.log('[wallet hooks] onConnect: ', address);
+    }
+    function onDisconnect() {
+        console.log('[wallet hooks] onDisconnect');
+    }
+
+    const VueComponent = defineComponent({
+        setup() {
+            // Here you can use `useWallet` API
+            const { wallet, connect, signMessage, signTransaction } = useWallet();
+            return () =>
+                h('div', [
+                    h('div', { style: 'color: #222;' }, `Current Adapter: ${(wallet && wallet.adapter.name) || ''}`),
+                ]);
+        },
+    });
+</script>
+
+<template>
+    <WalletProvider :adapters="adapters" @connect="onConnect" @disconnect="onDisconnect">
+        <VueComponent />
+    </WalletProvider>
+</template>
+```
+
+### @tronweb3/tronwallet-adapter-vue-ui
+
+This package contains a set of out-of-the-box components to make it easy to `select/connect/disconnect` wallets.
+
+Code example：
+
+```html
+<template>
+    <WalletProvider @error="onError">
+        <WalletModalProvider>
+            <WalletActionButton></WalletActionButton>
+            <Profile></Profile>
+        </WalletModalProvider>
+    </WalletProvider>
+</template>
+<script setup>
+    import { h, defineComponent } from 'vue';
+    import { useWallet, WalletProvider } from '@tronweb3/tronwallet-adapter-vue-hooks';
+    import { WalletModalProvider, WalletActionButton } from '@tronweb3/tronwallet-adapter-vue-ui';
+    // This is necessary to keep style normal.
+    import '@tronweb3/tronwallet-adapter-vue-ui/style.css';
+    import { WalletDisconnectedError, WalletError, WalletNotFoundError } from '@tronweb3/tronwallet-abstract-adapter';
+
+    function onError(e: WalletError) {
+        if (e instanceof WalletNotFoundError) {
+            console.error(e.message);
+        } else if (e instanceof WalletDisconnectedError) {
+            console.error(e.message);
+        } else console.error(e.message);
+    }
+
+    const ConnectComponent = defineComponent({
+        setup() {
+            return () => h(WalletActionButton);
+        },
+    });
+
+    const Profile = defineComponent({
+        setup() {
+            const { wallet } = useWallet();
+            return () => h('div', `Current adapter: ${wallet?.adapter.name}`);
+        },
+    });
+</script>
+```
+
 ## Quick Start
 
 Clone this repo and run the following commands:
@@ -278,7 +370,7 @@ pnpm example
 
 ## Which package should developers use ?
 
-It's recommended to use `@tronweb3/tronwallet-adapter-react-hooks` or `@tronweb3/tronwallet-adapter-react-ui` for developing easily.
+It's recommended to use `@tronweb3/tronwallet-adapter-react-hooks` or `@tronweb3/tronwallet-adapter-react-ui` for developing easily. There are also out-of-box libraries for Vue: `@tronweb3/tronwallet-adapter-vue-hooks` and `@tronweb3/tronwallet-adapter-vue-ui`.
 
 If you don't want to customize your UI components and just want to accomplish functions rapidly, you can use components of `@tronweb3/tronwallet-adapter-react-ui` such as `WalletActionButton`. Its out-of-the-box components will help you `select/connect` the wallet and manage the wallet state.
 
