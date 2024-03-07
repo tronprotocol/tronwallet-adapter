@@ -64,7 +64,9 @@ await walletconnectAdapter.connect();
 await walletconnectAdapter.signMessage(message);
 ```
 
-### React Hooks
+### Hooks and UI components for **React**
+
+There are two libraries for React developers: `@tronweb3/tronwallet-adapter-react-hooks` and `@tronweb3/tronwallet-adapter-react-ui`.
 
 React hook is a hook to manage the global state of wallet, such as current selected wallet and the connect state, address, and so on. It also provides some methods to interact with wallet.
 
@@ -91,8 +93,6 @@ function Comp() {
 }
 ```
 
-### React UI Components
-
 `useWallet()` only contains logic to manage wallet state. Besides, we provide a set of out-of-box components to help you interact with wallets:
 
 -   `WalletSelectButton`: Shows a wallet dialog to select a wallet
@@ -103,6 +103,41 @@ function Comp() {
 Here is the demo image:
 
 ![example](./demo.png)
+
+### Hooks and UI components for **Vue**
+
+There are two libraries for Vue developers: `@tronweb3/tronwallet-adapter-vue-hooks` and `@tronweb3/tronwallet-adapter-vue-ui`.
+Vue hook is a hook to manage the global state of wallet, such as current selected wallet and the connect state, address, and so on. It also provides some methods to interact with wallet.
+
+When your dapp supports multiple wallets, with the help of `useWallet()` hook you can easily:
+
+-   select which wallet to use
+-   connect to the selected wallet
+-   disconnect to the selected wallet
+-   call `signMessage` or `signTransaction` of the selected wallet
+
+Examples:
+
+```html
+<template>
+<div>
+    <button onClick={() => select('TronLink')}>Select Wallet</button>
+    <button onClick={connect}>Connect</button>
+    <button onClick={disconnect}>Disconnect</button>
+    <button onClick={() => signMessage('Hello World')}>Sign Message</button>
+</div>
+</template>
+<script setup>
+    const { wallet, address, connected, select, connect, disconnect, signMessage, signTransaction } = useWallet();
+</script>
+```
+
+`useWallet()` only contains logic to manage wallet state. Besides, we provide a set of out-of-box components to help you interact with wallets:
+
+-   `WalletSelectButton`: Shows a wallet dialog to select a wallet
+-   `WalletConnectButton`: Connects to the selected wallet
+-   `WalletDisconnectButton`: Disconnects from the selected wallet
+-   `WalletActionButton`: A button with multiple actions include `select/connect/disconnect`
 
 ## Documentation
 
@@ -265,7 +300,7 @@ function App() {
 }
 ```
 
-### @tronweb3/tronwallet-adapter-vue-hooks
+<h3 id="vue-demos">@tronweb3/tronwallet-adapter-vue-hooks</h3>
 
 This package contains vue hooks to easily `select/connect/disconnect` wallets and manage the wallet state.
 

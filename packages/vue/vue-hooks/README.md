@@ -145,7 +145,7 @@ Here is an example:
 
 ## `useWallet()`
 
-`useWallet` is a react hook providing a set of properties and methods which can be used to select and connect wallet, get wallet state and so on.
+`useWallet` is a Vue hook providing a set of properties and methods which can be used to select and connect wallet, get wallet state and so on.
 
 > `useWallet()` must be used in the descendant components of `WalletProvider`!
 
