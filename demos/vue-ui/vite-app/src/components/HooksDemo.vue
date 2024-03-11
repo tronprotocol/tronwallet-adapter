@@ -48,7 +48,8 @@ async function onSignTransaction() {
 </template>
 
 <style scoped>
-.read-the-docs {
+
+p {
     color: #888;
 }
 </style>

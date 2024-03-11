@@ -1,6 +1,6 @@
 # TronWallet Adapter for Tron Apps
 
-This is a quick setup guide and examples about how to add TronWallet Adapters to a React-based Tron DApp.
+This is a quick setup guide and examples about how to add TronWallet Adapters to a React-based and Vue-based Tron DApp.
 
 ## Quick Setup for React developers
 
