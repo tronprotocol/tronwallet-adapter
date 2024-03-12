@@ -7,10 +7,10 @@ export const WalletSelectButton = defineComponent({
     props: ButtonProps,
     setup(props, { slots }) {
         const { visible, setVisible } = useWalletModal();
-        const handleClick = () => {
+        const handleClick = async () => {
             let preventDefault = false;
             if (props.onClick) {
-                preventDefault = props.onClick();
+                preventDefault = await props.onClick();
             }
             if (!preventDefault) setVisible(!visible.value);
         };

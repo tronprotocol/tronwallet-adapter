@@ -8,7 +8,7 @@ export const WalletConnectButton = defineComponent({
         async function handleClick() {
             let preventDefault = false;
             if (props.onClick) {
-                preventDefault = props.onClick();
+                preventDefault = await props.onClick();
             }
             // eslint-disable-next-line @typescript-eslint/no-empty-function
             if (!preventDefault) {

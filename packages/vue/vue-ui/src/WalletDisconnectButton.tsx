@@ -5,10 +5,10 @@ export const WalletDisconnectButton = defineComponent({
     props: ButtonProps,
     setup(props, { slots }) {
         const { wallet, disconnect, disconnecting, connected } = useWallet();
-        function handleClick() {
+        async function handleClick() {
             let preventDefault = false;
             if (props.onClick) {
-                preventDefault = props.onClick();
+                preventDefault = await props.onClick();
             }
             if (!preventDefault) {
                 disconnect().catch(() => {

@@ -11,7 +11,7 @@ import { WalletItem, WalletSelectModal } from '../../src/index.js';
 
 const Providers = defineComponent({
     components: { WalletProvider, WalletModalProvider, WalletSelectButton },
-    props: ['className', 'tabIndex', 'style'],
+    props: ['className', 'tabIndex', 'style', 'disabled', 'icon', 'onClick'],
     template: `<WalletProvider><WalletModalProvider><WalletSelectButton v-bind="$props"></WalletSelectButton> </WalletModalProvider></WalletProvider>`,
 });
 
