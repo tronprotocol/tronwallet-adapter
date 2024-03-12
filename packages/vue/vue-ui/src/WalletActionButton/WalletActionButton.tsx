@@ -5,7 +5,7 @@ import { WalletConnectButton } from '../WalletConnectButton.js';
 import { Collapse } from './Collapse.js';
 import { useWalletModal } from '../useWalletModal.js';
 import { copyData, createWrapperAndAppendToBody, getRelatedPosition } from '../utils.js';
-import type { Ref, UnwrapRef } from 'vue';
+import type { CSSProperties, PropType, Ref, UnwrapRef } from 'vue';
 import { defineComponent, ref, onMounted, onUnmounted, onBeforeMount } from 'vue';
 function useRef<T>(initialValue: T | (() => T)): [Ref<T>, (v: T) => void] {
     const v = typeof initialValue === 'function' ? (initialValue as () => T)() : initialValue;
@@ -16,9 +16,29 @@ function useRef<T>(initialValue: T | (() => T)): [Ref<T>, (v: T) => void] {
     return [state as Ref<T>, setState];
 }
 export const WalletActionButton = defineComponent({
-    props: ButtonProps,
-    emits: ['click'],
-    setup(props, { emit, slots }) {
+    props: {
+        className: {
+            type: String,
+            default: '',
+        },
+        disabled: {
+            type: Boolean,
+            default: false,
+        },
+        style: {
+            type: Object as PropType<CSSProperties>,
+            default: () => ({}),
+        },
+        tabIndex: {
+            type: Number,
+            default: 0,
+        },
+        icon: {
+            type: String,
+            default: '',
+        },
+    },
+    setup(props, { slots }) {
         const { address, wallet, disconnect } = useWallet();
         const { setVisible } = useWalletModal();
         const [dropdownVisible, setDropdownVisible] = useRef(false);
@@ -86,7 +106,7 @@ export const WalletActionButton = defineComponent({
 
         return () =>
             !wallet.value ? (
-                <WalletSelectButton {...props} onClick={hideDropdown}>
+                <WalletSelectButton {...{ ...props, onClick: hideDropdown }}>
                     {slots.default ? slots.default() : 'Select Wallet'}
                 </WalletSelectButton>
             ) : (
@@ -98,18 +118,17 @@ export const WalletActionButton = defineComponent({
                     {!address.value ? (
                         <div onMouseenter={openDropdown} onMouseleave={hideDropdown}>
                             {slots.default ? (
-                                <WalletConnectButton {...props} onClick={() => emit('click')}>
+                                <WalletConnectButton {...{ ...props, onClick: () => undefined }}>
                                     {slots.default()}
                                 </WalletConnectButton>
                             ) : (
-                                <WalletConnectButton {...props} onClick={() => emit('click')}></WalletConnectButton>
+                                <WalletConnectButton {...{ ...props, onClick: () => undefined }}></WalletConnectButton>
                             )}
                         </div>
                     ) : (
                         <Button
                             ref={(el) => (wrapperRef.value = el as HTMLElement)}
-                            {...props}
-                            onClick={openDropdown}
+                            {...{ ...props, onClick: openDropdown }}
                             style={{ pointerEvents: dropdownVisible.value ? 'none' : 'auto', ...props.style }}
                             icon={wallet.value ? wallet.value.adapter.icon : ''}
                         >

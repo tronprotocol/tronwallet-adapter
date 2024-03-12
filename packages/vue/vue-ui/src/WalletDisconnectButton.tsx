@@ -3,7 +3,6 @@ import { computed, defineComponent } from 'vue';
 import { Button, ButtonProps } from './Button.js';
 export const WalletDisconnectButton = defineComponent({
     props: ButtonProps,
-    emits: ['click'],
     setup(props, { slots }) {
         const { wallet, disconnect, disconnecting, connected } = useWallet();
         function handleClick() {
@@ -25,11 +24,10 @@ export const WalletDisconnectButton = defineComponent({
         });
         return () => (
             <Button
-                {...props}
+                {...{ ...props, onClick: handleClick }}
                 data-testid="wallet-disconnect-button"
                 disabled={props.disabled || !wallet.value || !connected.value}
-                icon={wallet.value ? wallet.value.adapter.icon : ''}
-                onClick={handleClick}
+                icon={props.icon ? props.icon : wallet.value ? wallet.value.adapter.icon : ''}
             >
                 {content.value}
             </Button>

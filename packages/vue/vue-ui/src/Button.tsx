@@ -21,15 +21,18 @@ export const ButtonProps = {
         type: String,
         default: '',
     },
+    onClick: {
+        type: Function,
+        required: false,
+    },
 };
 export const Button = defineComponent({
     props: ButtonProps,
-    emits: ['click'],
-    setup(props, { emit, slots }) {
+    setup(props, { slots }) {
         const buttonRef = ref<HTMLElement | null>();
 
         function handleClick() {
-            emit('click');
+            props.onClick?.();
             setTimeout(() => {
                 buttonRef.value?.blur();
             }, 300);

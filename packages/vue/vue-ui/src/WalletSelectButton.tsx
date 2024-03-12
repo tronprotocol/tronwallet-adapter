@@ -5,7 +5,6 @@ import { defineComponent } from 'vue';
 
 export const WalletSelectButton = defineComponent({
     props: ButtonProps,
-    emits: ['click'],
     setup(props, { slots }) {
         const { visible, setVisible } = useWalletModal();
         const handleClick = () => {
@@ -16,7 +15,7 @@ export const WalletSelectButton = defineComponent({
             if (!preventDefault) setVisible(!visible.value);
         };
         return () => (
-            <Button {...props} data-testid="wallet-select-button" onClick={handleClick}>
+            <Button {...{ ...props, onClick: handleClick }} data-testid="wallet-select-button">
                 {slots.default ? slots.default() : 'Select Wallet'}
             </Button>
         );

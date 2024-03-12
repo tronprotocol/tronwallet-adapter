@@ -45,6 +45,7 @@ async function onSignTransaction() {
     <ElButton :disabled="!connected" @click="onDisconnect">disconnect</ElButton>
     <ElButton :disabled="!connected" @click="onSignMessage">signMessage</ElButton>
     <ElButton :disabled="!connected" @click="onSignTransaction">transfer</ElButton>
+    
 </template>
 
 <style scoped>

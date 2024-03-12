@@ -3,7 +3,6 @@ import { computed, defineComponent } from 'vue';
 import { Button, ButtonProps } from './Button.js';
 export const WalletConnectButton = defineComponent({
     props: ButtonProps,
-    emits: ['click'],
     setup(props, { slots }) {
         const { wallet, connect, connecting, connected } = useWallet();
         async function handleClick() {
@@ -33,12 +32,11 @@ export const WalletConnectButton = defineComponent({
 
         return () => (
             <Button
-                {...props}
+                {...{ ...props, onClick: handleClick }}
                 data-testid="wallet-connect-button"
                 className={`wallet-button ${props.className}`}
                 disabled={props.disabled || !wallet.value || connecting.value || connected.value}
-                onClick={handleClick}
-                icon={wallet.value ? wallet.value.adapter.icon : ''}
+                icon={props.icon ? props.icon : wallet.value ? wallet.value.adapter.icon : ''}
             >
                 {content.value}
             </Button>
