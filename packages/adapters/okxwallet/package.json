@@ -1,6 +1,6 @@
 {
     "name": "@tronweb3/tronwallet-adapter-okxwallet",
-    "version": "1.0.2",
+    "version": "1.0.3",
     "description": "Wallet adapter for Okx Wallet extension and Okx Wallet app.",
     "keywords": [
         "TRON",
