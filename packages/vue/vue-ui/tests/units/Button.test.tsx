@@ -27,6 +27,22 @@ describe('Button', () => {
         expect(button?.attributes('style')).toContain('border-color: red');
         expect(button?.attributes().disabled).toBe('');
     });
+    test('disabled prop should work fine', () => {
+        container = makeSut({
+            disabled: false,
+        });
+        const button = container.get('button');
+        expect(button).not.toBeNull();
+        expect(button?.attributes().disabled).toBeUndefined();
+    });
+    test('disabled prop should work fine2', () => {
+        container = makeSut({
+            disabled: true,
+        });
+        const button = container.get('button');
+        expect(button).not.toBeNull();
+        expect(button?.attributes().disabled).toBe('');
+    });
     test('children prop should work fine', () => {
         container = makeSut({}, h('span', 'button'));
         const button = container.get('button')!;

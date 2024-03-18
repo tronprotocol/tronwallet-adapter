@@ -45,4 +45,7 @@ export class MockTronLink implements TronLinkWallet {
         this.ready = state;
         this.tronWeb.ready = state;
     }
+    setAddress(address: '') {
+        this.address = address;
+    }
 }

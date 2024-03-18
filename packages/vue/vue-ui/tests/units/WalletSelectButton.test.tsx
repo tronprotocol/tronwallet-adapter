@@ -52,4 +52,68 @@ describe('WalletSelectButton', () => {
         await nextTick();
         expect(localStorage.getItem('tronAdapterName')).toEqual(`"TronLink"`);
     });
+    test('className prop should work fine', async () => {
+        container = makeSut({ className: 'test-class' });
+        const button = container.get('button');
+        expect(button.attributes('class')).toContain('test-class');
+    });
+    test('tabIndex prop should work fine', async () => {
+        container = makeSut({ tabIndex: 20 });
+        const button = container.get('button');
+        expect(button.attributes('tabindex')).toEqual('20');
+    });
+    test('disabled prop should work fine', async () => {
+        container = makeSut({ disabled: true });
+        const button = container.get('button');
+        expect(button.attributes('disabled')).toEqual('');
+    });
+    test('disabled prop should work fine 2', async () => {
+        container = makeSut({ disabled: false });
+        const button = container.get('button');
+        expect(button.attributes('disabled')).toBeUndefined();
+    });
+    test('style prop should work fine', async () => {
+        container = makeSut({ style: { color: 'red' } });
+        const button = container.get('button');
+        expect(button.attributes('style')).toContain('color: red');
+    });
+    test('icon prop should work fine', async () => {
+        container = makeSut({ icon: 'xxx' });
+        const img = container.get('img');
+        expect(img.attributes('src')).toEqual('xxx');
+    });
+
+    describe('onClick prop should work fine', () => {
+        beforeEach(() => {
+            vi.useFakeTimers();
+        });
+        test('onClick prop which returns false should work fine', async () => {
+            const onClick = vi.fn(() => {
+                return false;
+            });
+            container = makeSut({ onClick });
+            vi.advanceTimersByTime(500);
+            getByTestId('wallet-select-button').trigger('click');
+            expect(onClick).toBeCalledTimes(1);
+            await nextTick();
+            const SelectModal = container.getComponent(WalletSelectModal);
+            expect(SelectModal).not.toBeNull();
+            await nextTick();
+            expect(SelectModal.props().visible).toBe(true);
+        });
+        test('onClick prop which returns true should work fine', async () => {
+            const onClick = vi.fn(() => {
+                return true;
+            });
+            container = makeSut({ onClick });
+            vi.advanceTimersByTime(500);
+            getByTestId('wallet-select-button').trigger('click');
+            expect(onClick).toBeCalledTimes(1);
+            await nextTick();
+            const SelectModal = container.getComponent(WalletSelectModal);
+            expect(SelectModal).not.toBeNull();
+            await nextTick();
+            expect(SelectModal.props().visible).toBe(false);
+        });
+    });
 });
