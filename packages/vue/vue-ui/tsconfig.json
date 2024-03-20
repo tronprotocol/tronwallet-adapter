@@ -1,0 +1,22 @@
+{
+    "extends": "./tsconfig.esm.json",
+    "include": ["src"],
+    "exclude": [""],
+    "compilerOptions": {
+        "jsx": "preserve",
+        "jsxImportSource": "vue",
+        // "noImplicitAny": false,
+        // "strict": false,
+        "target": "esnext",
+        "lib": ["esnext", "dom"],
+        "module": "esnext",
+        "moduleResolution": "node",
+        "resolveJsonModule": true,
+        "strict": true,
+        "strictNullChecks": true,
+        "declaration": true,
+        "outDir": "./dist",
+        "skipDefaultLibCheck": true,
+        "skipLibCheck": true
+    }
+}

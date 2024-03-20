@@ -99,7 +99,7 @@ function SignDemo() {
     }
 
     async function onSignTransaction() {
-        const transaction = await tronWeb.transactionBuilder.sendTrx(receiver, tronWeb.toSun(0.1), address);
+        const transaction = await tronWeb.transactionBuilder.sendTrx(receiver, tronWeb.toSun(0.000001), address);
         console.log(transaction);
 
         const signedTransaction = await signTransaction(transaction);

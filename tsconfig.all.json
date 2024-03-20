@@ -39,6 +39,9 @@
         },
         {
             "path": "./packages/react/react-ui/tsconfig.all.json"
+        },
+        {
+            "path": "./packages/vue/vue-hooks/tsconfig.all.json"
         }
     ]
 }

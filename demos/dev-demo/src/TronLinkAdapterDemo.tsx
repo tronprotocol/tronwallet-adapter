@@ -80,7 +80,7 @@ export function TronLinkAdapterDemo() {
 
     async function onSignTransaction() {
         const tronWeb = (window.tron as any).tronWeb as any;
-        const transaction = await tronWeb.transactionBuilder.sendTrx(receiver, tronWeb.toSun(0.1), adapter.address);
+        const transaction = await tronWeb.transactionBuilder.sendTrx(receiver, tronWeb.toSun(0.000001), adapter.address);
         const signedTransaction = await adapter.signTransaction(transaction);
         // const signedTransaction = await tronWeb.trx.sign(transaction);
         const res = await tronWeb.trx.sendRawTransaction(signedTransaction);
@@ -230,7 +230,7 @@ function MultiSignDemo(props: { address: string; adapter: Adapter }) {
     const multiSignWithAddress1 = useCallback(
         async function () {
             const tronWeb = (window.tron as any).tronWeb as any;
-            const transaction = await tronWeb.transactionBuilder.sendTrx(receiver, tronWeb.toSun(0.1), props.address, { permissionId: 2 });
+            const transaction = await tronWeb.transactionBuilder.sendTrx(receiver, tronWeb.toSun(0.000001), props.address, { permissionId: 2 });
             const signedTransaction = await props.adapter.multiSign(transaction, null, 2);
             setTransferTransaction(signedTransaction);
         },

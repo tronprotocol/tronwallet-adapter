@@ -1,7 +1,7 @@
 import { isInBrowser, isInMobileBrowser } from '@tronweb3/tronwallet-abstract-adapter';
 
 export function supportTokenPocket() {
-    return !!window.tronWeb && typeof (window as any).tokenpocket !== 'undefined';
+    return !!isInMobileBrowser() && !!window.tronWeb && typeof (window as any).tokenpocket !== 'undefined';
 }
 
 /**

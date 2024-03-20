@@ -198,8 +198,7 @@ function MultiSignDemo(props: { address: string; adapter: Adapter }) {
     const multiSignWithAddress1 = useCallback(
         async function () {
             const tronWeb = (window as any).tronWeb1 as any;
-            const transaction = await tronWeb.transactionBuilder.sendTrx(receiver, tronWeb.toSun(0.1), props.address, { permissionId: 2 });
-            // debugger;
+            const transaction = await tronWeb.transactionBuilder.sendTrx(receiver, tronWeb.toSun(0.000001), props.address, { permissionId: 2 });
             console.log('before multiSign', transaction)
             const signedTransaction = await props.adapter.multiSign(transaction, null, 2);
             console.log('after multiSign', signedTransaction)
