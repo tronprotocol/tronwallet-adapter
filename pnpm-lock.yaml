@@ -490,6 +490,9 @@ importers:
       '@tronweb3/tronwallet-adapter-react-ui':
         specifier: ^1.1.0
         version: link:../../../packages/react/react-ui
+      '@tronweb3/tronwallet-adapter-tronlink':
+        specifier: ^1.1.9
+        version: link:../../../packages/adapters/tronlink
       '@tronweb3/tronwallet-adapter-walletconnect':
         specifier: ^1.0.0
         version: link:../../../packages/adapters/walletconnect
