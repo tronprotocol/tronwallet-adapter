@@ -1,22 +1,14 @@
 import '../styles/globals.css';
 import type { AppProps } from 'next/app';
-import type { WalletError } from '@tronweb3/tronwallet-abstract-adapter';
+import type { Adapter, WalletError } from '@tronweb3/tronwallet-abstract-adapter';
 import { WalletDisconnectedError, WalletNotFoundError } from '@tronweb3/tronwallet-abstract-adapter';
 // @ts-ignore
 import { toast } from 'react-hot-toast';
-import {
-    BitKeepAdapter,
-    OkxWalletAdapter,
-    TokenPocketAdapter,
-    TronLinkAdapter,
-    WalletConnectAdapter,
-} from '@tronweb3/tronwallet-adapters';
-import { useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { WalletProvider } from '@tronweb3/tronwallet-adapter-react-hooks';
 import { WalletModalProvider } from '@tronweb3/tronwallet-adapter-react-ui';
 import '@tronweb3/tronwallet-adapter-react-ui/style.css';
 import { LedgerAdapter } from '@tronweb3/tronwallet-adapter-ledger';
-
 export default function App({ Component, pageProps }: AppProps) {
     function onError(e: WalletError) {
         if (e instanceof WalletNotFoundError) {
@@ -25,36 +17,46 @@ export default function App({ Component, pageProps }: AppProps) {
             toast.error(e.message);
         } else toast.error(e.message);
     }
-    const adapters = useMemo(function () {
-        const tronLinkAdapter = new TronLinkAdapter();
-        const ledger = new LedgerAdapter({
-            accountNumber: 2,
-        });
-        const walletConnectAdapter = new WalletConnectAdapter({
-            network: 'Nile',
-            options: {
-                relayUrl: 'wss://relay.walletconnect.com',
-                // example WC app project ID
-                projectId: '5fc507d8fc7ae913fff0b8071c7df231',
-                metadata: {
-                    name: 'Test DApp',
-                    description: 'JustLend WalletConnect',
-                    url: 'https://your-dapp-url.org/',
-                    icons: ['https://your-dapp-url.org/mainLogo.svg'],
+    const [adapters, setAdapters] = useState<Adapter[]>([]);
+    useEffect(() => {
+        import('@tronweb3/tronwallet-adapters').then((res) => {
+            const {
+                BitKeepAdapter,
+                OkxWalletAdapter,
+                TokenPocketAdapter,
+                TronLinkAdapter,
+                WalletConnectAdapter
+            } = res;
+                const tronLinkAdapter = new TronLinkAdapter();
+            const ledger = new LedgerAdapter({
+                accountNumber: 2,
+            });
+            const walletConnectAdapter = new WalletConnectAdapter({
+                network: 'Nile',
+                options: {
+                    relayUrl: 'wss://relay.walletconnect.com',
+                    // example WC app project ID
+                    projectId: '5fc507d8fc7ae913fff0b8071c7df231',
+                    metadata: {
+                        name: 'Test DApp',
+                        description: 'JustLend WalletConnect',
+                        url: 'https://your-dapp-url.org/',
+                        icons: ['https://your-dapp-url.org/mainLogo.svg'],
+                    },
                 },
-            },
-            web3ModalConfig: {
-                themeMode: 'dark',
-                themeVariables: {
-                    '--w3m-z-index': '1000',
+                web3ModalConfig: {
+                    themeMode: 'dark',
+                    themeVariables: {
+                        '--w3m-z-index': '1000',
+                    },
                 },
-            },
+            });
+            const bitKeepAdapter = new BitKeepAdapter();
+            const tokenPocketAdapter = new TokenPocketAdapter();
+            const okxwalletAdapter = new OkxWalletAdapter();
+            setAdapters([tronLinkAdapter, bitKeepAdapter, tokenPocketAdapter, okxwalletAdapter, walletConnectAdapter, ledger])
         });
-        const bitKeepAdapter = new BitKeepAdapter();
-        const tokenPocketAdapter = new TokenPocketAdapter();
-        const okxwalletAdapter = new OkxWalletAdapter();
-        return [tronLinkAdapter, bitKeepAdapter, tokenPocketAdapter, okxwalletAdapter, walletConnectAdapter, ledger];
-    }, []);
+    }, [setAdapters])
 
     /**
      * wrap your app content with WalletProvider and WalletModalProvider

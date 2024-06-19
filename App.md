@@ -1,8 +1,8 @@
 # TronWallet Adapter for Tron Apps
 
-This is a quick setup guide and examples about how to add TronWallet Adapters to a React-based Tron DApp.
+This is a quick setup guide and examples about how to add TronWallet Adapters to a React-based and Vue-based Tron DApp.
 
-## Quick Setup (using React UI)
+## Quick Setup for React developers
 
 ### Install
 
@@ -80,15 +80,12 @@ function SignDemo() {
             <div>
                 <h2>Wallet Connection Info</h2>
                 <p>
-                    {' '}
                     <span>Connection Status:</span> {connected ? 'Connected' : 'Disconnected'}{' '}
                 </p>
                 <p>
-                    {' '}
                     <span>Your selected Wallet:</span> {wallet?.adapter.name}{' '}
                 </p>
                 <p>
-                    {' '}
                     <span>Your Address:</span> {address}{' '}
                 </p>
             </div>
@@ -101,4 +98,87 @@ function SignDemo() {
         </div>
     );
 }
+```
+
+## Quick Setup for Vue developers
+
+### Install
+
+Install these dependencies:
+
+```shell
+npm install --save \
+    @tronweb3/tronwallet-abstract-adapter \
+    @tronweb3/tronwallet-adapters \
+    @tronweb3/tronwallet-adapter-vue-hooks \
+    @tronweb3/tronwallet-adapter-vue-ui
+```
+
+### Setup
+
+`@tronweb3/tronwallet-adapter-vue-hooks` and `@tronweb3/tronwallet-adapter-vue-ui` provide a global state by `provide/inject` of Vue. Accordingly, developers need to wrap `App` content within the `WalletProvider` and `WalletModalProvider`.
+
+```html
+<template>
+    <WalletProvider @error="onError">
+        <WalletModalProvider>
+            <!-- Place your app's components here -->
+        </WalletModalProvider>
+    </WalletProvider>
+</template>
+<script setup>
+    import { h, defineComponent } from 'vue';
+    import { useWallet, WalletProvider } from '@tronweb3/tronwallet-adapter-vue-hooks';
+    import { WalletModalProvider, WalletActionButton } from '@tronweb3/tronwallet-adapter-vue-ui';
+    // This is necessary to keep style normal.
+    import '@tronweb3/tronwallet-adapter-vue-ui/style.css';
+    import { WalletDisconnectedError, WalletError, WalletNotFoundError } from '@tronweb3/tronwallet-abstract-adapter';
+
+    function onError(e: WalletError) {
+        if (e instanceof WalletNotFoundError) {
+            console.error(e.message);
+        } else if (e instanceof WalletDisconnectedError) {
+            console.error(e.message);
+        } else console.error(e.message);
+    }
+</script>
+```
+
+### Usage
+
+```html
+<script setup>
+    import { useWallet } from '@tronweb3/tronwallet-adapter-vue-hooks';
+    import TronWeb from 'tronweb';
+
+    const tronWeb: any = new TronWeb({
+        fullHost: 'https://api.nileex.io', // here we use Nile test net
+    });
+
+    const { wallets, wallet, address, connected, connect, disconnect, signMessage, signTransaction } = useWallet();
+    const receiver = 'xxxxx';
+
+    async function onSignMessage() {
+        const res = await signMessage('Hello world!');
+    }
+    async function onSignTransaction() {
+        const transaction = await tronWeb.transactionBuilder.sendTrx(
+            receiver,
+            tronWeb.toSun(0.000001),
+            wallet.value?.adapter.address
+        );
+        const signedTransaction = await signTransaction(transaction);
+        const res = await tronWeb.trx.sendRawTransaction(signedTransaction);
+    }
+</script>
+
+<template>
+    <p>Current Wallet: {{ wallet?.adapter.name }}</p>
+    <p>Connection State: {{ wallet?.adapter.state }}</p>
+    <p>Address : {{ address }}</p>
+    <button :disabled="connected" @click="connect">connect</button>
+    <button :disabled="!connected" @click="disconnect">disconnect</button>
+    <button :disabled="!connected" @click="onSignMessage">signMessage</button>
+    <button :disabled="!connected" @click="onSignTransaction">transfer</button>
+</template>
 ```

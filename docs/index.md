@@ -82,3 +82,63 @@ function Comp() {
 
 Here is the demo image:
 ![demo.png](https://raw.githubusercontent.com/tronprotocol/tronwallet-adapter/main/demo.png)
+
+
+## Vue hook
+
+Vue hook is a hook to manage the global state of wallet, such as current selected wallet and the connect state, address, and so on. It also provides some methods to interact with wallet.
+
+When your dapp supports multiple wallets, with the help of `useWallet()` hook you can easily:
+
+-   select which wallet to use
+-   connect to the selected wallet
+-   disconnect to the selected wallet
+-   call `signMessage` or `signTransaction` of the selected wallet
+
+Examples:
+```html
+<script setup>
+    import { defineComponent, h } from 'vue';
+    import { WalletProvider, useWallet } from '@tronweb3/tronwallet-adapter-vue-hooks';
+    import { TronLinkAdapter } from '@tronweb3/tronwallet-adapters';
+    const tronLink = new TronLinkAdapter();
+
+    const adapters = [tronLink];
+
+    function onConnect(address) {
+        console.log('[wallet hooks] onConnect: ', address);
+    }
+    function onDisconnect() {
+        console.log('[wallet hooks] onDisconnect');
+    }
+
+    const VueComponent = defineComponent({
+        setup() {
+            // Here you can use `useWallet` API
+            const { wallet, connect, signMessage, signTransaction } = useWallet();
+            return () =>
+                h('div', [
+                    h('div', { style: 'color: #222;' }, `Current Adapter: ${(wallet && wallet.adapter.name) || ''}`),
+                ]);
+        },
+    });
+</script>
+
+<template>
+    <WalletProvider :adapters="adapters" @connect="onConnect" @disconnect="onDisconnect">
+        <VueComponent />
+    </WalletProvider>
+</template>
+```
+
+## Vue UI Components
+
+`useWallet()` only contains logic to manage wallet state. Besides, we provide a set of out-of-box components to help you interact with wallets:
+
+-   `WalletSelectButton`: Show wallets dialog to select a wallet
+-   `WalletConnectButton`: Connect to the selected wallet
+-   `WalletDisconnectButton`: Disconnect to the selected wallet
+-   `WalletActionButton`: A Button with multiple actions include `select/connect/disconnect`
+
+Here is the demo image:
+![demo.png](https://raw.githubusercontent.com/tronprotocol/tronwallet-adapter/main/demo.png)

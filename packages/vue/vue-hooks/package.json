@@ -1,0 +1,54 @@
+{
+    "name": "@tronweb3/tronwallet-adapter-vue-hooks",
+    "version": "1.0.0",
+    "description": "A `useWallet()` hook to make it easy to interact with Tron wallets.",
+    "keywords": [
+        "TRON",
+        "TronWeb",
+        "adapter"
+    ],
+    "author": "tronprotocol",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/tronprotocol/tronwallet-adapter"
+    },
+    "license": "MIT",
+    "type": "module",
+    "sideEffects": false,
+    "engines": {
+        "node": ">=16",
+        "pnpm": ">=7"
+    },
+    "main": "./lib/cjs/index.js",
+    "module": "./lib/esm/index.js",
+    "types": "./lib/types/index.d.ts",
+    "exports": {
+        "require": "./lib/cjs/index.js",
+        "import": "./lib/esm/index.js",
+        "types": "./lib/types/index.d.ts"
+    },
+    "files": [
+        "lib",
+        "src",
+        "LICENSE"
+    ],
+    "publishConfig": {
+        "access": "public"
+    },
+    "scripts": {
+        "clean": "shx mkdir -p lib && shx rm -rf lib",
+        "package": "shx echo '{ \"type\": \"commonjs\" }' > lib/cjs/package.json",
+        "test": "vitest run"
+    },
+    "dependencies": {
+        "@tronweb3/tronwallet-abstract-adapter": "workspace:^",
+        "@tronweb3/tronwallet-adapter-tronlink": "workspace:^"
+    },
+    "devDependencies": {
+        "jsdom": "^23.0.1",
+        "shx": "^0.3.4",
+        "vitest": "^1.0.2",
+        "vue": "^3.3.11",
+        "@vue/test-utils": "^2.4.3"
+    }
+}

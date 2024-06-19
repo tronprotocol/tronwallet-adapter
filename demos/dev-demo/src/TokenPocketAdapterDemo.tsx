@@ -77,7 +77,7 @@ export function TokenPocketAdapterDemo() {
     async function onSignTransaction() {
         const tronWeb = (window as any).tronWeb1 as any;
         console.log(adapter.address)
-        const transaction = await tronWeb.transactionBuilder.sendTrx(receiver, tronWeb.toSun(0.1), adapter.address);
+        const transaction = await tronWeb.transactionBuilder.sendTrx(receiver, tronWeb.toSun(0.000001), adapter.address);
         console.log('before signtransaction')
         const signedTransaction = await adapter.signTransaction(transaction);
         // const signedTransaction = await tronWeb.trx.sign(transaction);
@@ -196,7 +196,7 @@ function MultiSignDemo(props: { address: string; adapter: Adapter }) {
     const multiSignWithAddress1 = useCallback(
         async function () {
             const tronWeb = (window as any).tronWeb1 as any;
-            const transaction = await tronWeb.transactionBuilder.sendTrx(receiver, tronWeb.toSun(0.1), props.address, { permissionId: 2 });
+            const transaction = await tronWeb.transactionBuilder.sendTrx(receiver, tronWeb.toSun(0.000001), props.address, { permissionId: 2 });
             // debugger;
             console.log('before multiSign', transaction)
             const signedTransaction = await props.adapter.multiSign(transaction, null, 2);

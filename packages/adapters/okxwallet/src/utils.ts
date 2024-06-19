@@ -4,9 +4,11 @@ export function supportOkxWallet() {
     return !!(window.okxwallet && window.okxwallet.tronLink);
 }
 
+export const isOKApp = /OKApp/i.test(navigator.userAgent);
+
 export function openOkxWallet() {
-    if (!supportOkxWallet() && isInMobileBrowser()) {
-        window.location.href = `okx://wallet/dapp/details?dappUrl=${window.location.href}`;
+    if (!isOKApp && isInMobileBrowser()) {
+        window.location.href = 'okx://wallet/dapp/url?dappUrl=' + encodeURIComponent(window.location.href);
         return true;
     }
     return false;

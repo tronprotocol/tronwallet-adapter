@@ -241,12 +241,12 @@ enum AdapterState {
 -   Type: `() => Promise<void>`
     Disconnect from current selected wallet.
 
-### signTransaction
+#### signTransaction
 
 -   Type: `(transaction: Transaction) => Promise<SignedTransaction>`
     Sign a unsigned transaction. This method is the same as TronWeb API.
 
-### signMessage
+#### signMessage
 
 -   Type: `(message: string) => Promise<string>`
     Sign a message.
