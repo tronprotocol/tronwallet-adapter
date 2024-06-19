@@ -27,6 +27,7 @@
         "@tronweb3/tronwallet-adapter-tokenpocket": "^1.0.2",
         "@tronweb3/tronwallet-adapter-tronlink-evm": "^1.0.0",
         "@tronweb3/tronwallet-adapters": "^1.1.9",
+        "@types/node": "^18.19.0",
         "events": "^3.3.0",
         "ganache": "^7.9.0",
         "lit-html": "^3.0.0",
@@ -46,9 +47,15 @@
         "webpack-cli": "^5.0.2"
     },
     "overrides": {
-        "@ledgerhq/errors": "6.10.0"
+        "@ledgerhq/errors": "6.10.0",
+        "@ledgerhq/devices": "6.27.1",
+        "@ledgerhq/hw-transport": "6.27.1",
+        "@ledgerhq/hw-transport-webhid": "6.27.1"
     },
     "resolutions": {
-        "@ledgerhq/errors": "6.10.0"
+        "@ledgerhq/errors": "6.10.0",
+        "@ledgerhq/devices": "6.27.1",
+        "@ledgerhq/hw-transport": "6.27.1",
+        "@ledgerhq/hw-transport-webhid": "6.27.1"
     }
 }
