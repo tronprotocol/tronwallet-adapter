@@ -27,7 +27,6 @@ export function XDEFIWalletAdapterDemo() {
         setReadyState(adapter.readyState);
         if (adapter.connected) {
             adapter.network().then((res) => {
-                console.log(res);
                 setChainId(res.chainId)
             }).catch(e => {
                 console.log(e)
@@ -35,7 +34,6 @@ export function XDEFIWalletAdapterDemo() {
         }
 
         adapter.on('readyStateChanged', () => {
-            console.log('readyState: ', adapter.readyState)
             setReadyState(adapter.readyState)
         })
         adapter.on('connect', async () => {
@@ -47,21 +45,17 @@ export function XDEFIWalletAdapterDemo() {
             })
         });
         adapter.on('stateChanged', (state) => {
-            console.log('stateChanged: ', state);
             setConnectState(state);
         });
         adapter.on('accountsChanged', (data, preaddr) => {
-            console.log('accountsChanged: current', data,' pre: ', preaddr);
             setAccount(data as string);
         });
 
         adapter.on('chainChanged', (data) => {
-            console.log('chainChanged: ', data);
             setChainId((data as any).chainId);
         });
 
         adapter.on('disconnect', () => {
-            console.log('disconnect');
             setAccount(adapter.address || '')
         });
 
@@ -74,7 +68,6 @@ export function XDEFIWalletAdapterDemo() {
         const tronWeb = (window.tron as any).tronWeb as any;
         const transaction = await tronWeb.transactionBuilder.sendTrx(receiver, tronWeb.toSun(0.000001), adapter.address);
         const signedTransaction = await adapter.signTransaction(transaction);
-        // const signedTransaction = await tronWeb.trx.sign(transaction);
         const res = await tronWeb.trx.sendRawTransaction(signedTransaction);
         setOpen(true);
     }
@@ -102,6 +95,7 @@ export function XDEFIWalletAdapterDemo() {
             console.log(e.error?.message || e.message);
         }
     }
+
     return (
         <Box sx={{ width: '100%', maxWidth: 900 }}>
             <h1>XDEFI Wallet Adapter Demo Demo</h1>
@@ -165,39 +159,7 @@ export function Detail(props: { children: ReactNode }) {
 }
 
 function MultiSignDemo(props: { address: string; adapter: Adapter }) {
-    const [address1, setAddress1] = useState('');
     const [open, setOpen] = useState(false);
-
-    async function onApprove() {
-        const ownerAddress = tronWeb.address.toHex(props.address);
-        const ownerPermission = {
-            type: 0,
-            permission_name: 'owner',
-            threshold: 1,
-            keys: [
-                {
-                    address: ownerAddress,
-                    weight: 1,
-                },
-            ],
-        };
-        const activePermission = {
-            type: 2,
-            permission_name: 'ActivePermission',
-            threshold: 2,
-            keys: [],
-            operations: '7fff1fc0037e0000000000000000000000000000000000000000000000000000',
-        } as any;
-
-        activePermission.keys.push({ address: ownerAddress, weight: 1 });
-        activePermission.keys.push({ address: tronWeb.address.toHex(address1), weight: 1 });
-
-        const updateTransaction = await tronWeb.transactionBuilder.updateAccountPermissions(ownerAddress, ownerPermission, null, [activePermission]);
-        const signed = await props.adapter.signTransaction(updateTransaction);
-        const res = await tronWeb.trx.sendRawTransaction(signed);
-        alert('update successfully.');
-    }
-
     const [transferTransaction, setTransferTransaction] = useState(null);
     const [canSend, setCanSend] = useState(false);
 
@@ -210,14 +172,12 @@ function MultiSignDemo(props: { address: string; adapter: Adapter }) {
         },
         [props.adapter, setTransferTransaction, props.address]
     );
+
     const multiSignWithAddress2 = useCallback(
         async function () {
-            console.log('first multi signed tx:', transferTransaction);
             const signedTransaction = await props.adapter.multiSign(transferTransaction as any, null, 2);
-            console.log('second multi signed tx:', signedTransaction);
             setTransferTransaction(signedTransaction);
             const signWeight = await tronWeb.trx.getSignWeight(signedTransaction, 2);
-            console.log('signWeight: ', signWeight);
             if (signWeight.current_weight >= 2) {
                 setCanSend(true);
             }
@@ -228,6 +188,7 @@ function MultiSignDemo(props: { address: string; adapter: Adapter }) {
         const res = await tronWeb.trx.broadcast(transferTransaction);
         setOpen(true);
     }
+
     return (
         <>
             <h3>MultiSign Demo</h3>

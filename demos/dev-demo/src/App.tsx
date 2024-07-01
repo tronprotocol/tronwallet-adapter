@@ -51,7 +51,7 @@ function App() {
                         <Tab label="OkxWalletAdapter Demo" />
                         <Tab label="MetaMaskWalletAdapter Demo" />
                         <Tab label="TronlinkEvmWalletAdapter Demo" />
-                        <Tab label="XDEFIWalletAdapterDemo Demo" />
+                        <Tab label="XDEFIWalletAdapter Demo" />
                     </Tabs>
                 </Box>
                 <TabPanel value={value} index={0}>
