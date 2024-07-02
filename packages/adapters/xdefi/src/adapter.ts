@@ -30,7 +30,7 @@ import type {
     TronLinkMessageEvent,
     TronWeb,
 } from './types.js';
-import { openTronLink, supportTron, supportTronLink, waitTronwebReady } from './utils.js';
+import { supportTron, supportTronLink, waitTronReady } from './utils.js';
 export interface TronLinkWallet {
     ready: boolean;
     tronWeb: TronWeb;
@@ -53,31 +53,32 @@ export async function getNetworkInfoByTronWeb(tronWeb: TronWeb) {
 }
 declare global {
     interface Window {
-        // @ts-ignore r
+        // @ts-ignore
         tronLink?: TronLinkWallet;
         // @ts-ignore
         tronWeb?: TronWeb;
         // @ts-ignore
         tron?: Tron;
+        // @ts-ignore
     }
 }
 export interface XDEFIAdapterConfig extends BaseAdapterConfig {
     /**
-     * Timeout in millisecond for checking if TronLink wallet exists.
+     * Timeout in millisecond for checking if XDEFI wallet exists.
      * Default is 30 * 1000ms
      */
     checkTimeout?: number;
     /**
-     * Set if open TronLink app using DeepLink.
+     * Set if open XDEFI wallet app using DeepLink.
      * Default is true.
      */
-    openTronLinkAppOnMobile?: boolean;
+    openUrlWhenWalletNotFound?: boolean;
     /**
-     * The icon of your dapp. Used when open TronLink app in mobile device browsers.
+     * The icon of your dapp. Used when open XDEFI wallet app in mobile device browsers.
      */
     dappIcon?: string;
     /**
-     * The name of your dapp. Used when open TronLink app in mobile device browsers.
+     * The name of your dapp. Used when open XDEFI wallet app in mobile device browsers.
      */
     dappName?: string;
 }
@@ -101,19 +102,12 @@ export class XDEFIAdapter extends Adapter {
 
     constructor(config: XDEFIAdapterConfig = {}) {
         super();
-        const {
-            checkTimeout = 30 * 1000,
-            dappIcon = '',
-            dappName = '',
-            openUrlWhenWalletNotFound = true,
-            openTronLinkAppOnMobile = true,
-        } = config;
+        const { checkTimeout = 30 * 1000, dappIcon = '', dappName = '', openUrlWhenWalletNotFound = true } = config;
         if (typeof checkTimeout !== 'number') {
             throw new Error('[XDEFIAdapter] config.checkTimeout should be a number');
         }
         this.config = {
             checkTimeout,
-            openTronLinkAppOnMobile,
             openUrlWhenWalletNotFound,
             dappIcon,
             dappName,
@@ -177,7 +171,6 @@ export class XDEFIAdapter extends Adapter {
 
     async connect(): Promise<void> {
         try {
-            this.checkIfOpenTronLink();
             if (this.connected || this.connecting) return;
             await this._checkWallet();
             if (this.state === AdapterState.NotFound) {
@@ -198,13 +191,13 @@ export class XDEFIAdapter extends Adapter {
                     this.setState(AdapterState.Connected);
                     this._listenTronEvent();
                     if (!this._wallet.tronWeb) {
-                        await waitTronwebReady(this._wallet as Tron);
+                        await waitTronReady(this._wallet as Tron);
                     }
                 } catch (error: any) {
-                    let message = error?.message || error || 'Connect TronLink wallet failed.';
+                    let message = error?.message || error || 'Connect XDEFI wallet failed.';
                     if (error.code === -32002) {
                         message =
-                            'The same DApp has already initiated a request to connect to TronLink wallet, and the pop-up window has not been closed.';
+                            'The same DApp has already initiated a request to connect to XDEFI wallet, and the pop-up window has not been closed.';
                     }
                     if (error.code === 4001) {
                         message = 'The user rejected connection.';
@@ -216,13 +209,11 @@ export class XDEFIAdapter extends Adapter {
                 try {
                     const res = await wallet.request({ method: 'tron_requestAccounts' });
                     if (!res) {
-                        // 1. wallet is locked
-                        // 2. tronlink is first installed and there is no wallet account
-                        throw new WalletConnectionError('TronLink wallet is locked or no wallet account is avaliable.');
+                        throw new WalletConnectionError('XDEFI wallet is locked or no wallet account is avaliable.');
                     }
                     if (res.code === 4000) {
                         throw new WalletConnectionError(
-                            'The same DApp has already initiated a request to connect to TronLink wallet, and the pop-up window has not been closed.'
+                            'The same DApp has already initiated a request to connect to XDEFI wallet, and the pop-up window has not been closed.'
                         );
                     }
                     if (res.code === 4001) {
@@ -327,8 +318,6 @@ export class XDEFIAdapter extends Adapter {
      * Switch to target chain. If current chain is the same as target chain, the call will success immediately.
      * Available chainIds:
      * - Mainnet: 0x2b6653dc
-     * - Shasta: 0x94a9059e
-     * - Nile: 0xcd8690dc
      * @param chainId chainId
      */
     async switchChain(chainId: string) {
@@ -359,7 +348,6 @@ export class XDEFIAdapter extends Adapter {
     }
 
     private async checkAndGetWallet() {
-        this.checkIfOpenTronLink();
         await this._checkWallet();
         if (this.state !== AdapterState.Connected) throw new WalletDisconnectedError();
         const wallet = this._wallet;
@@ -413,16 +401,6 @@ export class XDEFIAdapter extends Adapter {
         }
     };
 
-    private checkIfOpenTronLink() {
-        const { dappName = '', dappIcon = '' } = this.config;
-        if (this.config.openTronLinkAppOnMobile === false) {
-            return;
-        }
-        if (openTronLink({ dappIcon, dappName })) {
-            throw new WalletNotFoundError();
-        }
-    }
-
     // following code is for TIP-1193
     private _listenTronEvent() {
         this._stopListenTronEvent();
@@ -446,8 +424,6 @@ export class XDEFIAdapter extends Adapter {
         const preAddr = this.address || '';
         const curAddr = (this._wallet?.tronWeb && this._wallet?.tronWeb.defaultAddress?.base58) || '';
         if (!curAddr) {
-            // change to a new address and if it's disconnected, data will be empty
-            // tronlink will emit accountsChanged many times, only process when connected
             this.setAddress(null);
             this.setState(AdapterState.Disconnect);
         } else {
@@ -534,12 +510,12 @@ export class XDEFIAdapter extends Adapter {
             address = this._wallet.tronWeb.defaultAddress?.base58 || null;
             state = this._wallet.ready ? AdapterState.Connected : AdapterState.Disconnect;
         } else {
-            // no tronlink support
+            // no tron support
             this._wallet = null;
             address = null;
             state = AdapterState.NotFound;
         }
-        // In TronLink App, account should be connected
+        // In XDEFI App, account should be connected
         if (isInMobileBrowser() && state === AdapterState.Disconnect) {
             this.checkForWalletReadyForApp();
         }
