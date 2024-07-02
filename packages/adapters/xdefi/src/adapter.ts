@@ -73,14 +73,6 @@ export interface XDEFIAdapterConfig extends BaseAdapterConfig {
      * Default is true.
      */
     openUrlWhenWalletNotFound?: boolean;
-    /**
-     * The icon of your dapp. Used when open XDEFI wallet app in mobile device browsers.
-     */
-    dappIcon?: string;
-    /**
-     * The name of your dapp. Used when open XDEFI wallet app in mobile device browsers.
-     */
-    dappName?: string;
 }
 
 export const XDEFIAdapterName = 'XDEFI' as AdapterName<'XDEFI'>;
@@ -102,15 +94,13 @@ export class XDEFIAdapter extends Adapter {
 
     constructor(config: XDEFIAdapterConfig = {}) {
         super();
-        const { checkTimeout = 30 * 1000, dappIcon = '', dappName = '', openUrlWhenWalletNotFound = true } = config;
+        const { checkTimeout = 30 * 1000, openUrlWhenWalletNotFound = true } = config;
         if (typeof checkTimeout !== 'number') {
             throw new Error('[XDEFIAdapter] config.checkTimeout should be a number');
         }
         this.config = {
             checkTimeout,
             openUrlWhenWalletNotFound,
-            dappIcon,
-            dappName,
         };
         this._connecting = false;
         this._wallet = null;

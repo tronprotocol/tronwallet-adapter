@@ -45,21 +45,6 @@ await tronWeb.trx.sendRawTransaction(signedTransaction);
          * Default is 30 * 1000ms
          */
         checkTimeout?: number;
-        /**
-         * Set if open XDEFI wallet app using DeepLink on mobile device.
-         * Default is true.
-         */
-        openTronLinkAppOnMobile?: boolean;
-        /**
-         * The icon of your dapp. Used when open XDEFI wallet app in mobile device browsers.
-         * Default is current website icon.
-         */
-        dappIcon?: string;
-        /**
-         * The name of your dapp. Used when open XDEFI wallet app in mobile device browsers.
-         * Default is `document.title`.
-         */
-        dappName?: string;
     }
     ```
 -   `network()` method is supported to get current network information. The type of returned value is `Network` as follows:
@@ -84,6 +69,6 @@ await tronWeb.trx.sendRawTransaction(signedTransaction);
 
 ### Caveats
 
--   **TronLink Doesn't support `disconnect` by DApp**. As TronLinkAdapter doesn't support disconnect by DApp website, call `adapter.disconnect()` won't disconnect from TronLink extension really.
+- **XDEFI Doesn't support `disconnect` by DApp**. As XDEFIAdapter doesn't support disconnect by DApp website, call `adapter.disconnect()` won't disconnect from XDEFI extension really.
 
 For more information about tronwallet adapters, please refer to [`@tronweb3/tronwallet-adapters`](https://github.com/tronprotocol/tronwallet-adapter/tree/main/packages/adapters/adapters)
