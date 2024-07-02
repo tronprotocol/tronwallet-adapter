@@ -9,7 +9,6 @@ import { TokenPocketAdapterDemo } from './TokenPocketAdapterDemo.js';
 import { BitgetAdapterDemo } from './BitgetAdapterDemo.js';
 import { OkxWalletAdapterDemo } from './OkxWalletAdapterDemo.js';
 import { MetamaskAdapterDemo } from './Metamask.js';
-import { TronLinkEvmAdapter } from '@tronweb3/tronwallet-adapter-tronlink-evm';
 import { TronLinkEvmAdapterDemo } from './TronLinkEvmDemo.js';
 import { XDEFIWalletAdapterDemo } from './XDEFIWalletAdapterDemo.js';
 interface TabPanelProps {

@@ -1,6 +1,7 @@
 import type { ReactNode } from 'react';
 import { useEffect, useMemo, useState, useCallback } from 'react';
-import { TronLinkAdapter } from '@tronweb3/tronwallet-adapters';
+import { XDEFIAdapter } from '@tronweb3/tronwallet-adapter-xdefi';
+
 import type { Adapter } from '@tronweb3/tronwallet-abstract-adapter';
 import { AdapterState } from '@tronweb3/tronwallet-abstract-adapter';
 import { Box, Button, Typography, Alert, TextField } from '@mui/material';
@@ -15,7 +16,8 @@ export function XDEFIWalletAdapterDemo() {
     const [open, setOpen] = useState(false);
     const [signMessage, setSignMessage] = useState('Hello, Adapter');
     const [signedMessage, setSignedMessage] = useState('');
-    const adapter = useMemo(() => new TronLinkAdapter({
+    
+    const adapter = useMemo(() => new XDEFIAdapter({
         openTronLinkAppOnMobile: true,
         openUrlWhenWalletNotFound: false,
         checkTimeout: 3000

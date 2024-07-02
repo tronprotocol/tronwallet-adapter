@@ -42,6 +42,9 @@
         },
         {
             "path": "./packages/vue/vue-hooks/tsconfig.all.json"
+        },
+        {
+            "path": "./packages/adapters/xdefi/tsconfig.all.json"
         }
     ]
 }
