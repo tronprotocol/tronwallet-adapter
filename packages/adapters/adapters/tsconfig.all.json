@@ -20,6 +20,9 @@
             "path": "../okxwallet/tsconfig.all.json"
         },
         {
+            "path": "/Users/weixuefeng/source/bitbucket/tronwallet-adapter/packages/adapters/gatewallet/tsconfig.all.json"
+        },
+        {
             "path": "./tsconfig.cjs.json"
         },
         {

@@ -1,16 +1,16 @@
 {
-    "name": "@tronweb3/tronwallet-adapters",
-    "version": "1.2.1",
-    "description": "Wallet adapters to help developers interact with Tron wallets using consistent API.",
+    "name": "@tronweb3/tronwallet-adapter-gatewallet",
+    "version": "1.0.0",
+    "description": "Wallet adapter for Gate Wallet extension and Gate Wallet app.",
     "keywords": [
         "TRON",
         "TronWeb",
-        "adapters"
+        "Gate Wallet"
     ],
     "author": "tronprotocol",
     "repository": {
         "type": "git",
-        "url": "https://github.com/tronprotocol/tronwallet-adapter"
+        "url": "git+https://github.com/tronprotocol/tronwallet-adapter.git"
     },
     "license": "MIT",
     "type": "module",
@@ -38,18 +38,25 @@
     "scripts": {
         "clean": "shx mkdir -p lib && shx rm -rf lib",
         "package": "shx echo '{ \"type\": \"commonjs\" }' > lib/cjs/package.json",
+        "test": "jest",
+        "test:coverage": "jest  --coverage",
         "build:umd": "node ../../../scripts/build-umd.js"
     },
     "dependencies": {
-        "@tronweb3/tronwallet-adapter-bitkeep": "workspace:^",
-        "@tronweb3/tronwallet-adapter-ledger": "workspace:^",
-        "@tronweb3/tronwallet-adapter-okxwallet": "workspace:^",
-        "@tronweb3/tronwallet-adapter-tokenpocket": "workspace:^",
-        "@tronweb3/tronwallet-adapter-tronlink": "workspace:^",
-        "@tronweb3/tronwallet-adapter-walletconnect": "workspace:^",
-        "@tronweb3/tronwallet-adapter-gatewallet": "/Users/weixuefeng/source/bitbucket/tronwallet-adapter/packages/adapters/gatewallet"
+        "@tronweb3/tronwallet-abstract-adapter": "workspace:^",
+        "@tronweb3/tronwallet-adapter-tronlink": "workspace:^"
     },
     "devDependencies": {
+        "@testing-library/dom": "^8.20.0",
+        "jest-environment-jsdom": "^29.3.1",
         "shx": "^0.3.4"
+    },
+    "bugs": {
+        "url": "https://github.com/tronprotocol/tronwallet-adapter/issues"
+    },
+    "homepage": "https://github.com/tronprotocol/tronwallet-adapter#readme",
+    "directories": {
+        "lib": "lib",
+        "test": "tests"
     }
 }
