@@ -47,7 +47,7 @@
         "@tronweb3/tronwallet-adapter-tokenpocket": "workspace:^",
         "@tronweb3/tronwallet-adapter-tronlink": "workspace:^",
         "@tronweb3/tronwallet-adapter-walletconnect": "workspace:^",
-        "@tronweb3/tronwallet-adapter-gatewallet": "/Users/weixuefeng/source/bitbucket/tronwallet-adapter/packages/adapters/gatewallet"
+        "@tronweb3/tronwallet-adapter-gatewallet": "workspace:^"
     },
     "devDependencies": {
         "shx": "^0.3.4"
