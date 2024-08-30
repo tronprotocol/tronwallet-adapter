@@ -5,9 +5,9 @@ This package provides an adapter to enable TRON DApps to connect to the [Gate Wa
 ## Demo
 
 ```typescript
-import { OkxWalletAdapter } from '@tronweb3/tronwallet-adapter-okxwallet';
+import { GateWalletAdapter } from '@tronweb3/tronwallet-adapter-gatewallet';
 
-const adapter = new OkxWalletAdapter();
+const adapter = new GateWalletAdapter();
 // connect to TokenPocket
 await adapter.connect();
 
@@ -15,7 +15,7 @@ await adapter.connect();
 console.log(adapter.address);
 
 // create a send TRX transaction
-const unSignedTransaction = await window.okxwallet.tronLink.tronWeb.transactionBuilder.sendTrx(
+const unSignedTransaction = await window.gatewallet.tronLink.tronWeb.transactionBuilder.sendTrx(
     targetAddress,
     100,
     adapter.address
@@ -23,17 +23,17 @@ const unSignedTransaction = await window.okxwallet.tronLink.tronWeb.transactionB
 // using adapter to sign the transaction
 const signedTransaction = await adapter.signTransaction(unSignedTransaction);
 // broadcast the transaction
-await window.okxwallet.tronLink.tronWeb.trx.sendRawTransaction(signedTransaction);
+await window.gatewallet.tronLink.tronWeb.trx.sendRawTransaction(signedTransaction);
 ```
 
 ## Documentation
 
 ### API
 
--   `Constructor(config: OkxWalletAdapterConfig)`
+-   `Constructor(config: GateWalletAdapterConfig)`
 
 ```typescript
-interface OkxWalletAdapterConfig {
+interface GateWalletAdapterConfig {
     /**
      * Set if open Wallet's website when wallet is not installed.
      * Default is true.
@@ -76,10 +76,6 @@ interface OkxWalletAdapterConfig {
 
 ### Caveats
 
--   OkxWallet App and Extension doesn't implement `signMessage()`, `multiSign()` and `switchChain()`.
--   OkxWallet Extension only support these: `accountsChanged`,`connect`,`disconnect`.
--   OkxWallet App does not support any events.
--   Deeplink only works for OKX App **version 6.1.38 or later** on Android.
--   **OKX Wallet App on IOS does not support TRON currently**.
+-   GateWallet App and Extension doesn't implement `multiSign()` and `switchChain()`.
 
 For more information about tronwallet adapters, please refer to [`@tronweb3/tronwallet-adapters`](https://github.com/tronprotocol/tronwallet-adapter/tree/main/packages/adapters/adapters)
